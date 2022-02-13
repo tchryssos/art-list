@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+import { FlexBox } from '../box/FlexBox';
 import { createInputStyles } from './styles';
 
 export interface InputProps {
@@ -10,14 +11,14 @@ export interface InputProps {
   type: 'text' | 'date';
 }
 
-const InputWrapper = styled.div`
+const InputWrapper = styled(FlexBox)`
   width: 100%;
 `;
 
-const StyledInput = styled.input(({ theme }) => ({
-  ...createInputStyles(theme),
-  width: '100%',
-}));
+const StyledInput = styled.input`
+  ${({ theme }) => createInputStyles(theme)};
+  width: 100%;
+`;
 
 const Label = styled.label(({ theme }) => ({
   fontSize: theme.fontSize.subBody,
@@ -28,9 +29,10 @@ export const Input: React.FC<InputProps> = ({
   className,
   required,
   label,
+  type,
 }) => (
-  <InputWrapper className={className}>
+  <InputWrapper className={className} column>
     <Label htmlFor={name}>{label}</Label>
-    <StyledInput name={name} required={required} type="date" />
+    <StyledInput name={name} required={required} type={type} />
   </InputWrapper>
 );
