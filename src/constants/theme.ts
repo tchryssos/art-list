@@ -70,7 +70,7 @@ const theme = {
   },
   fontFamily: {
     normal:
-      "'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'ＭＳ Ｐゴシック', Osaka, monospace",
+      "'Hiragino Kaku Gothic Pro', 'メイリオ', 'ＭＳ Ｐゴシック', -apple-system, BlinkMacSystemFont, sans-serif",
   },
   lineHeight: {
     normal: 1.2,

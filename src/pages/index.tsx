@@ -18,10 +18,16 @@ const Submit = styled(Button)`
   padding: ${({ theme }) => theme.spacing[16]};
 `;
 
-const NavButton = styled(Button)`
-  height: ${({ theme }) => theme.spacing[48]};
-  width: ${({ theme }) => theme.spacing[48]};
+const Nav = styled(FlexBox)`
+  margin-top: auto;
 `;
+
+const NavButton = styled(Button)(({ theme }) => ({
+  width: theme.spacing[64],
+  height: theme.spacing[64],
+  padding: theme.spacing[16],
+  borderRadius: theme.border.borderRadius.round,
+}));
 
 const Home: React.FC = () => {
   const onSubmit = (e: FormEvent) => {
@@ -44,13 +50,6 @@ const Home: React.FC = () => {
   };
   return (
     <Layout>
-      <FlexBox justifyContent="flex-end">
-        <Link href={LIST_ROUTE}>
-          <NavButton buttonLike>
-            <Search title="Search" titleId="search-icon" />
-          </NavButton>
-        </Link>
-      </FlexBox>
       <Form onSubmit={onSubmit}>
         <Title>Art Form</Title>
         <Input label="Artist" name="artist" required type="text" />
@@ -67,6 +66,13 @@ const Home: React.FC = () => {
           <Body bold>Submit</Body>
         </Submit>
       </Form>
+      <Nav justifyContent="flex-end">
+        <Link href={LIST_ROUTE}>
+          <NavButton buttonLike>
+            <Search title="Search" titleId="search-icon" />
+          </NavButton>
+        </Link>
+      </Nav>
     </Layout>
   );
 };

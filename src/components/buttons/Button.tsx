@@ -18,7 +18,7 @@ const StyledButton = styled.button<StyledProps>(({ theme, transparent }) => ({
     : 'none',
   // Non-standard padding matches default button padding
   padding: `${pxToRem(1)} ${pxToRem(6)}`,
-  ':hover': {
+  ':hover, :active': {
     filter: `brightness(${theme.filters.brightnessMod})`,
   },
   ':disabled': {
