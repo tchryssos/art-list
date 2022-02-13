@@ -23,7 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     <>
       <Head title={title} />
       <FlexBox flex={1} justifyContent="center" p={isAtLeastXs ? 32 : 16}>
-        <PageWrapper>{children}</PageWrapper>
+        <PageWrapper column>{children}</PageWrapper>
       </FlexBox>
     </>
   );
