@@ -4,7 +4,7 @@ type HeadProps = {
   title?: string;
 };
 
-export const Head: React.FC<HeadProps> = ({ title = 'CHANGE ME' }) => (
+export const Head: React.FC<HeadProps> = ({ title = "Troy's Art List" }) => (
   <NextHead>
     {/* Uncomment the following lines if using google fonts */}
     {/* <link

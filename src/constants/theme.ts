@@ -48,11 +48,12 @@ const theme = {
     },
   },
   fontSize: {
-    body: '1rem',
-    title: '2rem',
+    body: '0.825rem',
+    title: '1.5rem',
   },
   fontFamily: {
-    normal: 'sans-serif',
+    normal:
+      "'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'ＭＳ Ｐゴシック', Osaka, monospace",
   },
   lineHeight: {
     normal: 1.2,
