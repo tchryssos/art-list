@@ -50,6 +50,7 @@ const theme = {
   fontSize: {
     body: '0.825rem',
     title: '1.5rem',
+    subBody: '0.75rem',
   },
   fontFamily: {
     normal:

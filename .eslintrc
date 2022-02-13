@@ -36,6 +36,7 @@
     "comma-dangle": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",
+    "no-restricted-syntax": "warn",
 
     // import
     "import/no-named-as-default": "off",
