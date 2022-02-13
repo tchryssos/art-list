@@ -21,7 +21,7 @@ const standardModeColors: ColorModeColors = {
 };
 
 const standardModeFilters = {
-  brightnessMod: 0.8,
+  brightnessMod: 0.9,
 };
 
 const theme = {

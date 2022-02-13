@@ -48,7 +48,7 @@ const Home: React.FC = () => {
         <Input label="Location Seen" name="location" required type="text" />
         <Input label="Date Seen" name="date" required type="date" />
         <Submit type="submit">
-          <Body>Submit</Body>
+          <Body bold>Submit</Body>
         </Submit>
       </Form>
     </Layout>
