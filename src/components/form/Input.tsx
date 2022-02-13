@@ -9,6 +9,7 @@ export interface InputProps {
   required?: boolean;
   className?: string;
   type: 'text' | 'date';
+  defaultValue?: string;
 }
 
 const InputWrapper = styled(FlexBox)`
@@ -30,9 +31,15 @@ export const Input: React.FC<InputProps> = ({
   required,
   label,
   type,
+  defaultValue,
 }) => (
   <InputWrapper className={className} column>
     <Label htmlFor={name}>{label}</Label>
-    <StyledInput name={name} required={required} type={type} />
+    <StyledInput
+      defaultValue={defaultValue}
+      name={name}
+      required={required}
+      type={type}
+    />
   </InputWrapper>
 );

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import padStart from 'lodash.padstart';
 import { FormEvent } from 'react';
 
 import { FlexBox } from '~/components/box/FlexBox';
@@ -32,6 +33,15 @@ const Home: React.FC = () => {
       console.log(entry);
     }
   };
+
+  const getTodayDefaultValue = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = padStart(String(d.getMonth() + 1), 2, '0');
+    const day = padStart(String(d.getDate()), 2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
   return (
     <Layout>
       <FlexBox justifyContent="flex-end">
@@ -46,7 +56,13 @@ const Home: React.FC = () => {
         <Input label="Artist" name="artist" required type="text" />
         <Input label="Artwork Name" name="name" required type="text" />
         <Input label="Location Seen" name="location" required type="text" />
-        <Input label="Date Seen" name="date" required type="date" />
+        <Input
+          defaultValue={getTodayDefaultValue()}
+          label="Date Seen"
+          name="date"
+          required
+          type="date"
+        />
         <Submit type="submit">
           <Body bold>Submit</Body>
         </Submit>
