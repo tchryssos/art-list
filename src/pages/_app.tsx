@@ -24,6 +24,7 @@ const createGlobalStyles = (theme: Theme) => css`
   /* @import url(''); */
   html {
     ${baseStyle};
+    background-color: ${theme.colors.background};
   }
   body {
     ${baseStyle};

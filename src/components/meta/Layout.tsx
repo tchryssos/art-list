@@ -11,7 +11,7 @@ type LayoutProps = {
 };
 
 const PageWrapper = styled(FlexBox)`
-  max-width: ${({ theme }) => theme.breakpointValues.lg}px;
+  max-width: ${({ theme }) => theme.breakpointValues.md}px;
   width: 100%;
   height: 100%;
 `;

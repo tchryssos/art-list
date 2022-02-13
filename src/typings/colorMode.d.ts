@@ -1,11 +1,13 @@
 type ColorHash = `#${string}`;
 type ColorRgba = `rgba(${number},${number},${number},${number})`;
-
 export interface ColorModeColors {
   background: ColorHash;
   text: ColorHash;
-  darken: ColorRgba;
-  lighten: ColorRgba;
+  success: ColorHash;
+  danger: ColorHash;
+  accentHeavy: ColorHash;
+  accentLight: ColorHash;
+  smudge: ColorRgba;
 }
 
 export type ColorMode = 'standard';
