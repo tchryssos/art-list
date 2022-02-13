@@ -23,6 +23,7 @@ const StyledInput = styled.input`
 
 const Label = styled.label(({ theme }) => ({
   fontSize: theme.fontSize.subBody,
+  fontWeight: theme.fontWeight.regular,
 }));
 
 export const Input: React.FC<InputProps> = ({

@@ -76,9 +76,10 @@ const theme = {
     normal: 1.2,
   },
   fontWeight: {
-    regular: 400,
-    bold: 700,
-    black: 800,
+    light: 400,
+    regular: 600,
+    bold: 800,
+    black: 900,
   },
 };
 
