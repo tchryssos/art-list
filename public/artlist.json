@@ -1,0 +1,541 @@
+[
+  {
+    "artist": "Franz Klein",
+    "name": "Painting Number 2",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjE1MTE0NCJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA4MCAtcmVzaXplIDE1MzZ4MTUzNlx1MDAzZSJdXQ.jpg?sha=683c8b648af20840",
+    "location": "MoMA",
+    "date": "12/13/2018"
+  },
+  {
+    "artist": "Franz Klein",
+    "name": "Monitor",
+    "imgSrc": "https://www.moca.org/storage/app/uploads/public/57a/e46/185/thumb_1712_1120_0_0_0_auto.jpg",
+    "location": "MoCA",
+    "date": "1/11/2019"
+  },
+  {
+    "artist": "Franz Klein",
+    "name": "Black Iris",
+    "imgSrc": "https://www.moca.org/storage/app/uploads/public/57a/e21/a9b/thumb_1692_1120_0_0_0_auto.jpg",
+    "location": "MoCA",
+    "date": "1/11/2019"
+  },
+  {
+    "artist": "Bruce Nauman",
+    "name": "",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Mark Rothko",
+    "name": "Black on Dark Sienna on Purple",
+    "imgSrc": "https://www.moca.org/storage/app/uploads/public/55e/768/577/thumb_808_1120_0_0_0_auto.jpg",
+    "location": "MoCA",
+    "date": "1/11/2019"
+  },
+  {
+    "artist": "Mark Rothko",
+    "name": "No. 301",
+    "imgSrc": "https://www.moca.org/storage/app/uploads/public/55e/773/ef0/thumb_814_1120_0_0_0_auto.jpg",
+    "location": "MoCA",
+    "date": "1/11/2019"
+  },
+  {
+    "artist": "Mark Rothko",
+    "name": "No. 9",
+    "imgSrc": "https://media.nga.gov/iiif/756ca39d-d22f-429a-ad4d-2525697a05b6__640/full/!588,600/0/default.jpg",
+    "location": "National Gallery of Art",
+    "date": "1/11/2019"
+  },
+  {
+    "artist": "Mark Rothko",
+    "name": "No. 13",
+    "imgSrc": "https://collectionapi.metmuseum.org/api/collection/v1/iiif/484362/1006959/restricted",
+    "location": "The Met Fifth Avenue",
+    "date": "1/16/2019"
+  },
+  {
+    "artist": "Mark Rothko",
+    "name": "Untitled (Brown and Gray) (1969)",
+    "imgSrc": "https://collectionapi.metmuseum.org/api/collection/v1/iiif/484366/1006282/restricted",
+    "location": "The Met Fifth Avenue",
+    "date": "1/16/2019"
+  },
+  {
+    "artist": "Barnett Newman",
+    "name": "",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Ad Reinhardt",
+    "name": "Number 107",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjIwNjM5OCJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=a1d203162dc1bd5c",
+    "location": "MoMA",
+    "date": "11/26/2019"
+  },
+  {
+    "artist": "Josef Albers",
+    "name": "",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Claude Monet",
+    "name": "The Japanese Footbridge (1920)",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjE1MTE1NiJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=8b338b5fb3cf8e6d",
+    "location": "MoMa",
+    "date": "12/18/2018"
+  },
+  {
+    "artist": "Henri Matisse",
+    "name": "View of Notre Dame",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjE2NjgxMiJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=9914ab5d13545a79",
+    "location": "MoMA",
+    "date": "12/13/2018"
+  },
+  {
+    "artist": "Henri Matisse",
+    "name": "The Young Sailor II",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Phillip Guston",
+    "name": "Cherries",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjI1NTg0MyJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=cad00c75f2c09609",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Agnes Martin",
+    "name": "With My Back to the World",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjE2MDAzOSJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=f335fc34910d77a0",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Gego",
+    "name": "Untitled (73/15)",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjIzNTA2MyJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=01957005ecce82e6",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Joan Mitchell",
+    "name": "Wood, Wind, No Tuba",
+    "imgSrc": "https://www.moma.org/media/W1siZiIsIjE1OTIyMSJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ.jpg?sha=ad8e78480d0b6f67",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Joan Mitchell",
+    "name": "Iva",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Joan Mitchell",
+    "name": "La Vie en Rose",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Jo Baer",
+    "name": "Brilliant Yellow #9",
+    "imgSrc": "https://www.artic.edu/iiif/2/2d384434-c049-7f51-ce4f-b03b8168154a/full/843,/0/default.jpg",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Raymond Pettibon",
+    "name": "No Title (I've prayed...)",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Raymond Pettibon",
+    "name": "Untitled (Getting Oswald to...)",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Raymond Pettibon",
+    "name": "No Title (Angels are surrounding...)",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Raymond Pettibon",
+    "name": "No Title (I have picked)",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Julio Le Parc",
+    "name": "Sequences of Growth and Decrease in Translational Motion",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Julio Le Parc",
+    "name": "Seventeen Sequences",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Julio Le Parc",
+    "name": "Rotations",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Julio Le Parc",
+    "name": "Quantitative Sequences",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Carmen Herrera",
+    "name": "Alba",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Gerhard Richter",
+    "name": "Abstraktes Bild (742-4)",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Lynne Golob Gelfman",
+    "name": "circle blue",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Pablo Picasso",
+    "name": "Mandolin and Guitar",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Joan Brown",
+    "name": "woman waiting in a theater lobby",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Jonas Wood",
+    "name": "Jungle Kitchen",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Dike Blair",
+    "name": "Untitled (1997)",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Mark Bradford",
+    "name": "Duck Walk",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Jennifer Bartlett",
+    "name": "Squaring: 2, 4, 16, 256, 65,536",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Terry Winters",
+    "name": "Light Source Direction",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Pat Steir",
+    "name": "Sixteen Waterfalls of Dreams, Memories, and Sentiment",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "David Bates",
+    "name": "The Long Cyprus",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Eduard Gaertner",
+    "name": "Parochialstrasse in Berlin",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Henri de Toulouse-Lautrec",
+    "name": "The Englishman",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Otto Friedrich",
+    "name": "Fugato",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Horace Pippin",
+    "name": "The Squirrel Hunter",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Paul Klee",
+    "name": "One Who Understands",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Giorgio de Chirico",
+    "name": "Ariadne",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Leiko Ikemura",
+    "name": "Amazons",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Leiko Ikemura",
+    "name": "Marine",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Leiko Ikemura",
+    "name": "Berlin Horizon 1 & 2",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Richard Diebenkorn",
+    "name": "Berkeley No 8",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Neil Welliver",
+    "name": "Breached Beaver Dam",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Helen Frankenthaler",
+    "name": "captain's watch",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Helen Frankenthaler",
+    "name": "stride",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Robert Motherwell",
+    "name": "Two Figures",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Yoan Capote",
+    "name": "Isla (Tierra Prometida)",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "J. C. Dahl",
+    "name": "Udsigt mod Jungshoved",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Vilhelm Hammershøi",
+    "name": "Fra det gamle Christiansborg",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Johan Rohde",
+    "name": "Vinteraften i Ribe",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Niels Lergaard",
+    "name": "Havet. Grå vinterdag",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Charles H. Davis",
+    "name": "Giverny, Harvest Moon",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Charles Schreyvogel",
+    "name": "In Hot Pursuit",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Carl Craig",
+    "name": "Party / After-party",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Wayne Thiebaud",
+    "name": "Clown Walk",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Edgar Payne",
+    "name": "Red Rocks",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Jóhannes Sveinsson Kjarval",
+    "name": "Moss by Mt. Vífilsfell",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Jóhannes Sveinsson Kjarval",
+    "name": "Án titlis (Vífilsfell) 1945",
+    "imgSrc": "",
+    "location": "",
+    "date": ""
+  },
+  {
+    "artist": "Emil Nolde",
+    "name": "Young Couple",
+    "imgSrc": "Moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "José Clemente Orozco",
+    "name": "The Subway",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Max Beckmann",
+    "name": "portrait of Frau H. M. (Naila)",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Thomas Bayrle",
+    "name": "chairs up",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Thomas Bayrle",
+    "name": "paper tiger",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Robert Ryman",
+    "name": "Twin",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Carmela Gross",
+    "name": "Stamp (carimbo)",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Gego",
+    "name": "untitled (73/14)",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  },
+  {
+    "artist": "Shigeko Kubota",
+    "name": "Berlin diary: thanks to my ancestors",
+    "imgSrc": "moma",
+    "location": "",
+    "date": "11/2/21"
+  }
+]
