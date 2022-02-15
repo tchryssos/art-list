@@ -18,10 +18,9 @@ const Frame = styled(FlexBox)(({ theme }) => ({
   border: `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`,
   padding: theme.spacing[16],
   gap: theme.spacing[8],
-  transition: 'transform 250ms linear',
   '&:hover, &:active': {
-    transform: 'scale(1.005)',
     borderColor: theme.colors.text,
+    backgroundColor: theme.colors.smudge,
   },
 }));
 
