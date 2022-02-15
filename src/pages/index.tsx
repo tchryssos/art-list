@@ -1,25 +1,8 @@
-import styled from '@emotion/styled';
 import padStart from 'lodash.padstart';
 import { FormEvent } from 'react';
 
-import { FlexBox } from '~/components/box/FlexBox';
-import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
-import { Search } from '~/components/icons/Search';
-import { Link } from '~/components/Link';
 import { Layout } from '~/components/meta/Layout';
-import { LIST_ROUTE } from '~/constants/routing';
-
-const Nav = styled(FlexBox)`
-  margin-top: auto;
-`;
-
-const NavButton = styled(Button)(({ theme }) => ({
-  width: theme.spacing[64],
-  height: theme.spacing[64],
-  padding: theme.spacing[16],
-  borderRadius: theme.border.borderRadius.round,
-}));
 
 const Home: React.FC = () => {
   const onSubmit = (e: FormEvent) => {
@@ -42,19 +25,12 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout>
+    <Layout nav="list">
       <ArtForm
         defaultValues={{ date: getTodayDefaultValue() }}
         formTitle="Add New Artwork"
         onSubmit={onSubmit}
       />
-      <Nav justifyContent="flex-end">
-        <Link href={LIST_ROUTE}>
-          <NavButton buttonLike>
-            <Search title="Search" titleId="search-icon" />
-          </NavButton>
-        </Link>
-      </Nav>
     </Layout>
   );
 };

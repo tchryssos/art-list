@@ -22,7 +22,7 @@ const List: React.FC = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout nav="home">
       <Title mb={16}>Art List</Title>
       {artList ? (
         <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
