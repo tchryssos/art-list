@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
-import { SyntheticEvent, useState } from 'react';
 
 import { IS_URL } from '~/constants/regex';
+import { createArtDetailRoute } from '~/constants/routing';
 import { pxToRem } from '~/logic/util/styles';
 import { TEMPart } from '~/typings/art';
 
 import { FlexBox } from './box/FlexBox';
 import { Image } from './Image';
+import { Link } from './Link';
 import { Body } from './typography/Body';
 
 interface ArtListItemProps {
@@ -14,9 +15,14 @@ interface ArtListItemProps {
 }
 
 const Frame = styled(FlexBox)(({ theme }) => ({
-  border: `${theme.border.borderWidth[1]} solid ${theme.colors.text}`,
+  border: `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`,
   padding: theme.spacing[16],
   gap: theme.spacing[8],
+  transition: 'transform 250ms linear',
+  '&:hover, &:active': {
+    transform: 'scale(1.005)',
+    borderColor: theme.colors.text,
+  },
 }));
 
 const ArtImg = styled(Image)`
@@ -31,32 +37,24 @@ const ArtImg = styled(Image)`
 `;
 
 export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
-  const [imageElement, setImageElement] = useState<HTMLImageElement>();
-
-  const onLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    const target = e.target as HTMLImageElement;
-    if (target.complete) {
-      setImageElement(e.target as HTMLImageElement);
-    }
-  };
-
   const { name, artist, location, date, imgSrc } = art;
 
   return (
-    <Frame column>
-      <Body>{name}</Body>
-      <Body>{artist}</Body>
-      {imgSrc?.match(IS_URL) && (
-        <ArtImg
-          layout="fill"
-          objectFit="scale-down"
-          objectPosition="left center"
-          src={imgSrc}
-          onLoad={onLoad}
-        />
-      )}
-      <Body>{location}</Body>
-      <Body>{date}</Body>
-    </Frame>
+    <Link darkenOnHover={false} href={createArtDetailRoute('1000')}>
+      <Frame column>
+        <Body>{name}</Body>
+        <Body>{artist}</Body>
+        {imgSrc?.match(IS_URL) && (
+          <ArtImg
+            layout="fill"
+            objectFit="scale-down"
+            objectPosition="left center"
+            src={imgSrc}
+          />
+        )}
+        <Body>{location}</Body>
+        <Body>{date}</Body>
+      </Frame>
+    </Link>
   );
 };

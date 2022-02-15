@@ -23,7 +23,7 @@ const List: React.FC = () => {
 
   return (
     <Layout>
-      <Title>Art List</Title>
+      <Title mb={16}>Art List</Title>
       {artList ? (
         <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
           {artList.map((a) => (

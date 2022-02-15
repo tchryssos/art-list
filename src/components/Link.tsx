@@ -7,16 +7,20 @@ interface LinkProps {
   children: React.ReactNode;
   className?: string;
   underline?: boolean;
+  darkenOnHover?: boolean;
 }
 
-interface StyledProps extends Pick<LinkProps, 'underline'> {}
+interface StyledProps extends Pick<LinkProps, 'underline' | 'darkenOnHover'> {}
 
 const StyledLink = styled.a<StyledProps>`
   color: ${({ theme }) => theme.colors.text};
   display: inline-block;
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
   :hover {
-    filter: brightness(${({ theme }) => theme.filters.brightnessMod});
+    filter: brightness(
+      ${({ theme, darkenOnHover }) =>
+        darkenOnHover ? theme.filters.brightnessMod : ''}
+    );
   }
 `;
 
@@ -25,10 +29,12 @@ export const Link: React.FC<LinkProps> = ({
   isInternal = true,
   children,
   className,
+  darkenOnHover = true,
 }) => (
   <NextLink href={href} passHref>
     <StyledLink
       className={className}
+      darkenOnHover={darkenOnHover}
       rel="noopener noreferrer"
       target={isInternal ? '_self' : '_blank'}
     >
