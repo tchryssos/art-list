@@ -14,7 +14,7 @@ const List: React.FC = () => {
     const fetchArt = async () => {
       const resp = await fetch('/artlist.json');
       const list: TEMPart[] = await resp.json();
-      setArtList(list.reverse());
+      setArtList(list);
     };
     fetchArt();
   }, []);

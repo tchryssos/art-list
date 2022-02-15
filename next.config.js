@@ -7,6 +7,13 @@ module.exports = {
     defaultLocale: 'en-US',
   },
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: [
+      'upload.wikimedia.org',
+      'www.moma.org',
+      'collectionapi.metmuseum.org',
+      'www.moca.org',
+      'media.nga.gov',
+      'www.artic.edu',
+    ],
   },
 };
