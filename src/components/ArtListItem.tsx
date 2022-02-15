@@ -38,6 +38,10 @@ const ArtImg = styled(Image)`
 export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
   const { name, artist, location, date, imgSrc } = art;
 
+  if (!(name && artist)) {
+    return null;
+  }
+
   return (
     <Link darkenOnHover={false} href={createArtDetailRoute('1000')}>
       <Frame column>
@@ -45,14 +49,17 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
         <Body>{artist}</Body>
         {imgSrc?.match(IS_URL) && (
           <ArtImg
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoAQMAAAC2MCouAAAAA1BMVEXo6Og4/a9sAAAAC0lEQVQI12MYYQAAAPAAAU6V2N8AAAAASUVORK5CYII=
+            "
             layout="fill"
             objectFit="scale-down"
             objectPosition="left center"
+            placeholder="blur"
             src={imgSrc}
           />
         )}
-        <Body>{location}</Body>
-        <Body>{date}</Body>
+        <Body>{location || '???'}</Body>
+        <Body>{date || '???'}</Body>
       </Frame>
     </Link>
   );
