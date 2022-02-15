@@ -5,10 +5,12 @@ import { GridBox } from '~/components/box/GridBox';
 import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout } from '~/components/meta/Layout';
 import { Title } from '~/components/typography/Title';
+import { useBreakpointsLessThan } from '~/logic/hooks/useBreakpoints';
 import { TEMPart } from '~/typings/art';
 
 const List: React.FC = () => {
   const [artList, setArtList] = useState<TEMPart[]>();
+  const lessThanSm = useBreakpointsLessThan('sm');
 
   useEffect(() => {
     const fetchArt = async () => {
@@ -23,7 +25,7 @@ const List: React.FC = () => {
     <Layout>
       <Title>Art List</Title>
       {artList ? (
-        <GridBox columnGap={16} rowGap={16}>
+        <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
           {artList.map((a) => (
             <ArtListItem art={a} key={`${a.name}-${a.artist}`} />
           ))}

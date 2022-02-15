@@ -50,7 +50,7 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
         <ArtImg
           layout="fill"
           objectFit="scale-down"
-          objectPosition="left bottom"
+          objectPosition="left center"
           src={imgSrc}
           onLoad={onLoad}
         />

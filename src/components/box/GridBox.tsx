@@ -26,13 +26,12 @@ const Grid = styled(Box)<GridBoxProps>(
     columns = 2,
     columnGap,
     rowGap,
-    theme,
   }) => ({
     justifyItems,
     alignItems,
     columnGap,
     rowGap,
-    gridTemplateColumns: '1fr',
+    gridTemplateColumns: `repeat(${columns}, 1fr)`,
     ...(center && {
       justifyItems: 'center',
       alignItems: 'center',
@@ -40,9 +39,6 @@ const Grid = styled(Box)<GridBoxProps>(
     ...(inline && {
       display: 'inline-grid',
     }),
-    [theme.breakpoints.md]: {
-      gridTemplateColumns: `repeat(${columns}, 1fr)`,
-    },
   })
 );
 
