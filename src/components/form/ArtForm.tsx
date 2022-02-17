@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { FormEvent } from 'react';
 
 import { Button } from '../buttons/Button';
+import { SubmitButton } from '../buttons/SubmitButton';
 import { Body } from '../typography/Body';
 import { Title } from '../typography/Title';
 import { Form } from './Form';
@@ -69,8 +70,6 @@ export const ArtForm: React.FC<ArtFormProps> = ({
         type="text"
       />
     )}
-    <Submit type="submit">
-      <Body bold>Submit</Body>
-    </Submit>
+    <SubmitButton />
   </Form>
 );
