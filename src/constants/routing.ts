@@ -1,3 +1,4 @@
+// CLIENT ROUTES
 export const HOME_ROUTE = '/';
 
 export const LIST_ROUTE = '/list';
@@ -12,3 +13,5 @@ export const NEW_ARTIST_ROUTE = createArtistDetailRoute('new');
 export const createLocationDetailRoute = (id: DetailRouteId) =>
   `/locations/${id}`;
 export const NEW_LOCATION_ROUTE = createLocationDetailRoute('new');
+
+// API ROUTES

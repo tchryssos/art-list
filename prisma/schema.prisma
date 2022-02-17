@@ -25,14 +25,18 @@ model Art {
 }
 
 model Location {
-  id        Int     @id @default(autoincrement())
-  name      String
-  shortName String?
-  art       Art[]
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  shortName      String?
+  art            Art[]
+  createdOn      DateTime @db.Timestamp(6)
+  lastModifiedOn DateTime @db.Timestamp(6)
 }
 
 model Artist {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  art  Art[]
+  id             Int      @id @default(autoincrement())
+  name           String   @unique
+  art            Art[]
+  createdOn      DateTime @db.Timestamp(6)
+  lastModifiedOn DateTime @db.Timestamp(6)
 }

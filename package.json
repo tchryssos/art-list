@@ -14,7 +14,8 @@
     "build-storybook": "build-storybook",
     "test": "jest",
     "lint": "next lint",
-    "lint:prune": "! ts-prune -i src/pages/* | grep -v -e src/pages"
+    "lint:prune": "! ts-prune -i src/pages/* | grep -v -e src/pages",
+    "prisma:regenerate": "npx prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.4.0",
