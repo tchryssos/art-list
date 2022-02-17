@@ -4,7 +4,7 @@ import { FormEvent } from 'react';
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout, NavVariant } from '~/components/meta/Layout';
 
-const homeNav: NavVariant[] = ['location', 'artist', 'list'];
+const homeNav: NavVariant[] = ['list'];
 
 const Home: React.FC = () => {
   const onSubmit = (e: FormEvent) => {

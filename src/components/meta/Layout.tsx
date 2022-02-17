@@ -1,25 +1,18 @@
 import styled from '@emotion/styled';
 
-import {
-  HOME_ROUTE,
-  LIST_ROUTE,
-  NEW_ARTIST_ROUTE,
-  NEW_LOCATION_ROUTE,
-} from '~/constants/routing';
+import { HOME_ROUTE, LIST_ROUTE } from '~/constants/routing';
 import { useBreakpointsAtLeast } from '~/logic/hooks/useBreakpoints';
 import { pxToRem } from '~/logic/util/styles';
 
 import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
-import { Artist } from '../icons/Artist';
 import { Home } from '../icons/Home';
-import { Location } from '../icons/Location';
 import { Search } from '../icons/Search';
 import { IconProps } from '../icons/types';
 import { Link } from '../Link';
 import { Head } from './Head';
 
-export type NavVariant = 'art' | 'list' | 'artist' | 'location';
+export type NavVariant = 'art' | 'list';
 
 type LayoutProps = {
   children?: React.ReactNode;
@@ -64,14 +57,6 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
             case 'list':
               route = LIST_ROUTE;
               Icon = Search;
-              break;
-            case 'artist':
-              route = NEW_ARTIST_ROUTE;
-              Icon = Artist;
-              break;
-            case 'location':
-              route = NEW_LOCATION_ROUTE;
-              Icon = Location;
               break;
             default:
               route = HOME_ROUTE;
