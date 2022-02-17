@@ -3,11 +3,11 @@ import { NextApiHandler } from 'next';
 import { artistFindOrCreate } from '~/logic/api/artists';
 import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
-import { ArtistSubmitData } from '~/typings/art';
+import { ArtSubmitData } from '~/typings/art';
 
 const createArt: NextApiHandler = async (req, res) => {
   try {
-    const body: ArtistSubmitData = await JSON.parse(req.body);
+    const body: ArtSubmitData = await JSON.parse(req.body);
 
     const now = new Date();
 

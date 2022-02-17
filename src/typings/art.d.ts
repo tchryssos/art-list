@@ -8,7 +8,7 @@ export type TEMPart = {
   imgSrc: string;
 };
 
-export type ArtistSubmitData = {
+export type ArtSubmitData = {
   location: string;
   artist: string;
   name: string;
