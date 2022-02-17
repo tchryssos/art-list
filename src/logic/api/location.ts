@@ -1,4 +1,4 @@
-import { prisma } from '.';
+import { prisma } from '../util/prisma';
 
 export const locationFindOrCreate = async (locationName: string) => {
   const now = new Date();

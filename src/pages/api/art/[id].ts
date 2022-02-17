@@ -1,8 +1,8 @@
 import { NextApiHandler } from 'next';
 
+import { artistFindOrCreate } from '~/logic/api/artists';
+import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
-import { artistFindOrCreate } from '~/logic/util/prisma/artists';
-import { locationFindOrCreate } from '~/logic/util/prisma/location';
 import { ArtistSubmitData } from '~/typings/art';
 
 const getArt: NextApiHandler = async (req, res) => {
