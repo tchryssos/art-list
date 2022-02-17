@@ -15,7 +15,8 @@
     "test": "jest",
     "lint": "next lint",
     "lint:prune": "! ts-prune -i src/pages/* | grep -v -e src/pages",
-    "prisma:regenerate": "npx prisma generate"
+    "prisma:regenerate": "npx prisma generate",
+    "prisma:db-update-schema": "npx prisma db push"
   },
   "dependencies": {
     "@emotion/react": "^11.4.0",

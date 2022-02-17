@@ -4,6 +4,7 @@ import { FormEvent } from 'react';
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout, NavVariant } from '~/components/meta/Layout';
 import { ART_CREATE_ROUTE } from '~/constants/routing';
+import { formDataToJson } from '~/logic/util/forms';
 
 const homeNav: NavVariant[] = ['list'];
 
@@ -11,8 +12,8 @@ const Home: React.FC = () => {
   const onSubmit = async (e: FormEvent) => {
     const formData = new FormData(e.target as HTMLFormElement);
     const resp = await fetch(ART_CREATE_ROUTE, {
-      method: 'CREATE',
-      body: formData,
+      method: 'POST',
+      body: formDataToJson(formData),
     });
 
     return resp.json();

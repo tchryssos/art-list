@@ -39,7 +39,7 @@ const patchArt: NextApiHandler = async (req, res) => {
         name: body.name,
         lastModifiedOn: now,
         dateSeen: body.dateSeen,
-        url: body.url,
+        imgSrc: body.imgSrc,
         artistId: artist.id,
         locationId: location.id,
       },
