@@ -1,4 +1,3 @@
-import { Art } from '@prisma/client';
 import { useEffect, useState } from 'react';
 
 import { ArtListItem } from '~/components/ArtListItem';

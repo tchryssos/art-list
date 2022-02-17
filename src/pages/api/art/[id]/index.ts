@@ -13,6 +13,10 @@ const getArt: NextApiHandler = async (req, res) => {
       where: {
         id: parseInt(id, 10),
       },
+      include: {
+        Artist: true,
+        Location: true,
+      },
     });
 
     res.status(200).json(art);

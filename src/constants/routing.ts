@@ -15,3 +15,5 @@ export const createLocationDetailRoute = (id: DetailRouteId) =>
 // API ROUTES
 export const ART_CREATE_ROUTE = '/api/art/new/create';
 export const ART_LIST_ROUTE = '/api/art';
+export const createArtApiRoute = (id: DetailRouteId) =>
+  `/api${createArtDetailRoute(id)}`;

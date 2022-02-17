@@ -1,15 +1,12 @@
 import styled from '@emotion/styled';
-import { Art } from '@prisma/client';
-import { parse } from 'date-fns';
 
 import { IS_URL } from '~/constants/regex';
 import { createArtDetailRoute } from '~/constants/routing';
 import { formatDate } from '~/logic/util/date';
-import { pxToRem } from '~/logic/util/styles';
 import { CompleteArt } from '~/typings/art';
 
+import { ArtImg } from './ArtImg';
 import { FlexBox } from './box/FlexBox';
-import { Image } from './Image';
 import { Link } from './Link';
 import { Body } from './typography/Body';
 
@@ -27,17 +24,6 @@ const Frame = styled(FlexBox)(({ theme }) => ({
   },
 }));
 
-const ArtImg = styled(Image)`
-  width: 100%;
-  min-height: ${pxToRem(320)};
-  position: relative;
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacing[8]};
-  ${({ theme }) => theme.breakpoints.sm} {
-    min-height: ${pxToRem(400)};
-  }
-`;
-
 export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
   const {
     name,
@@ -53,7 +39,7 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
   }
 
   return (
-    <Link darkenOnHover={false} href={createArtDetailRoute('1000')}>
+    <Link darkenOnHover={false} href={createArtDetailRoute(`${art.id}`)}>
       <Frame column>
         <Body>{name}</Body>
         <Body>{artistName}</Body>

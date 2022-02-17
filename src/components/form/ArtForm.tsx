@@ -9,13 +9,7 @@ import { Input } from './Input';
 
 interface ArtFormProps {
   formTitle: string;
-  defaultValues?: {
-    artist?: string;
-    name?: string;
-    location?: string;
-    date?: string;
-    imgSrc?: string;
-  };
+  defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => void;
 }
 
@@ -48,7 +42,7 @@ export const ArtForm: React.FC<ArtFormProps> = ({
       type="text"
     />
     <Input<ArtSubmitData>
-      defaultValue={defaultValues?.date}
+      defaultValue={defaultValues?.dateSeen}
       label="Date Seen"
       name="dateSeen"
       required
