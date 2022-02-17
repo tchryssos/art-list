@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   return (
     <Layout nav={homeNav}>
       <ArtForm
-        defaultValues={{ date: getTodayDefaultValue() }}
+        defaultValues={{ dateSeen: getTodayDefaultValue() }}
         formTitle="Add New Artwork"
         onSubmit={onSubmit}
       />
