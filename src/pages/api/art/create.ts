@@ -22,6 +22,7 @@ const createArt: NextApiHandler = async (req, res) => {
         dateSeen: body.dateSeen,
         createdOn: now,
         lastModifiedOn: now,
+        imgSrc: body.imgSrc || '',
       },
     });
 

@@ -13,5 +13,5 @@ export type ArtSubmitData = {
   artist: string;
   name: string;
   dateSeen: string;
-  url?: string;
+  imgSrc?: string;
 };

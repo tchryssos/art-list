@@ -3,14 +3,14 @@ import styled from '@emotion/styled';
 import { FlexBox } from '../box/FlexBox';
 import { createInputStyles } from './styles';
 
-export interface InputProps {
-  name: string;
+export type InputProps<T extends Record<string, unknown>> = {
+  name: Extract<keyof T, string>;
   label: string;
   required?: boolean;
   className?: string;
   type: 'text' | 'date';
   defaultValue?: string;
-}
+};
 
 const InputWrapper = styled(FlexBox)`
   width: 100%;
@@ -26,21 +26,17 @@ const Label = styled.label(({ theme }) => ({
   fontWeight: theme.fontWeight.regular,
 }));
 
-export const Input: React.FC<InputProps> = ({
-  name,
-  className,
-  required,
-  label,
-  type,
-  defaultValue,
-}) => (
-  <InputWrapper className={className} column>
-    <Label htmlFor={name}>{label}</Label>
-    <StyledInput
-      defaultValue={defaultValue}
-      name={name}
-      required={required}
-      type={type}
-    />
-  </InputWrapper>
-);
+export function Input<T extends Record<string, unknown>>(props: InputProps<T>) {
+  const { name, className, required, label, type, defaultValue } = props;
+  return (
+    <InputWrapper className={className} column>
+      <Label htmlFor={name}>{label}</Label>
+      <StyledInput
+        defaultValue={defaultValue}
+        name={name}
+        required={required}
+        type={type}
+      />
+    </InputWrapper>
+  );
+}
