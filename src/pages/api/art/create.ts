@@ -1,47 +1,18 @@
 import { NextApiHandler } from 'next';
 
 import { prisma } from '~/logic/util/prisma';
-import { ArtCreateData } from '~/typings/art';
+import { artistFindOrCreate } from '~/logic/util/prisma/artists';
+import { locationFindOrCreate } from '~/logic/util/prisma/location';
+import { ArtistSubmitData } from '~/typings/art';
 
 const createArt: NextApiHandler = async (req, res) => {
   try {
-    const body: ArtCreateData = await JSON.parse(req.body);
+    const body: ArtistSubmitData = await JSON.parse(req.body);
 
     const now = new Date();
 
-    // Find or create artist by name
-    let artist = await prisma.artist.findUnique({
-      where: {
-        name: body.artist,
-      },
-    });
-
-    if (!artist) {
-      artist = await prisma.artist.create({
-        data: {
-          name: body.artist,
-          createdOn: now,
-          lastModifiedOn: now,
-        },
-      });
-    }
-
-    // Find or create location by name
-    let location = await prisma.location.findUnique({
-      where: {
-        name: body.location,
-      },
-    });
-
-    if (!location) {
-      location = await prisma.location.create({
-        data: {
-          name: body.location,
-          createdOn: now,
-          lastModifiedOn: now,
-        },
-      });
-    }
+    const artist = await artistFindOrCreate(body.artist);
+    const location = await locationFindOrCreate(body.location);
 
     const newArt = await prisma.art.create({
       data: {

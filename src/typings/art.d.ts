@@ -8,13 +8,10 @@ export type TEMPart = {
   imgSrc: string;
 };
 
-export type ArtCreateData = {
-  [K in keyof Pick<Art, 'name' | 'dateSeen'>]: string;
-} & {
+export type ArtistSubmitData = {
   location: string;
   artist: string;
-};
-
-export type ArtPatchData = {
-  [K in keyof Art]?: string;
+  name: string;
+  dateSeen: string;
+  url?: string;
 };

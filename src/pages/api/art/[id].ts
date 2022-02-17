@@ -1,7 +1,9 @@
-import { NextApiHandler, NextApiResponse } from 'next';
+import { NextApiHandler } from 'next';
 
 import { prisma } from '~/logic/util/prisma';
-import { ArtPatchData } from '~/typings/art';
+import { artistFindOrCreate } from '~/logic/util/prisma/artists';
+import { locationFindOrCreate } from '~/logic/util/prisma/location';
+import { ArtistSubmitData } from '~/typings/art';
 
 const getArt: NextApiHandler = async (req, res) => {
   try {
@@ -19,28 +21,43 @@ const getArt: NextApiHandler = async (req, res) => {
   }
 };
 
-// const patchArt: NextApiHandler = async (req, res) => {
-//   try {
-//     const { id } = req.query as { id: `${number}`}
+const patchArt: NextApiHandler = async (req, res) => {
+  try {
+    const { id } = req.query as { id: `${number}` };
 
-//     const currentArt = await prisma.art.findUnique({
-//       where: {
-//         id: parseInt(id, 10)
-//       }
-//     })
+    const body: ArtistSubmitData = await JSON.parse(req.body);
+    const now = new Date();
 
-//     const body: ArtPatchData = await JSON.parse(req.body)
+    const artist = await artistFindOrCreate(body.artist);
+    const location = await locationFindOrCreate(body.location);
 
-//     const updatedArt = await
-//   } catch (e) {
-//     res.status(500).json({ error: (e as Error).message });
-//   }
-// }
+    const updatedArt = await prisma.art.update({
+      where: {
+        id: parseInt(id, 10),
+      },
+      data: {
+        name: body.name,
+        lastModifiedOn: now,
+        dateSeen: body.dateSeen,
+        url: body.url,
+        artistId: artist.id,
+        locationId: location.id,
+      },
+    });
+    res.status(200).json(updatedArt);
+  } catch (e) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+};
 
 const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
-  await getArt(req, res);
+  if (method === 'PATCH') {
+    await patchArt(req, res);
+  } else {
+    await getArt(req, res);
+  }
 };
 
 export default handleRequest;

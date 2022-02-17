@@ -16,6 +16,7 @@ model Art {
   lastModifiedOn DateTime @db.Timestamp(6)
   name           String
   dateSeen       DateTime @db.Date
+  url            String?
 
 
   Location   Location? @relation(fields: [locationId], references: [id])
