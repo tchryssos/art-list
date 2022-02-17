@@ -10,8 +10,8 @@ const Path = styled.path<Pick<IconProps, 'color'>>`
 export const Search: React.FC<IconProps> = ({
   className,
   color,
-  title,
-  titleId,
+  title = 'Art List',
+  titleId = 'art-list-icon',
 }) => (
   <Icon className={className} title={title} titleId={titleId}>
     <Path
