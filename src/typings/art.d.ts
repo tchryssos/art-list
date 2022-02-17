@@ -14,3 +14,7 @@ export type ArtCreateData = {
   location: string;
   artist: string;
 };
+
+export type ArtPatchData = {
+  [K in keyof Art]?: string;
+};
