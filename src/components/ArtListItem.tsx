@@ -26,7 +26,7 @@ const Frame = styled(FlexBox)(({ theme }) => ({
 
 const ArtImg = styled(Image)`
   width: 100%;
-  min-height: ${pxToRem(240)};
+  min-height: ${pxToRem(320)};
   position: relative;
   display: block;
   margin-bottom: ${({ theme }) => theme.spacing[8]};
