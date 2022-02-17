@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import { ArtListItem } from '~/components/ArtListItem';
 import { GridBox } from '~/components/box/GridBox';
 import { LoadingPageSpinner } from '~/components/LoadingSpinner';
-import { Layout } from '~/components/meta/Layout';
+import { Layout, NavVariant } from '~/components/meta/Layout';
 import { Title } from '~/components/typography/Title';
 import { useBreakpointsLessThan } from '~/logic/hooks/useBreakpoints';
 import { TEMPart } from '~/typings/art';
+
+const listNav: NavVariant[] = ['art'];
 
 const List: React.FC = () => {
   const [artList, setArtList] = useState<TEMPart[]>();
@@ -22,7 +24,7 @@ const List: React.FC = () => {
   }, []);
 
   return (
-    <Layout nav="home">
+    <Layout nav={listNav}>
       <Title mb={16}>Art List</Title>
       {artList ? (
         <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>

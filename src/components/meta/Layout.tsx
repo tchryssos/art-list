@@ -1,20 +1,30 @@
 import styled from '@emotion/styled';
 
-import { HOME_ROUTE, LIST_ROUTE } from '~/constants/routing';
+import {
+  HOME_ROUTE,
+  LIST_ROUTE,
+  NEW_ARTIST_ROUTE,
+  NEW_LOCATION_ROUTE,
+} from '~/constants/routing';
 import { useBreakpointsAtLeast } from '~/logic/hooks/useBreakpoints';
 import { pxToRem } from '~/logic/util/styles';
 
 import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
+import { Artist } from '../icons/Artist';
 import { Home } from '../icons/Home';
+import { Location } from '../icons/Location';
 import { Search } from '../icons/Search';
+import { IconProps } from '../icons/types';
 import { Link } from '../Link';
 import { Head } from './Head';
+
+export type NavVariant = 'art' | 'list' | 'artist' | 'location';
 
 type LayoutProps = {
   children?: React.ReactNode;
   title?: string;
-  nav?: 'home' | 'list';
+  nav?: NavVariant[];
 };
 
 const PageWrapper = styled(FlexBox)`
@@ -29,6 +39,7 @@ const NavWrapper = styled(FlexBox)`
   bottom: 0;
   right: 0;
   margin: ${({ theme }) => theme.spacing[20]};
+  gap: ${({ theme }) => theme.spacing[16]};
 `;
 
 const NavButton = styled(Button)(({ theme }) => ({
@@ -45,15 +56,36 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
   if (nav) {
     return (
       <NavWrapper>
-        <Link href={nav === 'home' ? HOME_ROUTE : LIST_ROUTE}>
-          <NavButton buttonLike>
-            {nav === 'home' ? (
-              <Home title="Home" titleId="home-nav-icon" />
-            ) : (
-              <Search title="Art List" titleId="search-nav-icon" />
-            )}
-          </NavButton>
-        </Link>
+        {nav.map((n) => {
+          let route: string;
+          let Icon: React.FC<IconProps>;
+
+          switch (n) {
+            case 'list':
+              route = LIST_ROUTE;
+              Icon = Search;
+              break;
+            case 'artist':
+              route = NEW_ARTIST_ROUTE;
+              Icon = Artist;
+              break;
+            case 'location':
+              route = NEW_LOCATION_ROUTE;
+              Icon = Location;
+              break;
+            default:
+              route = HOME_ROUTE;
+              Icon = Home;
+              break;
+          }
+          return (
+            <Link href={route} key={n}>
+              <NavButton buttonLike>
+                <Icon />
+              </NavButton>
+            </Link>
+          );
+        })}
       </NavWrapper>
     );
   }

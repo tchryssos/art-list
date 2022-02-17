@@ -9,7 +9,7 @@ export type BaseIconProps = {
 };
 
 export type IconProps = Pick<
-  BaseIconProps,
+  Partial<BaseIconProps>,
   'title' | 'titleId' | 'className'
 > & {
   color?: Color;

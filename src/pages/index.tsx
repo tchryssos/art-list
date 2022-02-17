@@ -2,7 +2,9 @@ import padStart from 'lodash.padstart';
 import { FormEvent } from 'react';
 
 import { ArtForm } from '~/components/form/ArtForm';
-import { Layout } from '~/components/meta/Layout';
+import { Layout, NavVariant } from '~/components/meta/Layout';
+
+const homeNav: NavVariant[] = ['location', 'artist', 'list'];
 
 const Home: React.FC = () => {
   const onSubmit = (e: FormEvent) => {
@@ -25,7 +27,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout nav="list">
+    <Layout nav={homeNav}>
       <ArtForm
         defaultValues={{ date: getTodayDefaultValue() }}
         formTitle="Add New Artwork"

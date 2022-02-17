@@ -1,7 +1,9 @@
-import { Layout } from '~/components/meta/Layout';
+import { Layout, NavVariant } from '~/components/meta/Layout';
+
+const artDetailNav: NavVariant[] = ['art'];
 
 const ArtDetail: React.FC = () => (
-  <Layout nav="list">
+  <Layout nav={artDetailNav}>
     <div>DETAIL PAGE</div>
   </Layout>
 );
