@@ -10,6 +10,10 @@ const getArtList: NextApiHandler = async (_req, res) => {
           createdOn: 'desc',
         },
       ],
+      include: {
+        Artist: true,
+        Location: true,
+      },
     });
 
     res.status(200).json(artList);

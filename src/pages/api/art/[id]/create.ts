@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns';
 import { NextApiHandler } from 'next';
 
 import { artistFindOrCreate } from '~/logic/api/artists';
@@ -19,7 +20,7 @@ const createArt: NextApiHandler = async (req, res) => {
         name: body.name,
         artistId: artist.id,
         locationId: location.id,
-        dateSeen: body.dateSeen,
+        dateSeen: parseISO(body.dateSeen),
         createdOn: now,
         lastModifiedOn: now,
         imgSrc: body.imgSrc || '',

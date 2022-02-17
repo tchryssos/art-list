@@ -1,9 +1,12 @@
 import styled from '@emotion/styled';
+import { Art } from '@prisma/client';
+import { parse } from 'date-fns';
 
 import { IS_URL } from '~/constants/regex';
 import { createArtDetailRoute } from '~/constants/routing';
+import { formatDate } from '~/logic/util/date';
 import { pxToRem } from '~/logic/util/styles';
-import { TEMPart } from '~/typings/art';
+import { CompleteArt } from '~/typings/art';
 
 import { FlexBox } from './box/FlexBox';
 import { Image } from './Image';
@@ -11,7 +14,7 @@ import { Link } from './Link';
 import { Body } from './typography/Body';
 
 interface ArtListItemProps {
-  art: TEMPart;
+  art: CompleteArt;
 }
 
 const Frame = styled(FlexBox)(({ theme }) => ({
@@ -36,9 +39,16 @@ const ArtImg = styled(Image)`
 `;
 
 export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
-  const { name, artist, location, date, imgSrc } = art;
+  const {
+    name,
+    dateSeen,
+    Artist: { name: artistName },
+    Location: { name: locationName },
+    imgSrc,
+    artistId,
+  } = art;
 
-  if (!(name && artist)) {
+  if (!(name && artistId)) {
     return null;
   }
 
@@ -46,7 +56,7 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
     <Link darkenOnHover={false} href={createArtDetailRoute('1000')}>
       <Frame column>
         <Body>{name}</Body>
-        <Body>{artist}</Body>
+        <Body>{artistName}</Body>
         {imgSrc?.match(IS_URL) && (
           <ArtImg
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoAQMAAAC2MCouAAAAA1BMVEXo6Og4/a9sAAAAC0lEQVQI12MYYQAAAPAAAU6V2N8AAAAASUVORK5CYII=
@@ -58,8 +68,8 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
             src={imgSrc}
           />
         )}
-        <Body>{location || '???'}</Body>
-        <Body>{date || '???'}</Body>
+        <Body>{locationName || '???'}</Body>
+        <Body>{formatDate(dateSeen) || '???'}</Body>
       </Frame>
     </Link>
   );
