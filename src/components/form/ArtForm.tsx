@@ -1,5 +1,5 @@
 import { Artist, Location } from '@prisma/client';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
 import { ArtSubmitData } from '~/typings/art';
@@ -12,18 +12,21 @@ import { Input } from './Input';
 interface ArtFormProps {
   formTitle: string;
   defaultValues?: Partial<ArtSubmitData>;
-  onSubmit: (e: FormEvent) => void;
+  onSubmit: (e: FormEvent) => Promise<void> | void;
 }
 export const ArtForm: React.FC<ArtFormProps> = ({
   onSubmit,
   formTitle,
   defaultValues,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
   const [activeAutoComplete, setActiveAutoComplete] = useState<
     keyof ArtSubmitData | null
   >(null);
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const fetchAutocompleteLists = async () => {
@@ -47,8 +50,14 @@ export const ArtForm: React.FC<ArtFormProps> = ({
     fetchAutocompleteLists();
   }, []);
 
+  const _onSubmit = async (e: FormEvent) => {
+    setIsSubmitting(true);
+    await onSubmit(e);
+    setIsSubmitting(false);
+  };
+
   return (
-    <Form onSubmit={onSubmit}>
+    <Form formRef={formRef} onSubmit={_onSubmit}>
       <Title>{formTitle}</Title>
       <Input<ArtSubmitData>
         autoCompleteActive={activeAutoComplete === 'artist'}
@@ -93,7 +102,7 @@ export const ArtForm: React.FC<ArtFormProps> = ({
         type="text"
         onFocus={() => setActiveAutoComplete(null)}
       />
-      <SubmitButton />
+      <SubmitButton isSubmitting={isSubmitting} />
     </Form>
   );
 };

@@ -1,15 +1,20 @@
 import styled from '@emotion/styled';
 
+import { LoadingSpinner } from '../LoadingSpinner';
 import { Body } from '../typography/Body';
 import { Button } from './Button';
 
+interface SubmitButtonProps {
+  isSubmitting: boolean;
+}
+
 const Submit = styled(Button)`
-  width: fit-content;
+  height: ${({ theme }) => theme.spacing[48]};
   padding: ${({ theme }) => theme.spacing[16]};
 `;
 
-export const SubmitButton: React.FC = () => (
+export const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting }) => (
   <Submit type="submit">
-    <Body bold>Submit</Body>
+    {isSubmitting ? <LoadingSpinner /> : <Body bold>Submit</Body>}
   </Submit>
 );

@@ -27,15 +27,18 @@ const AutoCompleteList = styled(FlexBox)`
   top: ${pxToRem(80)};
   box-shadow: ${({ theme }) =>
     `${pxToRem(4)} ${pxToRem(4)} ${pxToRem(1)} ${theme.colors.smudge}`};
-  gap: ${({ theme }) => theme.spacing[8]};
-
-  :hover {
-    background-color: ${({ theme }) => theme.colors.accentLight};
-  }
 `;
 
 const AutoCompleteButton = styled(Button)`
   width: 100%;
+  border: ${({ theme }) =>
+    `${theme.border.borderWidth[1]} solid ${theme.colors.accentLight}`};
+  border-top: none;
+  :hover,
+  :focus,
+  :active {
+    background-color: ${({ theme }) => theme.colors.accentLight};
+  }
 `;
 
 type AutoCompleteItemProps = Pick<
@@ -97,7 +100,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   }, [filterList, itemList]);
 
   return (
-    <AutoCompleteList>
+    <AutoCompleteList column>
       {filteredList.map((item) => (
         <AutoCompleteItem
           key={item}

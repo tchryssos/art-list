@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { FormEvent } from 'react';
+import { FormEvent, RefObject } from 'react';
 
 interface FormProps {
   className?: string;
   onSubmit: (e: FormEvent) => void | Promise<void>;
   children: React.ReactNode | React.ReactNode[];
+  formRef?: RefObject<HTMLFormElement>;
 }
 
 const StyledForm = styled.form`
@@ -19,6 +20,7 @@ export const Form: React.FC<FormProps> = ({
   className,
   onSubmit,
   children,
+  formRef,
 }) => {
   const _onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export const Form: React.FC<FormProps> = ({
   };
 
   return (
-    <StyledForm className={className} onSubmit={_onSubmit}>
+    <StyledForm className={className} ref={formRef} onSubmit={_onSubmit}>
       {children}
     </StyledForm>
   );

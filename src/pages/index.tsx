@@ -1,14 +1,27 @@
+import styled from '@emotion/styled';
 import padStart from 'lodash.padstart';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
+import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout, NavVariant } from '~/components/meta/Layout';
+import { Body } from '~/components/typography/Body';
+import { Title } from '~/components/typography/Title';
 import { ART_CREATE_ROUTE } from '~/constants/routing';
 import { formDataToJson } from '~/logic/util/forms';
 
 const homeNav: NavVariant[] = ['list'];
 
+const ResetButton = styled(Button)`
+  padding: ${({ theme }) => theme.spacing[8]};
+  height: ${({ theme }) => theme.spacing[48]};
+`;
+
 const Home: React.FC = () => {
+  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
+    null
+  );
+
   const onSubmit = async (e: FormEvent) => {
     const formData = new FormData(e.target as HTMLFormElement);
     const resp = await fetch(ART_CREATE_ROUTE, {
@@ -16,7 +29,11 @@ const Home: React.FC = () => {
       body: formDataToJson(formData),
     });
 
-    return resp.json();
+    if (resp.status === 200) {
+      setSubmitSuccessful(true);
+    } else {
+      setSubmitSuccessful(false);
+    }
   };
 
   const getTodayDefaultValue = () => {
@@ -30,11 +47,21 @@ const Home: React.FC = () => {
 
   return (
     <Layout nav={homeNav}>
-      <ArtForm
-        defaultValues={{ dateSeen: getTodayDefaultValue() }}
-        formTitle="Add New Artwork"
-        onSubmit={onSubmit}
-      />
+      {submitSuccessful ? (
+        <>
+          <Title mb={16}>Add New Artwork</Title>
+          <Body mb={16}>Submit Successful!</Body>
+          <ResetButton onClick={() => setSubmitSuccessful(null)}>
+            <Body>Submit Another?</Body>
+          </ResetButton>
+        </>
+      ) : (
+        <ArtForm
+          defaultValues={{ dateSeen: getTodayDefaultValue() }}
+          formTitle="Add New Artwork"
+          onSubmit={onSubmit}
+        />
+      )}
     </Layout>
   );
 };
