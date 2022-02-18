@@ -39,6 +39,8 @@ export const Button: React.FC<BaseButtonProps> = ({
   children,
   transparent,
   buttonLike,
+  onFocus,
+  id,
 }) => {
   if (buttonLike) {
     return (
@@ -55,10 +57,12 @@ export const Button: React.FC<BaseButtonProps> = ({
     <StyledButton
       className={className}
       disabled={disabled || (!onClick && type !== 'submit')}
-      transparent={Boolean(transparent)}
+      id={id}
       // eslint-disable-next-line react/button-has-type
+      transparent={Boolean(transparent)}
       type={type}
       onClick={onClick}
+      onFocus={onFocus}
     >
       {children}
     </StyledButton>
