@@ -9,18 +9,17 @@ import { Title } from '~/components/typography/Title';
 const artistNav: NavVariant[] = ['art'];
 
 const ArtistDetail: React.FC = () => {
-  const [artistName, setArtistName] = useState('Artist');
+  const [artistName] = useState('Artist');
 
-  const onSubmit = () => {
-    const test = '';
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onSubmit = () => {};
 
   return (
     <Layout nav={artistNav}>
       <Title mb={16}>{artistName}</Title>
       <Form onSubmit={onSubmit}>
         <Input label="Artist Name" name="name" type="text" />
-        <SubmitButton />
+        <SubmitButton isSubmitting={false} />
       </Form>
     </Layout>
   );

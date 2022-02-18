@@ -9,17 +9,16 @@ import { Title } from '~/components/typography/Title';
 const artistNav: NavVariant[] = ['art'];
 
 const LocationDetail: React.FC = () => {
-  const [locationName, setLocationName] = useState('Location');
+  const [locationName] = useState('Location');
 
-  const onSubmit = () => {
-    const test = '';
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onSubmit = () => {};
   return (
     <Layout nav={artistNav}>
       <Title mb={16}>{locationName}</Title>
       <Form onSubmit={onSubmit}>
         <Input label="Location Name" name="name" type="text" />
-        <SubmitButton />
+        <SubmitButton isSubmitting={false} />
       </Form>
     </Layout>
   );

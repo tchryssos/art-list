@@ -10,8 +10,8 @@ const Path = styled.path<Pick<IconProps, 'color'>>`
 export const LoadingQuarter: React.FC<IconProps> = ({
   className,
   color,
-  title,
-  titleId,
+  title = 'Loading',
+  titleId = 'loading-id',
 }) => (
   <Icon className={className} title={title} titleId={titleId}>
     <Path color={color} d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8Z" />
