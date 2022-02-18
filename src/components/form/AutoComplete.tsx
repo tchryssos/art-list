@@ -13,6 +13,7 @@ interface AutoCompleteProps {
   itemList: string[];
   setInputValue: (newVal: string) => void;
   setActiveDescendant: (descId: string) => void;
+  setShowAutoComplete: (shouldShow: boolean) => void;
   inputValue: string;
 }
 
@@ -39,7 +40,7 @@ const AutoCompleteButton = styled(Button)`
 
 type AutoCompleteItemProps = Pick<
   AutoCompleteProps,
-  'setInputValue' | 'setActiveDescendant'
+  'setInputValue' | 'setActiveDescendant' | 'setShowAutoComplete'
 > & {
   value: string;
 };
@@ -48,12 +49,14 @@ const AutoCompleteItem: React.FC<AutoCompleteItemProps> = ({
   value,
   setInputValue,
   setActiveDescendant,
+  setShowAutoComplete,
 }) => (
   <AutoCompleteButton
     id={value}
     transparent
     onClick={() => {
       setInputValue(value);
+      setShowAutoComplete(false);
     }}
     onFocus={() => {
       setActiveDescendant(value);
@@ -70,6 +73,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   setInputValue,
   inputValue,
   setActiveDescendant,
+  setShowAutoComplete,
 }) => {
   const [filteredList, setFilteredList] = useState<string[]>([]);
 
@@ -99,6 +103,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
           key={item}
           setActiveDescendant={setActiveDescendant}
           setInputValue={setInputValue}
+          setShowAutoComplete={setShowAutoComplete}
           value={item}
         />
       ))}

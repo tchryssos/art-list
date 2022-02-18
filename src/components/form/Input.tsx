@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { FocusEventHandler, useState } from 'react';
+import { FocusEventHandler, useEffect, useState } from 'react';
 
 import { FlexBox } from '../box/FlexBox';
 import { AutoComplete } from './AutoComplete';
@@ -59,6 +59,13 @@ export function Input<T extends Record<string, unknown>>(
 
   const [value, setValue] = useState(defaultValue);
   const [activeDescendant, setActiveDescendant] = useState('');
+  const [showAutoComplete, setShowAutoComplete] = useState(
+    Boolean(autoCompleteActive)
+  );
+
+  useEffect(() => {
+    setShowAutoComplete(Boolean(autoCompleteActive));
+  }, [autoCompleteActive]);
 
   return (
     <InputWrapper className={className} column>
@@ -76,12 +83,13 @@ export function Input<T extends Record<string, unknown>>(
         }}
         onFocus={onFocus}
       />
-      {autoCompleteActive && autoCompleteList && (
+      {showAutoComplete && autoCompleteList && (
         <AutoComplete
           inputValue={value}
           itemList={autoCompleteList}
           setActiveDescendant={setActiveDescendant}
           setInputValue={setValue}
+          setShowAutoComplete={setShowAutoComplete}
         />
       )}
     </InputWrapper>
