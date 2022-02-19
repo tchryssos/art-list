@@ -6,7 +6,6 @@ import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout, NavVariant } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
-import { Title } from '~/components/typography/Title';
 import { ART_CREATE_ROUTE } from '~/constants/routing';
 import { formDataToJson } from '~/logic/util/forms';
 
@@ -46,10 +45,9 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout nav={homeNav}>
+    <Layout nav={homeNav} pageTitle="Add New Artwork">
       {submitSuccessful ? (
         <>
-          <Title mb={16}>Add New Artwork</Title>
           <Body mb={16}>Submit Successful!</Body>
           <ResetButton onClick={() => setSubmitSuccessful(null)}>
             <Body>Submit Another?</Body>
@@ -58,7 +56,6 @@ const Home: React.FC = () => {
       ) : (
         <ArtForm
           defaultValues={{ dateSeen: getTodayDefaultValue() }}
-          formTitle="Add New Artwork"
           onSubmit={onSubmit}
         />
       )}

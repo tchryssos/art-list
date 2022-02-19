@@ -10,6 +10,7 @@ import { Home } from '../icons/Home';
 import { Search } from '../icons/Search';
 import { IconProps } from '../icons/types';
 import { Link } from '../Link';
+import { Title } from '../typography/Title';
 import { Head } from './Head';
 
 export type NavVariant = 'art' | 'list';
@@ -18,6 +19,7 @@ type LayoutProps = {
   children?: React.ReactNode;
   title?: string;
   nav?: NavVariant[];
+  pageTitle: string;
 };
 
 const PageWrapper = styled(FlexBox)`
@@ -77,7 +79,12 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
   return null;
 };
 
-export const Layout: React.FC<LayoutProps> = ({ children, title, nav }) => {
+export const Layout: React.FC<LayoutProps> = ({
+  children,
+  title,
+  nav,
+  pageTitle,
+}) => {
   const isAtLeastXs = useBreakpointsAtLeast('xs');
 
   return (
@@ -85,6 +92,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title, nav }) => {
       <Head title={title} />
       <FlexBox flex={1} justifyContent="center" p={isAtLeastXs ? 32 : 16}>
         <PageWrapper column>
+          <Title mb={16}>{pageTitle}</Title>
           {children}
           <Nav nav={nav} />
         </PageWrapper>

@@ -44,7 +44,7 @@ const ArtDetail: React.FC = () => {
   };
 
   return (
-    <Layout nav={artDetailNav}>
+    <Layout nav={artDetailNav} pageTitle={`Edit '${art?.name || 'Art'}'`}>
       {art && (
         <ArtForm
           defaultValues={{
@@ -54,7 +54,6 @@ const ArtDetail: React.FC = () => {
             location: art.Location.name,
             imgSrc: art.imgSrc || '',
           }}
-          formTitle={`Edit '${art.name}'`}
           onSubmit={onSubmit}
         />
       )}

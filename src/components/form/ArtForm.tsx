@@ -5,18 +5,15 @@ import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
 import { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
-import { Title } from '../typography/Title';
 import { Form } from './Form';
 import { Input } from './Input';
 
 interface ArtFormProps {
-  formTitle: string;
   defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => Promise<void> | void;
 }
 export const ArtForm: React.FC<ArtFormProps> = ({
   onSubmit,
-  formTitle,
   defaultValues,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +55,6 @@ export const ArtForm: React.FC<ArtFormProps> = ({
 
   return (
     <Form formRef={formRef} onSubmit={_onSubmit}>
-      <Title>{formTitle}</Title>
       <Input<ArtSubmitData>
         autoCompleteActive={activeAutoComplete === 'artist'}
         autoCompleteList={artistList}

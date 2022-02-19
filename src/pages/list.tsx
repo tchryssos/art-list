@@ -4,7 +4,6 @@ import { ArtListItem } from '~/components/ArtListItem';
 import { GridBox } from '~/components/box/GridBox';
 import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout, NavVariant } from '~/components/meta/Layout';
-import { Title } from '~/components/typography/Title';
 import { ART_LIST_ROUTE } from '~/constants/routing';
 import { useBreakpointsLessThan } from '~/logic/hooks/useBreakpoints';
 import { CompleteArt } from '~/typings/art';
@@ -27,8 +26,7 @@ const List: React.FC = () => {
   }, []);
 
   return (
-    <Layout nav={listNav}>
-      <Title mb={16}>Art List</Title>
+    <Layout nav={listNav} pageTitle="Art List">
       {artList ? (
         <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
           {artList.map((a) => (
