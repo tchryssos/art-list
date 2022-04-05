@@ -1,66 +1,46 @@
-import styled from '@emotion/styled';
-import padStart from 'lodash.padstart';
-import { FormEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Button } from '~/components/buttons/Button';
-import { ArtForm } from '~/components/form/ArtForm';
+import { ArtListItem } from '~/components/ArtListItem';
+import { GridBox } from '~/components/box/GridBox';
+import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout, NavVariant } from '~/components/meta/Layout';
-import { Body } from '~/components/typography/Body';
-import { ART_CREATE_ROUTE } from '~/constants/routing';
-import { formDataToJson } from '~/logic/util/forms';
+import { ART_LIST_ROUTE } from '~/constants/routing';
+import { useBreakpointsLessThan } from '~/logic/hooks/useBreakpoints';
+import { CompleteArt } from '~/typings/art';
 
-const homeNav: NavVariant[] = ['list'];
+const listNav: NavVariant[] = ['art'];
 
-const ResetButton = styled(Button)`
-  padding: ${({ theme }) => theme.spacing[8]};
-  height: ${({ theme }) => theme.spacing[48]};
-`;
+const List: React.FC = () => {
+  const [artList, setArtList] = useState<CompleteArt[]>();
+  const lessThanSm = useBreakpointsLessThan('sm');
 
-const Home: React.FC = () => {
-  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
-    null
-  );
-
-  const onSubmit = async (e: FormEvent) => {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const resp = await fetch(ART_CREATE_ROUTE, {
-      method: 'POST',
-      body: formDataToJson(formData),
-    });
-
-    if (resp.status === 200) {
-      setSubmitSuccessful(true);
-    } else {
-      setSubmitSuccessful(false);
-    }
-  };
-
-  const getTodayDefaultValue = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = padStart(String(d.getMonth() + 1), 2, '0');
-    const day = padStart(String(d.getDate()), 2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
+  useEffect(() => {
+    const fetchArt = async () => {
+      const resp = await fetch(ART_LIST_ROUTE, {
+        method: 'GET',
+      });
+      const list: CompleteArt[] = await resp.json();
+      setArtList(list);
+    };
+    fetchArt();
+  }, []);
 
   return (
-    <Layout nav={homeNav} pageTitle="Add New Artwork">
-      {submitSuccessful ? (
-        <>
-          <Body mb={16}>Submit Successful!</Body>
-          <ResetButton onClick={() => setSubmitSuccessful(null)}>
-            <Body>Submit Another?</Body>
-          </ResetButton>
-        </>
+    <Layout nav={listNav} pageTitle="Art List">
+      {artList ? (
+        <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
+          {artList.map((a) => (
+            <ArtListItem art={a} key={a.id} />
+          ))}
+        </GridBox>
       ) : (
-        <ArtForm
-          defaultValues={{ dateSeen: getTodayDefaultValue() }}
-          onSubmit={onSubmit}
+        <LoadingPageSpinner
+          title="List loading"
+          titleId="list-loading-spinner"
         />
       )}
     </Layout>
   );
 };
 
-export default Home;
+export default List;

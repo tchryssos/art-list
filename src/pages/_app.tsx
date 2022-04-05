@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { css, Global, Theme, ThemeProvider } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { AppProps /* , AppContext */ } from 'next/app';
@@ -5,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { FlexBox } from '~/components/box/FlexBox';
 import { themes } from '~/constants/theme';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { BreakpointsContext } from '~/logic/contexts/breakpointsContext';
 import { ColorMode } from '~/typings/colorMode';
 import { BreakpointSize } from '~/typings/theme';
@@ -69,6 +71,8 @@ const Page: React.FC<AppProps> = ({ Component, pageProps }) => {
   const [colorMode] = useState<ColorMode>('standard');
   const theme = themes[colorMode];
 
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
   useEffect(() => {
     Object.keys(theme.breakpointValues).forEach((key, i, arr) => {
       const queryAdjective = key === 'xss' ? 'max' : 'min';
@@ -95,7 +99,9 @@ const Page: React.FC<AppProps> = ({ Component, pageProps }) => {
         <GlobalWrapper>
           <Global styles={createGlobalStyles(theme)} />
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-          <Component {...pageProps} />
+          <AuthContext.Provider value={{ isAuthorized, setIsAuthorized }}>
+            <Component {...pageProps} />
+          </AuthContext.Provider>
         </GlobalWrapper>
       </BreakpointsContext.Provider>
     </ThemeProvider>

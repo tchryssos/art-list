@@ -7,7 +7,7 @@ const Path = styled.path<Pick<IconProps, 'color'>>`
   fill: ${({ color = 'text', theme }) => theme.colors[color]};
 `;
 
-export const Home: React.FC<IconProps> = ({
+export const Add: React.FC<IconProps> = ({
   className,
   color,
   title = 'Add Artwork',

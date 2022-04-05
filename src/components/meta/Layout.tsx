@@ -1,16 +1,24 @@
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
-import { HOME_ROUTE, LIST_ROUTE } from '~/constants/routing';
+import {
+  ART_ADD_ROUTE,
+  AUTH_ROUTE_PATTERNS,
+  HOME_ROUTE,
+} from '~/constants/routing';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { useBreakpointsAtLeast } from '~/logic/hooks/useBreakpoints';
 import { pxToRem } from '~/logic/util/styles';
 
 import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
-import { Home } from '../icons/Home';
+import { Add } from '../icons/Add';
 import { Search } from '../icons/Search';
 import { IconProps } from '../icons/types';
 import { Link } from '../Link';
 import { Title } from '../typography/Title';
+import { Unauthorized } from '../Unauthorized';
 import { Head } from './Head';
 
 export type NavVariant = 'art' | 'list';
@@ -57,12 +65,12 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
 
           switch (n) {
             case 'list':
-              route = LIST_ROUTE;
+              route = HOME_ROUTE;
               Icon = Search;
               break;
             default:
-              route = HOME_ROUTE;
-              Icon = Home;
+              route = ART_ADD_ROUTE;
+              Icon = Add;
               break;
           }
           return (
@@ -86,15 +94,28 @@ export const Layout: React.FC<LayoutProps> = ({
   pageTitle,
 }) => {
   const isAtLeastXs = useBreakpointsAtLeast('xs');
+  const { pathname } = useRouter();
+
+  const { isAuthorized } = useContext(AuthContext);
+
+  const unauthorizedPage = AUTH_ROUTE_PATTERNS.some(
+    (p) => pathname.match(p) && !isAuthorized
+  );
 
   return (
     <>
       <Head title={title} />
       <FlexBox flex={1} justifyContent="center" p={isAtLeastXs ? 32 : 16}>
         <PageWrapper column>
-          <Title mb={16}>{pageTitle}</Title>
-          {children}
-          <Nav nav={nav} />
+          {unauthorizedPage ? (
+            <Unauthorized />
+          ) : (
+            <>
+              <Title mb={16}>{pageTitle}</Title>
+              {children}
+              <Nav nav={nav} />
+            </>
+          )}
         </PageWrapper>
       </FlexBox>
     </>
