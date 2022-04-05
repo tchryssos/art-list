@@ -5,7 +5,6 @@ import { AUTH_ROUTE, HOME_ROUTE } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formDataToJson } from '~/logic/util/forms';
 
-import { FlexBox } from './box/FlexBox';
 import { GridBox } from './box/GridBox';
 import { Button } from './buttons/Button';
 import { SubmitButton } from './buttons/SubmitButton';

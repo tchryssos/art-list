@@ -29,6 +29,7 @@ module.exports = {
       'ncartmuseum.org',
       'leiko.info',
       'd3swacfcujrr1g.cloudfront.net',
+      'ursfischer.com',
     ],
   },
 };

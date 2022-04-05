@@ -74,6 +74,18 @@ const Page: React.FC<AppProps> = ({ Component, pageProps }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
+    if (globalThis.document?.cookie) {
+      setIsAuthorized(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthorized && !globalThis.document?.cookie) {
+      globalThis.document.cookie = 'isAuthorized=true';
+    }
+  }, [isAuthorized]);
+
+  useEffect(() => {
     Object.keys(theme.breakpointValues).forEach((key, i, arr) => {
       const queryAdjective = key === 'xss' ? 'max' : 'min';
       const query = window.matchMedia(

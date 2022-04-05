@@ -7,15 +7,20 @@ export const ART_ADD_ROUTE = '/art/add';
 
 type DetailRouteId = `${number}` | 'new';
 
-export const ART_DETAIL_ROUTE_PATTERN = /\/art\/view\/([0-9]+|new)/;
 export const createArtDetailRoute = (id: DetailRouteId) => `/art/view/${id}`;
-
-export const ARTIST_DETAIL_ROUTE_PATTERN = /\/artists\/([0-9]+|new)/;
+export const ART_DETAIL_ROUTE_PATTERN = createArtDetailRoute(
+  '[id]' as DetailRouteId
+);
 export const createArtistDetailRoute = (id: DetailRouteId) => `/artists/${id}`;
+export const ARTIST_DETAIL_ROUTE_PATTERN = createArtistDetailRoute(
+  '[id]' as DetailRouteId
+);
 
-export const LOCATION_DETAIL_ROUTE_PATTERN = /\/locations\/([0-9]+|new)/;
 export const createLocationDetailRoute = (id: DetailRouteId) =>
   `/locations/${id}`;
+export const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
+  '[id]' as DetailRouteId
+);
 
 // API ROUTES
 export const ART_CREATE_ROUTE = '/api/art/new/create';

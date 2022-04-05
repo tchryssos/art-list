@@ -99,7 +99,7 @@ export const Layout: React.FC<LayoutProps> = ({
   const { isAuthorized } = useContext(AuthContext);
 
   const unauthorizedPage = AUTH_ROUTE_PATTERNS.some(
-    (p) => pathname.match(p) && !isAuthorized
+    (p) => pathname === p && !isAuthorized
   );
 
   return (
