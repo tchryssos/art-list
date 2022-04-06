@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
+import { useContext } from 'react';
 
 import { IS_URL } from '~/constants/regex';
 import { createArtDetailRoute } from '~/constants/routing';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
 import { CompleteArt } from '~/typings/art';
 
@@ -14,15 +16,38 @@ interface ArtListItemProps {
   art: CompleteArt;
 }
 
-const Frame = styled(FlexBox)(({ theme }) => ({
-  border: `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`,
-  padding: theme.spacing[16],
-  gap: theme.spacing[8],
-  '&:hover, &:active': {
-    borderColor: theme.colors.text,
-    backgroundColor: theme.colors.smudge,
-  },
-}));
+const Frame = styled(FlexBox)<{ isAuthorized: boolean }>(
+  ({ theme, isAuthorized }) => ({
+    border: `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`,
+    padding: theme.spacing[16],
+    gap: theme.spacing[8],
+    ...(isAuthorized && {
+      '&:hover, &:active': {
+        borderColor: theme.colors.text,
+        backgroundColor: theme.colors.smudge,
+      },
+    }),
+  })
+);
+
+interface ListItemWrapperProps {
+  children: React.ReactNode;
+  isAuthorized: boolean;
+  artId: number;
+}
+
+const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
+  children,
+  isAuthorized,
+  artId,
+}) =>
+  isAuthorized ? (
+    <Link darkenOnHover={false} href={createArtDetailRoute(`${artId}`)}>
+      {children}
+    </Link>
+  ) : (
+    <>{children}</>
+  );
 
 export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
   const {
@@ -34,13 +59,15 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
     artistId,
   } = art;
 
+  const { isAuthorized } = useContext(AuthContext);
+
   if (!(name && artistId)) {
     return null;
   }
 
   return (
-    <Link darkenOnHover={false} href={createArtDetailRoute(`${art.id}`)}>
-      <Frame column>
+    <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
+      <Frame column isAuthorized={isAuthorized}>
         <Body>{name}</Body>
         <Body>{artistName}</Body>
         {imgSrc?.match(IS_URL) && (
@@ -57,6 +84,6 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
         <Body>{locationName || '???'}</Body>
         <Body>{formatDate(dateSeen) || '???'}</Body>
       </Frame>
-    </Link>
+    </ListItemWrapper>
   );
 };
