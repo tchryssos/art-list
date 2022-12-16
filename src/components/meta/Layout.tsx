@@ -35,6 +35,9 @@ const PageWrapper = styled(FlexBox)`
   width: 100%;
   height: 100%;
   position: relative;
+  ${({ theme }) => theme.breakpoints.lg} {
+    max-width: ${({ theme }) => theme.breakpointValues.lg}px;
+  }
 `;
 
 const NavWrapper = styled(FlexBox)`

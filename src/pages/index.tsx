@@ -6,7 +6,10 @@ import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout, NavVariant } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
 import { ART_LIST_ROUTE } from '~/constants/routing';
-import { useBreakpointsLessThan } from '~/logic/hooks/useBreakpoints';
+import {
+  useBreakpointsAtLeast,
+  useBreakpointsLessThan,
+} from '~/logic/hooks/useBreakpoints';
 import { CompleteArt } from '~/typings/art';
 import { PrismaError } from '~/typings/util';
 
@@ -18,6 +21,7 @@ interface ListContentsProps {
 
 const ListContents: React.FC<ListContentsProps> = ({ artList }) => {
   const lessThanSm = useBreakpointsLessThan('sm');
+  const isXlOrGreater = useBreakpointsAtLeast('xl');
 
   if (!artList) {
     return (
@@ -29,8 +33,16 @@ const ListContents: React.FC<ListContentsProps> = ({ artList }) => {
     return <Body>Something went wrong fetching the art list!</Body>;
   }
 
+  let columns: 1 | 2 | 3 = 2;
+  if (lessThanSm) {
+    columns = 1;
+  }
+  if (isXlOrGreater) {
+    columns = 3;
+  }
+
   return (
-    <GridBox columnGap={16} columns={lessThanSm ? 1 : 2} rowGap={16}>
+    <GridBox columnGap={16} columns={columns} rowGap={16}>
       {(artList as CompleteArt[]).map((a) => (
         <ArtListItem art={a} key={a.id} />
       ))}
