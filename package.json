@@ -5,6 +5,7 @@
   "author": "<troychryssos@gmail.com>",
   "description": "A 'photo-blog' to track the art that resonates with me. ",
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,7 +25,7 @@
     "@mdi/react": "^1.6.1",
     "@prisma/client": "^5.0.0",
     "clsx": "^2.1.0",
-    "date-fns": "^3.3.1",
+    "date-fns": "2.30.0",
     "date-fns-tz": "^2.0.1",
     "html-entities": "^2.5.2",
     "lodash": "^4.17.21",

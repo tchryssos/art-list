@@ -14,7 +14,7 @@ export function LoadingSpinner({ className }: LoadingSpinnerProps) {
       className={className}
       color={colors.text}
       path={mdiLoading}
-      spin
+      spin={1}
       title="Loading"
     />
   );

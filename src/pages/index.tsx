@@ -49,7 +49,7 @@ function List() {
   }, []);
 
   return (
-    <Layout nav={listNav} pageTitle="Art List" title="Troy's Art List">
+    <Layout nav={listNav} title="Troy's Art List">
       <ListContents artList={artList} />
     </Layout>
   );

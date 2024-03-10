@@ -53,7 +53,7 @@ export function ArtListItem({ art }: ArtListItemProps) {
     <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
       <div
         className={clsx(
-          'flex flex-col- border border-solid border-accentHeavy p-4 gap-2',
+          'flex flex-col border border-solid border-accentHeavy p-4 gap-2',
           isAuthorized &&
             'hover:border-text hover:bg-smudge active:border-text  active:bg-smudge'
         )}

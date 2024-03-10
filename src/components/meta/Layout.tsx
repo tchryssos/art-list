@@ -23,7 +23,7 @@ type LayoutProps = {
   children?: React.ReactNode;
   title: string;
   nav?: NavVariant[];
-  pageTitle: string;
+  pageTitle?: string;
 };
 
 function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
@@ -81,7 +81,7 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
             <Unauthorized />
           ) : (
             <>
-              <Title className="mb-4">{pageTitle}</Title>
+              {pageTitle && <Title className="mb-4">{pageTitle}</Title>}
               {children}
               <Nav nav={nav} />
             </>
