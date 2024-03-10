@@ -16,9 +16,7 @@ interface ListContentsProps {
 
 function ListContents({ artList }: ListContentsProps) {
   if (!artList) {
-    return (
-      <LoadingPageSpinner title="List loading" titleId="list-loading-spinner" />
-    );
+    return <LoadingPageSpinner />;
   }
 
   if ((artList as PrismaError).error) {
