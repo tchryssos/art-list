@@ -20,6 +20,8 @@
     "knip:prune": "knip --include exports,types"
   },
   "dependencies": {
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
     "@prisma/client": "^5.0.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",

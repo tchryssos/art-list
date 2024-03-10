@@ -1,11 +1,9 @@
-import styled from '@emotion/styled';
 import { FormEvent, useContext, useState } from 'react';
 
 import { AUTH_ROUTE, HOME_ROUTE } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formDataToJson } from '~/logic/util/forms';
 
-import { GridBox } from './box/GridBox';
 import { Button } from './buttons/Button';
 import { SubmitButton } from './buttons/SubmitButton';
 import { Form } from './form/Form';
@@ -18,11 +16,7 @@ type PasswordData = {
   password: string;
 };
 
-const HomeButton = styled(Button)`
-  height: 100%;
-`;
-
-export const Unauthorized: React.FC = () => {
+export function Unauthorized() {
   const { setIsAuthorized } = useContext(AuthContext);
   const [isSubmitting, setisSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -46,7 +40,7 @@ export const Unauthorized: React.FC = () => {
   };
   return (
     <>
-      <Title mb={16}>Enter password to view this page</Title>
+      <Title className="mb-4">Enter password to view this page</Title>
       <Form onSubmit={onSubmit}>
         <Input<PasswordData>
           error={error}
@@ -55,15 +49,15 @@ export const Unauthorized: React.FC = () => {
           required
           type="password"
         />
-        <GridBox columnGap={16}>
+        <div className="grid gap-4 grid-cols-2">
           <SubmitButton isSubmitting={isSubmitting} />
           <Link href={HOME_ROUTE}>
-            <HomeButton buttonLike transparent>
+            <Button buttonLike className="h-full" transparent>
               <Body>Back to List</Body>
-            </HomeButton>
+            </Button>
           </Link>
-        </GridBox>
+        </div>
       </Form>
     </>
   );
-};
+}
