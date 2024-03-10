@@ -2,8 +2,7 @@ import { mdiLoading } from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
 import { ComponentProps } from 'react';
-
-import { colors } from '~/constants/theme';
+import { twMerge } from 'tailwind-merge';
 
 interface LoadingSpinnerProps {
   className?: string;
@@ -13,8 +12,7 @@ interface LoadingSpinnerProps {
 export function LoadingSpinner({ className, size = 2 }: LoadingSpinnerProps) {
   return (
     <Icon
-      className={className}
-      color={colors.text}
+      className={twMerge('text-text', className)}
       path={mdiLoading}
       size={size}
       spin={1}

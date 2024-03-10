@@ -3,12 +3,10 @@ import { FormEvent, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
-import { Layout, NavVariant } from '~/components/meta/Layout';
+import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
 import { ART_CREATE_ROUTE } from '~/constants/routing';
 import { formDataToJson } from '~/logic/util/forms';
-
-const homeNav: NavVariant[] = ['list'];
 
 function AddArtPage() {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
@@ -44,7 +42,7 @@ function AddArtPage() {
   };
 
   return (
-    <Layout nav={homeNav} pageTitle="Add New Artwork" title="Add New Artwork">
+    <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
       {submitSuccessful ? (
         <>
           <Body className="mb-4">Submit Successful!</Body>

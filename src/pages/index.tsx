@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ArtListItem } from '~/components/ArtListItem';
 import { LoadingPageSpinner } from '~/components/LoadingSpinner';
-import { Layout, NavVariant } from '~/components/meta/Layout';
+import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
 import { ART_LIST_ROUTE } from '~/constants/routing';
 import { CompleteArt } from '~/typings/art';
@@ -32,8 +32,6 @@ function ListContents({ artList }: ListContentsProps) {
   );
 }
 
-const listNav: NavVariant[] = ['art'];
-
 function List() {
   const [artList, setArtList] = useState<ArtList>();
 
@@ -49,7 +47,7 @@ function List() {
   }, []);
 
   return (
-    <Layout nav={listNav} title="Troy's Art List">
+    <Layout nav="art" title="Troy's Art List">
       <ListContents artList={artList} />
     </Layout>
   );

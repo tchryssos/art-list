@@ -55,9 +55,9 @@ export function ArtListItem({ art }: ArtListItemProps) {
     <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
       <div
         className={clsx(
-          'flex flex-col border border-solid border-[transparent] p-4 gap-1 h-full',
+          'flex flex-col border border-solid border-accentLight p-3 gap-1 h-full',
           isAuthorized &&
-            'hover:border-accentLight hover:bg-smudge active:border-accentLight  active:bg-smudge'
+            'hover:border-accentHeavy hover:bg-smudge active:border-accentHeavy  active:bg-smudge'
         )}
       >
         {imgSrc?.match(IS_URL) && (

@@ -1,5 +1,6 @@
 // CLIENT ROUTES
 export const HOME_ROUTE = '/';
+export const LOGIN_ROUTE = '/login';
 
 export const ART_ADD_ROUTE = '/art/add';
 
