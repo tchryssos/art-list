@@ -1,3 +1,5 @@
+import { mdiMagnify, mdiPlus } from '@mdi/js';
+import Icon from '@mdi/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
@@ -7,12 +9,10 @@ import {
   AUTH_ROUTE_PATTERNS,
   HOME_ROUTE,
 } from '~/constants/routing';
+import { colors } from '~/constants/theme';
 import { AuthContext } from '~/logic/contexts/authContext';
 
 import { Button } from '../buttons/Button';
-import { Add } from '../icons/Add';
-import { Search } from '../icons/Search';
-import { IconProps } from '../icons/types';
 import { Link } from '../Link';
 import { Title } from '../typography/Title';
 import { Unauthorized } from '../Unauthorized';
@@ -32,16 +32,16 @@ function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
       <div className="flex fixed bottom-0 right-0 m-5 gap-4">
         {nav.map((n) => {
           let route: string;
-          let Icon: React.FC<IconProps>;
+          let path: string;
 
           switch (n) {
             case 'list':
               route = HOME_ROUTE;
-              Icon = Search;
+              path = mdiMagnify;
               break;
             default:
               route = ART_ADD_ROUTE;
-              Icon = Add;
+              path = mdiPlus;
               break;
           }
           return (
@@ -50,7 +50,7 @@ function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
                 buttonLike
                 className="h-16 w-16 p-4 rounded-full shadow-nav-button"
               >
-                <Icon />
+                <Icon color={colors.text} path={path} />
               </Button>
             </Link>
           );

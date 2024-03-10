@@ -2,12 +2,22 @@ import { mdiLoading } from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
 
+import { colors } from '~/constants/theme';
+
 interface LoadingSpinnerProps {
   className?: string;
 }
 
 export function LoadingSpinner({ className }: LoadingSpinnerProps) {
-  return <Icon className={className} path={mdiLoading} spin title="Loading" />;
+  return (
+    <Icon
+      className={className}
+      color={colors.text}
+      path={mdiLoading}
+      spin
+      title="Loading"
+    />
+  );
 }
 
 export function LoadingPageSpinner({ className }: LoadingSpinnerProps) {

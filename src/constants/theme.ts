@@ -1,3 +1,5 @@
+import { Colors } from 'theme-types';
+
 import { pxToRem } from '~/logic/util/styles';
 import { ColorMode, ColorModeColors } from '~/typings/colorMode';
 
@@ -95,4 +97,14 @@ export interface Theme extends ThemeShape {}
 
 export const themes: Record<ColorMode, Theme> = {
   standard: StandardTheme,
+};
+
+export const colors: Colors = {
+  background: '#fafafa',
+  text: '#17242b',
+  success: '#00784e',
+  danger: '#db0033',
+  accentHeavy: '#adadad',
+  accentLight: '#e8e8e8',
+  smudge: 'rgba(0,0,0,0.05)',
 };

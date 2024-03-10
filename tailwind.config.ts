@@ -1,7 +1,8 @@
 /* eslint-disable import/no-default-export */
 import type { Config } from 'tailwindcss';
+import { Colors } from 'theme-types';
 
-const colors = {
+const colors: Colors = {
   background: '#fafafa',
   text: '#17242b',
   success: '#00784e',
@@ -38,7 +39,7 @@ export default {
         'breakpoint-xl': '1280px',
       },
     },
-    colors,
+    colors: colors as Record<keyof Colors, string>,
   },
   plugins: [],
 } satisfies Config;
