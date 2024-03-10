@@ -53,9 +53,9 @@ export function ArtListItem({ art }: ArtListItemProps) {
     <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
       <div
         className={clsx(
-          'flex flex-col border border-solid border-accentHeavy p-4 gap-2',
+          'flex flex-col border border-solid border-accentLight p-4 gap-2',
           isAuthorized &&
-            'hover:border-text hover:bg-smudge active:border-text  active:bg-smudge'
+            'hover:border-accentHeavy hover:bg-smudge active:border-accentHeavy  active:bg-smudge'
         )}
       >
         <Body>{name}</Body>
@@ -74,8 +74,10 @@ export function ArtListItem({ art }: ArtListItemProps) {
             }}
           />
         )}
-        <Body>{locationName || '???'}</Body>
-        <Body>{formatDate(dateSeen) || '???'}</Body>
+        <Body className="text-xs leading-3">{locationName || '???'}</Body>
+        <Body className="text-xs leading-3">
+          {formatDate(dateSeen) || '???'}
+        </Body>
       </div>
     </ListItemWrapper>
   );
