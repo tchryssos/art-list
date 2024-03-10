@@ -16,15 +16,20 @@ function AddArtPage() {
   );
 
   const onSubmit = async (e: FormEvent) => {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const resp = await fetch(ART_CREATE_ROUTE, {
-      method: 'POST',
-      body: formDataToJson(formData),
-    });
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const resp = await fetch(ART_CREATE_ROUTE, {
+        method: 'POST',
+        body: formDataToJson(formData),
+      });
 
-    if (resp.status === 200) {
-      setSubmitSuccessful(true);
-    } else {
+      if (resp.status === 200) {
+        setSubmitSuccessful(true);
+      } else {
+        setSubmitSuccessful(false);
+      }
+    } catch (error) {
+      console.error(error);
       setSubmitSuccessful(false);
     }
   };

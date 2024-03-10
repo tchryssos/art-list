@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useState } from 'react';
 
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout, NavVariant } from '~/components/meta/Layout';
-import { createArtApiRoute, LIST_ROUTE } from '~/constants/routing';
+import { createArtApiRoute, HOME_ROUTE } from '~/constants/routing';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
 import { CompleteArt } from '~/typings/art';
@@ -32,14 +32,18 @@ function ArtDetail() {
   }, [id]);
 
   const onSubmit = async (e: FormEvent) => {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const resp = await fetch(createArtApiRoute(id as `${number}`), {
-      method: 'PATCH',
-      body: formDataToJson(formData),
-    });
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const resp = await fetch(createArtApiRoute(id as `${number}`), {
+        method: 'PATCH',
+        body: formDataToJson(formData),
+      });
 
-    if (resp.status === 200) {
-      push(LIST_ROUTE);
+      if (resp.status === 200) {
+        push(HOME_ROUTE);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

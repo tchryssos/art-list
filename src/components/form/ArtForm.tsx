@@ -46,7 +46,11 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
 
   const _onSubmit = async (e: FormEvent) => {
     setIsSubmitting(true);
-    await onSubmit(e);
+    try {
+      await onSubmit(e);
+    } catch (error) {
+      console.error(error);
+    }
     setIsSubmitting(false);
   };
 

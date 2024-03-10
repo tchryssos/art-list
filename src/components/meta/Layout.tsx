@@ -1,4 +1,4 @@
-import { mdiMagnify, mdiPlus } from '@mdi/js';
+import { mdiImageSearchOutline, mdiPlus } from '@mdi/js';
 import Icon from '@mdi/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -37,7 +37,7 @@ function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
           switch (n) {
             case 'list':
               route = HOME_ROUTE;
-              path = mdiMagnify;
+              path = mdiImageSearchOutline;
               break;
             default:
               route = ART_ADD_ROUTE;

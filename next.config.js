@@ -53,6 +53,8 @@ module.exports = {
       'img.bndlyr.com',
       'd1lfxha3ugu3d4.cloudfront.net',
       'd7hftxdivxxvm.cloudfront.net',
+      'hammer.ucla.edu',
+      'www.galleryhyundai.com',
     ],
   },
 };

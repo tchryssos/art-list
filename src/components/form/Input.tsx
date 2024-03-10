@@ -1,9 +1,9 @@
+import clsx from 'clsx';
 import { FocusEventHandler, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { Body } from '../typography/Body';
 import { AutoComplete } from './AutoComplete';
-import { inputClassName } from './styles';
 
 type InputProps<T extends Record<string, unknown>> = {
   name: Extract<keyof T, string>;
@@ -63,9 +63,8 @@ export function Input<T extends Record<string, unknown>>(
       <input
         aria-activedescendant={activeDescendant}
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}
-        className={twMerge(
-          inputClassName,
-          'w-full',
+        className={clsx(
+          'p-4 text-base font-light bg-background text-text border border-solid  font-jp w-full',
           error ? 'border-danger' : 'border-accentHeavy'
         )}
         name={name}

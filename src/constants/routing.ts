@@ -1,8 +1,6 @@
 // CLIENT ROUTES
 export const HOME_ROUTE = '/';
 
-export const LIST_ROUTE = '/list';
-
 export const ART_ADD_ROUTE = '/art/add';
 
 type DetailRouteId = `${number}` | 'new';
