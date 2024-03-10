@@ -5,7 +5,7 @@ import { Body } from '../typography/Body';
 import { AutoComplete } from './AutoComplete';
 import { inputClassName } from './styles';
 
-export type InputProps<T extends Record<string, unknown>> = {
+type InputProps<T extends Record<string, unknown>> = {
   name: Extract<keyof T, string>;
   label: string;
   required?: boolean;
