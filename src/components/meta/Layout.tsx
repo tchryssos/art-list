@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
@@ -9,7 +8,6 @@ import {
   HOME_ROUTE,
 } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
-import { pxToRem } from '~/logic/util/styles';
 
 import { Button } from '../buttons/Button';
 import { Add } from '../icons/Add';
@@ -27,16 +25,6 @@ type LayoutProps = {
   nav?: NavVariant[];
   pageTitle: string;
 };
-
-const NavButton = styled(Button)(({ theme }) => ({
-  width: theme.spacing[64],
-  height: theme.spacing[64],
-  padding: theme.spacing[16],
-  borderRadius: theme.border.borderRadius.round,
-  boxShadow: `${pxToRem(1)} ${pxToRem(1)} ${pxToRem(1)} ${
-    theme.colors.accentHeavy
-  }`,
-}));
 
 function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
   if (nav) {
@@ -58,9 +46,12 @@ function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
           }
           return (
             <Link href={route} key={n}>
-              <NavButton buttonLike>
+              <Button
+                buttonLike
+                className="h-16 w-16 p-4 rounded-full shadow-nav-button"
+              >
                 <Icon />
-              </NavButton>
+              </Button>
             </Link>
           );
         })}

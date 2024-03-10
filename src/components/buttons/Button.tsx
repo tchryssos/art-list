@@ -19,7 +19,7 @@ export function Button({
 
   const buttonClasses = twMerge(
     buttonClassName,
-    transparent ? 'transparent' : 'bg-accentLight',
+    transparent ? 'bg-[transparent]' : 'bg-accentLight',
     !transparent && 'border border-text border-solid',
     className
   );

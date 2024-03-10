@@ -26,6 +26,9 @@ export default {
           'sans-serif',
         ],
       },
+      boxShadow: {
+        'nav-button': `0.0625rem 0.0625rem 0.0625rem ${colors.accentHeavy}`,
+      },
       spacing: {
         'breakpoint-xs': '639px',
         'breakpoint-sm': '640px',
