@@ -12,10 +12,7 @@ interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => Promise<void> | void;
 }
-export const ArtForm: React.FC<ArtFormProps> = ({
-  onSubmit,
-  defaultValues,
-}) => {
+export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
@@ -101,4 +98,4 @@ export const ArtForm: React.FC<ArtFormProps> = ({
       <SubmitButton isSubmitting={isSubmitting} />
     </Form>
   );
-};
+}

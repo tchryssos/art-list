@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
 import { FormEvent, RefObject } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface FormProps {
   className?: string;
@@ -8,28 +8,19 @@ interface FormProps {
   formRef?: RefObject<HTMLFormElement>;
 }
 
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[16]};
-  box-sizing: border-box;
-  width: 100%;
-`;
-
-export const Form: React.FC<FormProps> = ({
-  className,
-  onSubmit,
-  children,
-  formRef,
-}) => {
+export function Form({ className, onSubmit, children, formRef }: FormProps) {
   const _onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await onSubmit(e);
   };
 
   return (
-    <StyledForm className={className} ref={formRef} onSubmit={_onSubmit}>
+    <form
+      className={twMerge('flex flex-col gap-4 box-border w-full', className)}
+      ref={formRef}
+      onSubmit={_onSubmit}
+    >
       {children}
-    </StyledForm>
+    </form>
   );
-};
+}

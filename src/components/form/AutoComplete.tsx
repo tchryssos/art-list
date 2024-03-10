@@ -1,12 +1,8 @@
-import styled from '@emotion/styled';
+import { lowerCase, throttle } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 
-import { pxToRem } from '~/logic/util/styles';
-
-import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
 import { Body } from '../typography/Body';
-import { lowerCase, throttle } from 'lodash';
 
 interface AutoCompleteProps {
   itemList: string[];
@@ -16,30 +12,6 @@ interface AutoCompleteProps {
   inputValue: string;
 }
 
-const AutoCompleteList = styled(FlexBox)`
-  width: 100%;
-  max-height: ${pxToRem(240)};
-  border: ${({ theme }) =>
-    `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`};
-  border-top: none;
-  z-index: 2;
-  top: ${pxToRem(80)};
-  box-shadow: ${({ theme }) =>
-    `${pxToRem(4)} ${pxToRem(4)} ${pxToRem(1)} ${theme.colors.smudge}`};
-`;
-
-const AutoCompleteButton = styled(Button)`
-  width: 100%;
-  border: ${({ theme }) =>
-    `${theme.border.borderWidth[1]} solid ${theme.colors.accentLight}`};
-  border-top: none;
-  :hover,
-  :focus,
-  :active {
-    background-color: ${({ theme }) => theme.colors.accentLight};
-  }
-`;
-
 type AutoCompleteItemProps = Pick<
   AutoCompleteProps,
   'setInputValue' | 'setActiveDescendant' | 'setShowAutoComplete'
@@ -47,36 +19,41 @@ type AutoCompleteItemProps = Pick<
   value: string;
 };
 
-const AutoCompleteItem: React.FC<AutoCompleteItemProps> = ({
+function AutoCompleteItem({
   value,
   setInputValue,
   setActiveDescendant,
   setShowAutoComplete,
-}) => (
-  <AutoCompleteButton
-    id={value}
-    transparent
-    onClick={() => {
-      setInputValue(value);
-      setShowAutoComplete(false);
-    }}
-    onFocus={() => {
-      setActiveDescendant(value);
-    }}
-  >
-    <FlexBox p={8}>
-      <Body>{value}</Body>
-    </FlexBox>
-  </AutoCompleteButton>
-);
+}: AutoCompleteItemProps) {
+  return (
+    <li>
+      <Button
+        className="w-full border border-solid border-accentLight border-t-0 hover:bg-accentLight focus:bg-accentLight active:bg-accentLight"
+        id={value}
+        transparent
+        onClick={() => {
+          setInputValue(value);
+          setShowAutoComplete(false);
+        }}
+        onFocus={() => {
+          setActiveDescendant(value);
+        }}
+      >
+        <div className="p-2">
+          <Body>{value}</Body>
+        </div>
+      </Button>
+    </li>
+  );
+}
 
-export const AutoComplete: React.FC<AutoCompleteProps> = ({
+export function AutoComplete({
   itemList,
   setInputValue,
   inputValue,
   setActiveDescendant,
   setShowAutoComplete,
-}) => {
+}: AutoCompleteProps) {
   const [filteredList, setFilteredList] = useState<string[]>([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +76,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   }, [filterList, itemList]);
 
   return (
-    <AutoCompleteList column>
+    <ul className="flex flex-col w-full max-h-60 z-[2] top-20 border-t-0 border border-solid border-accentHeavy shadow-autocomplete-list">
       {filteredList.map((item) => (
         <AutoCompleteItem
           key={item}
@@ -109,6 +86,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
           value={item}
         />
       ))}
-    </AutoCompleteList>
+    </ul>
   );
-};
+}

@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { padStart } from 'lodash';
 import { FormEvent, useState } from 'react';
 
@@ -11,12 +10,7 @@ import { formDataToJson } from '~/logic/util/forms';
 
 const homeNav: NavVariant[] = ['list'];
 
-const ResetButton = styled(Button)`
-  padding: ${({ theme }) => theme.spacing[8]};
-  height: ${({ theme }) => theme.spacing[48]};
-`;
-
-const Home: React.FC = () => {
+function AddArtPage() {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
     null
   );
@@ -45,13 +39,16 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout nav={homeNav} pageTitle="Add New Artwork">
+    <Layout nav={homeNav} pageTitle="Add New Artwork" title="Add New Artwork">
       {submitSuccessful ? (
         <>
-          <Body mb={16}>Submit Successful!</Body>
-          <ResetButton onClick={() => setSubmitSuccessful(null)}>
+          <Body className="mb-4">Submit Successful!</Body>
+          <Button
+            className="p-2 h-12"
+            onClick={() => setSubmitSuccessful(null)}
+          >
             <Body>Submit Another?</Body>
-          </ResetButton>
+          </Button>
         </>
       ) : (
         <ArtForm
@@ -61,6 +58,6 @@ const Home: React.FC = () => {
       )}
     </Layout>
   );
-};
+}
 
-export default Home;
+export default AddArtPage;

@@ -1,10 +1,9 @@
-import styled from '@emotion/styled';
 import { FocusEventHandler, useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
-import { FlexBox } from '../box/FlexBox';
 import { Body } from '../typography/Body';
 import { AutoComplete } from './AutoComplete';
-import { createInputStyles } from './styles';
+import { inputClassName } from './styles';
 
 export type InputProps<T extends Record<string, unknown>> = {
   name: Extract<keyof T, string>;
@@ -28,28 +27,6 @@ type AutocompleteProps =
       autoCompleteList: string[];
       autoCompleteActive: boolean;
     };
-
-const InputWrapper = styled(FlexBox)`
-  width: 100%;
-`;
-
-const StyledInput = styled.input<{ error: boolean }>`
-  ${({ theme }) => createInputStyles(theme)};
-  width: 100%;
-  border-color: ${({ error, theme }) =>
-    error ? theme.colors.danger : theme.colors.accentHeavy};
-`;
-
-const Error = styled(Body)(({ theme }) => ({
-  color: theme.colors.danger,
-  fontSize: theme.fontSize.subBody,
-  marginTop: theme.spacing[4],
-}));
-
-const Label = styled.label(({ theme }) => ({
-  fontSize: theme.fontSize.subBody,
-  fontWeight: theme.fontWeight.regular,
-}));
 
 export function Input<T extends Record<string, unknown>>(
   props: InputProps<T> & AutocompleteProps
@@ -79,12 +56,18 @@ export function Input<T extends Record<string, unknown>>(
   }, [autoCompleteActive]);
 
   return (
-    <InputWrapper className={className} column>
-      <Label htmlFor={name}>{label}</Label>
-      <StyledInput
+    <div className={twMerge('flex flex-col w-full', className)}>
+      <label className="text-xs font-semibold" htmlFor={name}>
+        {label}
+      </label>
+      <input
         aria-activedescendant={activeDescendant}
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}
-        error={Boolean(error)}
+        className={twMerge(
+          inputClassName,
+          'w-full',
+          error ? 'border-danger' : 'border-accentHeavy'
+        )}
         name={name}
         required={required}
         type={type}
@@ -95,7 +78,7 @@ export function Input<T extends Record<string, unknown>>(
         }}
         onFocus={onFocus}
       />
-      {error && <Error>{error}</Error>}
+      {error && <Body className="text-danger text-xs mt-1">{error}</Body>}
       {showAutoComplete && autoCompleteList && (
         <AutoComplete
           inputValue={value}
@@ -105,6 +88,6 @@ export function Input<T extends Record<string, unknown>>(
           setShowAutoComplete={setShowAutoComplete}
         />
       )}
-    </InputWrapper>
+    </div>
   );
 }

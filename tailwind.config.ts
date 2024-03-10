@@ -28,6 +28,7 @@ export default {
       },
       boxShadow: {
         'nav-button': `0.0625rem 0.0625rem 0.0625rem ${colors.accentHeavy}`,
+        'autocomplete-list': `0.25rem 0.25rem 0.0625rem ${colors.smudge}`,
       },
       spacing: {
         'breakpoint-xs': '639px',

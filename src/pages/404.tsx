@@ -1,16 +1,16 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { GetStaticProps } from 'next';
 
 import { HOME_ROUTE } from '~/constants/routing';
 
-const FourOhFour: React.FC = () => {
-  const { push } = useRouter();
-
-  useEffect(() => {
-    push(HOME_ROUTE);
-  }, [push]);
-
+function FourOhFour() {
   return null;
-};
+}
 
 export default FourOhFour;
+
+export const getStaticProps: GetStaticProps = async () => ({
+  redirect: {
+    destination: HOME_ROUTE,
+    permanent: false,
+  },
+});
