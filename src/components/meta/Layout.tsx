@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
@@ -19,13 +20,12 @@ import { IconProps } from '../icons/types';
 import { Link } from '../Link';
 import { Title } from '../typography/Title';
 import { Unauthorized } from '../Unauthorized';
-import { Head } from './Head';
 
 export type NavVariant = 'art' | 'list';
 
 type LayoutProps = {
   children?: React.ReactNode;
-  title?: string;
+  title: string;
   nav?: NavVariant[];
   pageTitle: string;
 };
@@ -90,12 +90,7 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
   return null;
 };
 
-export const Layout: React.FC<LayoutProps> = ({
-  children,
-  title,
-  nav,
-  pageTitle,
-}) => {
+export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
   const isAtLeastXs = useBreakpointsAtLeast('xs');
   const { pathname } = useRouter();
 
@@ -107,7 +102,9 @@ export const Layout: React.FC<LayoutProps> = ({
 
   return (
     <>
-      <Head title={title} />
+      <Head>
+        <title>{title}</title>
+      </Head>
       <FlexBox flex={1} justifyContent="center" p={isAtLeastXs ? 32 : 16}>
         <PageWrapper column>
           {unauthorizedPage ? (
@@ -123,4 +120,4 @@ export const Layout: React.FC<LayoutProps> = ({
       </FlexBox>
     </>
   );
-};
+}

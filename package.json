@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "author": "<troychryssos@gmail.com>",
-  "description": "A 'photoblog' to track the art that resonates with me. ",
+  "description": "A 'photo-blog' to track the art that resonates with me. ",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
