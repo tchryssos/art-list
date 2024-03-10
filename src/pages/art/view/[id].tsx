@@ -10,7 +10,7 @@ import { CompleteArt } from '~/typings/art';
 
 const artDetailNav: NavVariant[] = ['art'];
 
-const ArtDetail: React.FC = () => {
+function ArtDetail() {
   const [art, setArt] = useState<CompleteArt | null>(null);
 
   const {
@@ -44,7 +44,11 @@ const ArtDetail: React.FC = () => {
   };
 
   return (
-    <Layout nav={artDetailNav} pageTitle={`Edit '${art?.name || 'Art'}'`}>
+    <Layout
+      nav={artDetailNav}
+      pageTitle={`Edit '${art?.name || 'Art'}'`}
+      title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
+    >
       {art && (
         <ArtForm
           defaultValues={{
@@ -59,6 +63,6 @@ const ArtDetail: React.FC = () => {
       )}
     </Layout>
   );
-};
+}
 
 export default ArtDetail;

@@ -7,19 +7,19 @@ import { Layout, NavVariant } from '~/components/meta/Layout';
 
 const artistNav: NavVariant[] = ['art'];
 
-const LocationDetail: React.FC = () => {
+function LocationDetail() {
   const [locationName] = useState('Location');
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onSubmit = () => {};
   return (
-    <Layout nav={artistNav} pageTitle={locationName}>
+    <Layout nav={artistNav} pageTitle={locationName} title={locationName}>
       <Form onSubmit={onSubmit}>
         <Input label="Location Name" name="name" type="text" />
         <SubmitButton isSubmitting={false} />
       </Form>
     </Layout>
   );
-};
+}
 
 export default LocationDetail;
