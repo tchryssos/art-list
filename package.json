@@ -1,9 +1,9 @@
 {
-  "name": "next-typescript-template",
-  "version": "0.1.1",
+  "name": "troyslist.art",
+  "version": "1.0.0",
   "private": false,
   "author": "<troychryssos@gmail.com>",
-  "description": "A website by Troy Chryssos",
+  "description": "A 'photoblog' to track the art that resonates with me. ",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
-    "@types/lodash": "^4.14.202",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "date-fns-tz": "^2.0.1",
@@ -33,6 +32,7 @@
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.3",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.25",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
