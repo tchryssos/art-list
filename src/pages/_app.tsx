@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import type { AppProps /* , AppContext */ } from 'next/app';
+import '../global.css';
+
+import type { AppProps } from 'next/app';
 
 import { AuthContextProvider } from '~/logic/contexts/authContext';
 

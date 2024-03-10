@@ -17,6 +17,16 @@ export default {
   theme: {
     colors,
     extend: {
+      fontFamily: {
+        jp: [
+          "'Hiragino Kaku Gothic Pro'",
+          "'メイリオ'",
+          "'ＭＳ Ｐゴシック'",
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'sans-serif',
+        ],
+      },
       spacing: {
         'breakpoint-xs': '639px',
         'breakpoint-sm': '640px',
