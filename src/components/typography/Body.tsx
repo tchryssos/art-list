@@ -1,17 +1,12 @@
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 import { TypographyProps } from './types';
 
-export function Body({
-  children,
-  className,
-  bold = true,
-  italic,
-}: TypographyProps) {
+export function Body({ children, className, bold, italic }: TypographyProps) {
   return (
     <p
-      className={clsx(
-        'text-text leading-5 text-sm',
+      className={twMerge(
+        'text-text leading-4 text-sm font-semibold',
         bold && 'font-bold',
         italic && 'italic',
         className

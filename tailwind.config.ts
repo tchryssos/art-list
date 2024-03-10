@@ -18,14 +18,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        jp: [
-          "'Hiragino Kaku Gothic Pro'",
-          "'メイリオ'",
-          "'ＭＳ Ｐゴシック'",
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'sans-serif',
-        ],
+        regular: ['"Lora"', 'serif'],
       },
       boxShadow: {
         'nav-button': `0.0625rem 0.0625rem 0.0625rem ${colors.accentHeavy}`,

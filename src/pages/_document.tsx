@@ -10,15 +10,15 @@ export default function Document() {
           href="https://fonts.gstatic.com"
           rel="preconnect"
         />
-        {/* <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
           rel="stylesheet"
-        /> */}
+        />
         <meta charSet="utf-8" />
         <meta content="initial-scale=1.0, width=device-width" name="viewport" />
         <meta content="A 'photo-blog' of my favorite art." name="description" />
       </Head>
-      <body className="font-jp text-text">
+      <body className="font-regular text-text">
         <Main />
         <NextScript />
       </body>

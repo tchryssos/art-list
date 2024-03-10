@@ -27,7 +27,9 @@ function ListItemWrapper({
   artId,
 }: ListItemWrapperProps) {
   return isAuthorized ? (
-    <Link href={createArtDetailRoute(`${artId}`)}>{children}</Link>
+    <Link className="h-full" href={createArtDetailRoute(`${artId}`)}>
+      {children}
+    </Link>
   ) : (
     <>{children}</>
   );
@@ -53,13 +55,11 @@ export function ArtListItem({ art }: ArtListItemProps) {
     <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
       <div
         className={clsx(
-          'flex flex-col border border-solid border-accentLight p-4 gap-2',
+          'flex flex-col border border-solid border-[transparent] p-4 gap-1 h-full',
           isAuthorized &&
-            'hover:border-accentHeavy hover:bg-smudge active:border-accentHeavy  active:bg-smudge'
+            'hover:border-accentLight hover:bg-smudge active:border-accentLight  active:bg-smudge'
         )}
       >
-        <Body>{name}</Body>
-        <Body>{artistName}</Body>
         {imgSrc?.match(IS_URL) && (
           <ArtImg
             alt={`Artwork: ${name} by ${artistName}`}
@@ -74,8 +74,13 @@ export function ArtListItem({ art }: ArtListItemProps) {
             }}
           />
         )}
-        <Body className="text-xs leading-3">{locationName || '???'}</Body>
-        <Body className="text-xs leading-3">
+        <Body>{name}</Body>
+        <Body>{artistName}</Body>
+
+        <Body className="text-xs leading-2 font-medium">
+          {locationName || '???'}
+        </Body>
+        <Body className="text-xs leading-2 font-medium">
           {formatDate(dateSeen) || '???'}
         </Body>
       </div>
