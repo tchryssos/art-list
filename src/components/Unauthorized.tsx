@@ -40,7 +40,9 @@ export function Unauthorized() {
   };
   return (
     <>
-      <Title className="mb-4">Enter password to view this page</Title>
+      <Title bold className="mb-4">
+        Enter password to view this page
+      </Title>
       <Form onSubmit={onSubmit}>
         <Input<PasswordData>
           error={error}
@@ -52,7 +54,7 @@ export function Unauthorized() {
         <div className="grid gap-4 grid-cols-2">
           <SubmitButton isSubmitting={isSubmitting} />
           <Link href={HOME_ROUTE}>
-            <Button buttonLike className="h-full" transparent>
+            <Button buttonLike className="h-full border" transparent>
               <Body>Back to List</Body>
             </Button>
           </Link>

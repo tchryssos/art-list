@@ -48,7 +48,7 @@ function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
             <Link href={route} key={n}>
               <Button
                 buttonLike
-                className="h-16 w-16 p-4 rounded-full shadow-nav-button"
+                className="h-16 w-16 p-4 rounded-full shadow-nav-button border-none hover:bg-accentHeavy active:bg-accentHeavy"
               >
                 <Icon color={colors.text} path={path} />
               </Button>

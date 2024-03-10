@@ -8,8 +8,17 @@ interface SubmitButtonProps {
 
 export function SubmitButton({ isSubmitting }: SubmitButtonProps) {
   return (
-    <Button className="h-12 p-4" type="submit">
-      {isSubmitting ? <LoadingSpinner /> : <Body bold>Submit</Body>}
+    <Button
+      className="h-13 p-4 border-none hover:bg-accentHeavy active:bg-accentHeavy"
+      type="submit"
+    >
+      {isSubmitting ? (
+        <div className="flex justify-center">
+          <LoadingSpinner size={1} />
+        </div>
+      ) : (
+        <Body>Submit</Body>
+      )}
     </Button>
   );
 }

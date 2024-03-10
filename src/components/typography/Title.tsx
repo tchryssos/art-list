@@ -2,7 +2,12 @@ import clsx from 'clsx';
 
 import { TypographyProps } from './types';
 
-export function Title({ children, className, bold, italic }: TypographyProps) {
+export function Title({
+  children,
+  className,
+  bold = true,
+  italic,
+}: TypographyProps) {
   return (
     <h2
       className={clsx(
