@@ -1,6 +1,4 @@
 import styled from '@emotion/styled';
-import lowerCase from 'lodash.lowercase';
-import throttle from 'lodash.throttle';
 import { useCallback, useEffect, useState } from 'react';
 
 import { pxToRem } from '~/logic/util/styles';
@@ -8,6 +6,7 @@ import { pxToRem } from '~/logic/util/styles';
 import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
 import { Body } from '../typography/Body';
+import { lowerCase, throttle } from 'lodash';
 
 interface AutoCompleteProps {
   itemList: string[];

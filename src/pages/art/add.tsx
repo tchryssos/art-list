@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import padStart from 'lodash.padstart';
+import { padStart } from 'lodash';
 import { FormEvent, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
