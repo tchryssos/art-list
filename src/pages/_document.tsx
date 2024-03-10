@@ -18,7 +18,7 @@ export default function Document() {
         <meta content="initial-scale=1.0, width=device-width" name="viewport" />
         <meta content="A 'photo-blog' of my favorite art." name="description" />
       </Head>
-      <body className="font-jp">
+      <body className="font-jp text-text">
         <Main />
         <NextScript />
       </body>

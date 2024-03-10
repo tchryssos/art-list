@@ -15,7 +15,6 @@ const colors = {
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
-    colors,
     extend: {
       fontFamily: {
         jp: [
@@ -35,6 +34,7 @@ export default {
         'breakpoint-xl': '1280px',
       },
     },
+    colors,
   },
   plugins: [],
 } satisfies Config;

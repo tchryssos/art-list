@@ -9,10 +9,8 @@ import {
   HOME_ROUTE,
 } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
-import { useBreakpointsAtLeast } from '~/logic/hooks/useBreakpoints';
 import { pxToRem } from '~/logic/util/styles';
 
-import { FlexBox } from '../box/FlexBox';
 import { Button } from '../buttons/Button';
 import { Add } from '../icons/Add';
 import { Search } from '../icons/Search';
@@ -30,24 +28,6 @@ type LayoutProps = {
   pageTitle: string;
 };
 
-const PageWrapper = styled(FlexBox)`
-  max-width: ${({ theme }) => theme.breakpointValues.md}px;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  ${({ theme }) => theme.breakpoints.lg} {
-    max-width: ${({ theme }) => theme.breakpointValues.lg}px;
-  }
-`;
-
-const NavWrapper = styled(FlexBox)`
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: ${({ theme }) => theme.spacing[20]};
-  gap: ${({ theme }) => theme.spacing[16]};
-`;
-
 const NavButton = styled(Button)(({ theme }) => ({
   width: theme.spacing[64],
   height: theme.spacing[64],
@@ -58,10 +38,10 @@ const NavButton = styled(Button)(({ theme }) => ({
   }`,
 }));
 
-const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
+function Nav({ nav }: Pick<LayoutProps, 'nav'>) {
   if (nav) {
     return (
-      <NavWrapper>
+      <div className="flex fixed bottom-0 right-0 m-5 gap-4">
         {nav.map((n) => {
           let route: string;
           let Icon: React.FC<IconProps>;
@@ -84,14 +64,13 @@ const Nav: React.FC<Pick<LayoutProps, 'nav'>> = ({ nav }) => {
             </Link>
           );
         })}
-      </NavWrapper>
+      </div>
     );
   }
   return null;
-};
+}
 
 export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
-  const isAtLeastXs = useBreakpointsAtLeast('xs');
   const { pathname } = useRouter();
 
   const { isAuthorized } = useContext(AuthContext);
@@ -105,19 +84,19 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
       <Head>
         <title>{title}</title>
       </Head>
-      <FlexBox flex={1} justifyContent="center" p={isAtLeastXs ? 32 : 16}>
-        <PageWrapper column>
+      <div className="flex flex-1 justify-center p-4 sm:p-8">
+        <div className="flex flex-col max-w-breakpoint-lg w-full h-full relative xl:max-w-breakpoint-xl">
           {unauthorizedPage ? (
             <Unauthorized />
           ) : (
             <>
-              <Title mb={16}>{pageTitle}</Title>
+              <Title className="mb-4">{pageTitle}</Title>
               {children}
               <Nav nav={nav} />
             </>
           )}
-        </PageWrapper>
-      </FlexBox>
+        </div>
+      </div>
     </>
   );
 }
