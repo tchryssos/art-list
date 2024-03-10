@@ -49,6 +49,10 @@ module.exports = {
       'sarahcharlesworth.net',
       'i.pinimg.com',
       'www.park-books.com',
+      'gulbenkian.pt',
+      'img.bndlyr.com',
+      'd1lfxha3ugu3d4.cloudfront.net',
+      'd7hftxdivxxvm.cloudfront.net',
     ],
   },
 };
