@@ -26,14 +26,15 @@ type LayoutProps = {
   title: string;
   nav?: NavVariant;
   pageTitle?: string;
+  noAction?: boolean;
 };
 
-interface NavProps extends Pick<LayoutProps, 'nav'> {
+interface NavProps extends Pick<LayoutProps, 'nav' | 'noAction'> {
   isAuthorized: boolean;
 }
 
-function Nav({ nav, isAuthorized }: NavProps) {
-  if (nav || !isAuthorized) {
+function Nav({ nav, isAuthorized, noAction }: NavProps) {
+  if (nav || (!isAuthorized && !noAction)) {
     let route: string;
     let path: string;
 
@@ -71,13 +72,22 @@ function Nav({ nav, isAuthorized }: NavProps) {
 
 function HomeLink() {
   return (
-    <Link className="min-w-12" href={HOME_ROUTE}>
-      <Body>Troy&apos;s Art List</Body>
+    <Link
+      className="min-w-12 border border-solid border-text px-2 py-1"
+      href={HOME_ROUTE}
+    >
+      <Body>Art List</Body>
     </Link>
   );
 }
 
-export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
+export function Layout({
+  children,
+  title,
+  nav,
+  pageTitle,
+  noAction,
+}: LayoutProps) {
   const { pathname } = useRouter();
 
   const { isAuthorized } = useContext(AuthContext);
@@ -116,7 +126,7 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
             <>
               {pageTitle && <Title className="mb-4">{pageTitle}</Title>}
               {children}
-              <Nav isAuthorized={isAuthorized} nav={nav} />
+              <Nav isAuthorized={isAuthorized} nav={nav} noAction={noAction} />
             </>
           )}
         </div>
