@@ -73,7 +73,7 @@ function Nav({ nav, isAuthorized, noAction }: NavProps) {
 function HomeLink() {
   return (
     <Link
-      className="min-w-12 border border-solid border-text px-2 py-1"
+      className="min-w-12 border border-solid hover:border-text px-2 py-1 border-[transparent]"
       href={HOME_ROUTE}
     >
       <Body>Art List</Body>

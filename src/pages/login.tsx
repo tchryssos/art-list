@@ -1,7 +1,13 @@
+import { GetServerSideProps } from 'next';
+
 import { Layout } from '~/components/meta/Layout';
 import { Unauthorized } from '~/components/Unauthorized';
 
-function Login() {
+interface LoginPageProps {
+  authorized: boolean;
+}
+
+function Login({ authorized }: LoginPageProps) {
   return (
     <Layout noAction title="Log In">
       <Unauthorized />
@@ -10,3 +16,14 @@ function Login() {
 }
 
 export default Login;
+
+export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({
+  req,
+}) => {
+  const isAuthorized = req.cookies?.authorized === 'true';
+  return {
+    props: {
+      authorized: isAuthorized,
+    },
+  };
+};
