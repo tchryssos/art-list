@@ -69,7 +69,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete('artist')}
+        onFocus={() => !readOnly && setActiveAutoComplete('artist')}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.name}
@@ -78,7 +78,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       <Input<ArtSubmitData>
         autoCompleteActive={activeAutoComplete === 'location'}
@@ -89,7 +89,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete('location')}
+        onFocus={() => !readOnly && setActiveAutoComplete('location')}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.dateSeen}
@@ -98,7 +98,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         readOnly={readOnly}
         required
         type="date"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.imgSrc}
@@ -106,7 +106,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         name="imgSrc"
         readOnly={readOnly}
         type="text"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       {!readOnly && <SubmitButton isSubmitting={isSubmitting} />}
     </Form>
