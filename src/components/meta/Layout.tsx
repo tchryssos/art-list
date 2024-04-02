@@ -1,4 +1,9 @@
-import { mdiImageSearchOutline, mdiLogin, mdiPlus } from '@mdi/js';
+import {
+  mdiHomeOutline,
+  mdiImageSearchOutline,
+  mdiLogin,
+  mdiPlus,
+} from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
 import Head from 'next/head';
@@ -78,7 +83,10 @@ function HomeLink() {
       className="min-w-12 border border-solid border-text px-2 py-1 hover:border-[transparent]"
       href={HOME_ROUTE}
     >
-      <Body>Art List</Body>
+      <span className="flex items-center gap-1">
+        <Body>Art List</Body>
+        <Icon path={mdiHomeOutline} size={0.75} />
+      </span>
     </Link>
   );
 }
