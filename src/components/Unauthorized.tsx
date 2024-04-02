@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { FormEvent, useContext, useState } from 'react';
 
 import { AUTH_ROUTE, HOME_ROUTE } from '~/constants/routing';
@@ -16,6 +17,7 @@ export function Unauthorized() {
   const { setIsAuthorized } = useContext(AuthContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const { push } = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
     setIsSubmitting(true);
@@ -28,6 +30,7 @@ export function Unauthorized() {
 
     if (resp.status === 200) {
       setIsAuthorized(true);
+      push(HOME_ROUTE);
     } else {
       setIsAuthorized(false);
       setIsSubmitting(false);

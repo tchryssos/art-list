@@ -26,7 +26,7 @@ export function AuthContextProvider({ children }: PropsWithChildren<unknown>) {
   useEffect(() => {
     const checkMe = async () => {
       const resp = await fetch(AUTH_ME_ROUTE);
-      const authorized = await resp.json();
+      const { authorized } = await resp.json();
       setIsAuthorized(authorized);
     };
     checkMe();

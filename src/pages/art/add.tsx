@@ -1,11 +1,13 @@
 import { padStart } from 'lodash';
+import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
-import { ART_CREATE_ROUTE } from '~/constants/routing';
+import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 
 function AddArtPage() {
@@ -64,3 +66,20 @@ function AddArtPage() {
 }
 
 export default AddArtPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const isAuthorized = isCookieAuthorized(req);
+
+  if (!isAuthorized) {
+    return {
+      redirect: {
+        destination: LOGIN_ROUTE,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

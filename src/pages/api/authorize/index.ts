@@ -2,6 +2,7 @@ import { serialize } from 'cookie';
 import { NextApiHandler } from 'next';
 
 import { AUTH_COOKIE_KEY } from '~/constants/auth';
+import { HOME_ROUTE } from '~/constants/routing';
 
 export type AuthData = {
   username: string;
@@ -20,6 +21,7 @@ const authorize: NextApiHandler = async (req, res) => {
         sameSite: 'lax',
         httpOnly: true,
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        path: HOME_ROUTE,
       });
 
       res.setHeader('Set-Cookie', cookie).status(200).json('Authorized');
