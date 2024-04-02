@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   createContext,
   PropsWithChildren,
@@ -5,6 +6,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+
+import { AUTH_ME_ROUTE } from '~/constants/routing';
 
 type AuthContextType = {
   isAuthorized: boolean;
@@ -18,18 +21,16 @@ export const AuthContext = createContext<AuthContextType>({
 
 export function AuthContextProvider({ children }: PropsWithChildren<unknown>) {
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const { pathname } = useRouter();
 
   useEffect(() => {
-    if (globalThis.document?.cookie) {
-      setIsAuthorized(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isAuthorized && !globalThis.document?.cookie) {
-      globalThis.document.cookie = 'isAuthorized=true';
-    }
-  }, [isAuthorized]);
+    const checkMe = async () => {
+      const resp = await fetch(AUTH_ME_ROUTE);
+      const authorized = await resp.json();
+      setIsAuthorized(authorized);
+    };
+    checkMe();
+  }, [pathname]);
 
   const providerValue = useMemo(
     () => ({ isAuthorized, setIsAuthorized }),

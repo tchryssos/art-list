@@ -2,12 +2,10 @@ import { GetServerSideProps } from 'next';
 
 import { Layout } from '~/components/meta/Layout';
 import { Unauthorized } from '~/components/Unauthorized';
+import { AUTH_COOKIE_KEY } from '~/constants/auth';
+import { HOME_ROUTE } from '~/constants/routing';
 
-interface LoginPageProps {
-  authorized: boolean;
-}
-
-function Login({ authorized }: LoginPageProps) {
+function Login() {
   return (
     <Layout noAction title="Log In">
       <Unauthorized />
@@ -17,13 +15,17 @@ function Login({ authorized }: LoginPageProps) {
 
 export default Login;
 
-export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({
-  req,
-}) => {
-  const isAuthorized = req.cookies?.authorized === 'true';
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const authorized = req.cookies?.[AUTH_COOKIE_KEY] === 'true';
+  if (authorized) {
+    return {
+      redirect: {
+        destination: HOME_ROUTE,
+        permanent: false,
+      },
+    };
+  }
   return {
-    props: {
-      authorized: isAuthorized,
-    },
+    props: {},
   };
 };

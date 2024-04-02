@@ -28,6 +28,7 @@ export const createArtApiRoute = (id: DetailRouteId) => `/api/art/${id}`;
 export const ARTISTS_LIST_ROUTE = '/api/artists';
 export const LOCATION_LIST_ROUTE = '/api/locations';
 export const AUTH_ROUTE = '/api/authorize';
+export const AUTH_ME_ROUTE = '/api/authorize/me';
 
 export const AUTH_ROUTE_PATTERNS = [
   ART_ADD_ROUTE,
