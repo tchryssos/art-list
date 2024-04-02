@@ -1,35 +1,25 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent } from 'react';
 
 import { ArtForm } from '~/components/form/ArtForm';
-import { Layout, NavVariant } from '~/components/meta/Layout';
+import { Layout } from '~/components/meta/Layout';
 import { createArtApiRoute, HOME_ROUTE } from '~/constants/routing';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
+import { prisma } from '~/logic/util/prisma';
 import { CompleteArt } from '~/typings/art';
 
-const artDetailNav: NavVariant[] = ['art'];
+interface ArtDetailProps {
+  art: CompleteArt;
+}
 
-function ArtDetail() {
-  const [art, setArt] = useState<CompleteArt | null>(null);
-
+function ArtDetail({ art }: ArtDetailProps) {
+  console.log(art);
   const {
     query: { id },
     push,
   } = useRouter();
-
-  useEffect(() => {
-    if (id) {
-      const fetchArt = async () => {
-        const resp = await fetch(createArtApiRoute(id as `${number}`), {
-          method: 'GET',
-        });
-        const artwork: CompleteArt = await resp.json();
-        setArt(artwork);
-      };
-      fetchArt();
-    }
-  }, [id]);
 
   const onSubmit = async (e: FormEvent) => {
     try {
@@ -49,7 +39,7 @@ function ArtDetail() {
 
   return (
     <Layout
-      nav={artDetailNav}
+      nav="art"
       pageTitle={`Edit '${art?.name || 'Art'}'`}
       title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
     >
@@ -70,3 +60,32 @@ function ArtDetail() {
 }
 
 export default ArtDetail;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { id } = params || {};
+
+  try {
+    const art = await prisma.art.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!art) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        art,
+      },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      notFound: true,
+    };
+  }
+};

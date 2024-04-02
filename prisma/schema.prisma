@@ -36,10 +36,3 @@ model Artist {
   lastModifiedOn DateTime @db.Timestamp(6)
   art            Art[]
 }
-
-model Session {
-  id       String   @id @default(cuid())
-  userId   String
-  expires  DateTime
-  loggedIn DateTime
-}

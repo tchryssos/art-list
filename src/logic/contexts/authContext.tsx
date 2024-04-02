@@ -10,24 +10,24 @@ import {
 import { AUTH_ME_ROUTE } from '~/constants/routing';
 
 type AuthContextType = {
-  isAuthorized: boolean;
+  isAuthorized: boolean | null;
   setIsAuthorized: (isAuthorized: boolean) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
-  isAuthorized: false,
+  isAuthorized: null,
   setIsAuthorized: () => null,
 });
 
 export function AuthContextProvider({ children }: PropsWithChildren<unknown>) {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const { pathname } = useRouter();
 
   useEffect(() => {
     const checkMe = async () => {
       const resp = await fetch(AUTH_ME_ROUTE);
       const { authorized } = await resp.json();
-      setIsAuthorized(authorized);
+      setIsAuthorized(Boolean(authorized || false));
     };
     checkMe();
   }, [pathname]);

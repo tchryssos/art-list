@@ -30,7 +30,7 @@ type LayoutProps = {
 };
 
 interface NavProps extends Pick<LayoutProps, 'nav' | 'noAction'> {
-  isAuthorized: boolean;
+  isAuthorized: boolean | null;
 }
 
 function Nav({ nav, isAuthorized, noAction }: NavProps) {
@@ -49,9 +49,11 @@ function Nav({ nav, isAuthorized, noAction }: NavProps) {
           path = mdiPlus;
           break;
       }
-    } else {
+    } else if (isAuthorized === false) {
       route = LOGIN_ROUTE;
       path = mdiLogin;
+    } else {
+      return null;
     }
 
     return (
