@@ -16,6 +16,7 @@ type InputProps<T extends Record<string, unknown>> = {
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   error?: string;
+  readOnly?: boolean;
 };
 
 type AutocompleteProps =
@@ -43,6 +44,7 @@ export function Input<T extends Record<string, unknown>>(
     autoCompleteList,
     autoCompleteActive,
     error,
+    readOnly,
   } = props;
 
   const [value, setValue] = useState(defaultValue);
@@ -68,6 +70,7 @@ export function Input<T extends Record<string, unknown>>(
           error ? 'border-danger' : 'border-accentHeavy'
         )}
         name={name}
+        readOnly={readOnly}
         required={required}
         type={type}
         value={value}

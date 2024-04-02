@@ -1,10 +1,13 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent } from 'react';
+import { FormEvent, useContext } from 'react';
 
 import { ArtForm } from '~/components/form/ArtForm';
 import { Layout } from '~/components/meta/Layout';
+import { AUTH_PROPS_KEY } from '~/constants/auth';
 import { createArtApiRoute, HOME_ROUTE } from '~/constants/routing';
+import { isCookieAuthorized } from '~/logic/api/auth';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
@@ -15,11 +18,12 @@ interface ArtDetailProps {
 }
 
 function ArtDetail({ art }: ArtDetailProps) {
-  console.log(art);
   const {
     query: { id },
     push,
   } = useRouter();
+
+  const { isAuthorized } = useContext(AuthContext);
 
   const onSubmit = async (e: FormEvent) => {
     try {
@@ -40,7 +44,7 @@ function ArtDetail({ art }: ArtDetailProps) {
   return (
     <Layout
       nav="art"
-      pageTitle={`Edit '${art?.name || 'Art'}'`}
+      pageTitle={`Edit "${art?.name || 'Art'}"`}
       title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
     >
       {art && (
@@ -52,6 +56,7 @@ function ArtDetail({ art }: ArtDetailProps) {
             location: art.Location.name,
             imgSrc: art.imgSrc || '',
           }}
+          readOnly={!isAuthorized}
           onSubmit={onSubmit}
         />
       )}
@@ -61,13 +66,20 @@ function ArtDetail({ art }: ArtDetailProps) {
 
 export default ArtDetail;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
   const { id } = params || {};
 
   try {
     const art = await prisma.art.findUnique({
       where: {
         id: Number(id),
+      },
+      include: {
+        Artist: true,
+        Location: true,
       },
     });
 
@@ -80,6 +92,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
       props: {
         art,
+        [AUTH_PROPS_KEY]: isCookieAuthorized(req),
       },
     };
   } catch (e) {

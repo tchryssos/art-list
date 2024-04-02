@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import {
   createContext,
   PropsWithChildren,
@@ -19,9 +18,17 @@ export const AuthContext = createContext<AuthContextType>({
   setIsAuthorized: () => null,
 });
 
-export function AuthContextProvider({ children }: PropsWithChildren<unknown>) {
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-  const { pathname } = useRouter();
+interface AuthContextProviderProps {
+  authorized?: boolean;
+}
+
+export function AuthContextProvider({
+  children,
+  authorized: _authorized,
+}: PropsWithChildren<AuthContextProviderProps>) {
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(
+    _authorized === undefined ? null : _authorized
+  );
 
   useEffect(() => {
     const checkMe = async () => {
@@ -30,7 +37,7 @@ export function AuthContextProvider({ children }: PropsWithChildren<unknown>) {
       setIsAuthorized(Boolean(authorized || false));
     };
     checkMe();
-  }, [pathname]);
+  }, []);
 
   const providerValue = useMemo(
     () => ({ isAuthorized, setIsAuthorized }),

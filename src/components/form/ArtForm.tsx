@@ -11,8 +11,9 @@ import { Input } from './Input';
 interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => Promise<void> | void;
+  readOnly?: boolean;
 }
-export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
+export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
@@ -45,6 +46,9 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
   }, []);
 
   const _onSubmit = async (e: FormEvent) => {
+    if (readOnly) {
+      return;
+    }
     setIsSubmitting(true);
     try {
       await onSubmit(e);
@@ -62,6 +66,7 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
         defaultValue={defaultValues?.artist}
         label="Artist"
         name="artist"
+        readOnly={readOnly}
         required
         type="text"
         onFocus={() => setActiveAutoComplete('artist')}
@@ -70,6 +75,7 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
         defaultValue={defaultValues?.name}
         label="Artwork Name"
         name="name"
+        readOnly={readOnly}
         required
         type="text"
         onFocus={() => setActiveAutoComplete(null)}
@@ -80,6 +86,7 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
         defaultValue={defaultValues?.location}
         label="Location Seen"
         name="location"
+        readOnly={readOnly}
         required
         type="text"
         onFocus={() => setActiveAutoComplete('location')}
@@ -88,6 +95,7 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
         defaultValue={defaultValues?.dateSeen}
         label="Date Seen"
         name="dateSeen"
+        readOnly={readOnly}
         required
         type="date"
         onFocus={() => setActiveAutoComplete(null)}
@@ -96,10 +104,11 @@ export function ArtForm({ onSubmit, defaultValues }: ArtFormProps) {
         defaultValue={defaultValues?.imgSrc}
         label="Image Url"
         name="imgSrc"
+        readOnly={readOnly}
         type="text"
         onFocus={() => setActiveAutoComplete(null)}
       />
-      <SubmitButton isSubmitting={isSubmitting} />
+      {!readOnly && <SubmitButton isSubmitting={isSubmitting} />}
     </Form>
   );
 }
