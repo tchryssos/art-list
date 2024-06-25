@@ -18,7 +18,7 @@ import { Body } from '../typography/Body';
 import { Title } from '../typography/Title';
 import { Unauthorized } from '../Unauthorized';
 
-export type NavVariant = 'art' | 'list';
+type NavVariant = 'art' | 'list';
 
 type LayoutProps = {
   children?: React.ReactNode;
