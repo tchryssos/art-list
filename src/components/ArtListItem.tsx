@@ -52,7 +52,7 @@ export function ArtListItem({ art }: ArtListItemProps) {
   }
 
   return (
-    <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
+    <ListItemWrapper artId={art.id} isAuthorized={Boolean(isAuthorized)}>
       <div
         className={clsx(
           'flex flex-col border border-solid border-accentLight p-3 gap-1 h-full',
