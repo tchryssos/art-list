@@ -65,13 +65,14 @@ function Nav({ nav, isAuthorized }: NavProps) {
 
 function HomeLink() {
   return (
-    <Link
-      className="min-w-12 border border-solid border-text px-2 py-1 hover:border-[transparent]"
-      href={HOME_ROUTE}
-    >
+    <Link className="min-w-12 px-2 py-1 group" href={HOME_ROUTE}>
       <span className="flex items-center gap-1">
-        <Body className="text-md">Art List</Body>
-        <Icon path={mdiHomeOutline} size={0.75} />
+        <Body>Art List</Body>
+        <Icon
+          className="invisible group-hover:visible"
+          path={mdiHomeOutline}
+          size={0.75}
+        />
       </span>
     </Link>
   );
