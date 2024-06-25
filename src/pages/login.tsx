@@ -7,7 +7,7 @@ import { isCookieAuthorized } from '~/logic/api/auth';
 
 function Login() {
   return (
-    <Layout noAction title="Log In">
+    <Layout title="Log In">
       <Unauthorized />
     </Layout>
   );

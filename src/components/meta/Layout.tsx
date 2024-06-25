@@ -1,9 +1,4 @@
-import {
-  mdiHomeOutline,
-  mdiImageSearchOutline,
-  mdiLogin,
-  mdiPlus,
-} from '@mdi/js';
+import { mdiHomeOutline, mdiImageSearchOutline, mdiPlus } from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
 import Head from 'next/head';
@@ -14,7 +9,6 @@ import {
   ART_ADD_ROUTE,
   AUTH_ROUTE_PATTERNS,
   HOME_ROUTE,
-  LOGIN_ROUTE,
 } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 
@@ -31,34 +25,26 @@ type LayoutProps = {
   title: string;
   nav?: NavVariant;
   pageTitle?: string;
-  noAction?: boolean;
 };
 
-interface NavProps extends Pick<LayoutProps, 'nav' | 'noAction'> {
+interface NavProps extends Pick<LayoutProps, 'nav'> {
   isAuthorized: boolean | null;
 }
 
-function Nav({ nav, isAuthorized, noAction }: NavProps) {
-  if (nav || (!isAuthorized && !noAction)) {
+function Nav({ nav, isAuthorized }: NavProps) {
+  if (nav && isAuthorized) {
     let route: string;
     let path: string;
 
-    if (isAuthorized) {
-      switch (nav) {
-        case 'list':
-          route = HOME_ROUTE;
-          path = mdiImageSearchOutline;
-          break;
-        default:
-          route = ART_ADD_ROUTE;
-          path = mdiPlus;
-          break;
-      }
-    } else if (isAuthorized === false) {
-      route = LOGIN_ROUTE;
-      path = mdiLogin;
-    } else {
-      return null;
+    switch (nav) {
+      case 'list':
+        route = HOME_ROUTE;
+        path = mdiImageSearchOutline;
+        break;
+      default:
+        route = ART_ADD_ROUTE;
+        path = mdiPlus;
+        break;
     }
 
     return (
@@ -84,20 +70,14 @@ function HomeLink() {
       href={HOME_ROUTE}
     >
       <span className="flex items-center gap-1">
-        <Body>Art List</Body>
+        <Body className="text-md">Art List</Body>
         <Icon path={mdiHomeOutline} size={0.75} />
       </span>
     </Link>
   );
 }
 
-export function Layout({
-  children,
-  title,
-  nav,
-  pageTitle,
-  noAction,
-}: LayoutProps) {
+export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
   const { pathname } = useRouter();
 
   const { isAuthorized } = useContext(AuthContext);
@@ -136,7 +116,7 @@ export function Layout({
             <>
               {pageTitle && <Title className="mb-4">{pageTitle}</Title>}
               {children}
-              <Nav isAuthorized={isAuthorized} nav={nav} noAction={noAction} />
+              <Nav isAuthorized={isAuthorized} nav={nav} />
             </>
           )}
         </div>
