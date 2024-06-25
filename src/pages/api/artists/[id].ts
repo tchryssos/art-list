@@ -1,5 +1,6 @@
 import { NextApiHandler } from 'next';
 
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
 import { ArtistSubmitData } from '~/typings/artist';
 
@@ -45,7 +46,11 @@ const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   if (method === 'PATCH') {
-    await patchArtist(req, res);
+    if (isCookieAuthorized(req)) {
+      await patchArtist(req, res);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
   } else {
     await getArtist(req, res);
   }

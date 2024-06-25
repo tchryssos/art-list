@@ -2,6 +2,7 @@ import { parseISO } from 'date-fns';
 import { NextApiHandler } from 'next';
 
 import { artistFindOrCreate } from '~/logic/api/artists';
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
 import { ArtSubmitData } from '~/typings/art';
@@ -59,7 +60,11 @@ const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   if (method === 'PATCH') {
-    await patchArt(req, res);
+    if (isCookieAuthorized(req)) {
+      await patchArt(req, res);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
   } else {
     await getArt(req, res);
   }

@@ -1,5 +1,6 @@
 import { NextApiHandler } from 'next';
 
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
 import { LocationSubmitData } from '~/typings/location';
 
@@ -45,7 +46,11 @@ const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   if (method === 'PATCH') {
-    await patchLocation(req, res);
+    if (isCookieAuthorized(req)) {
+      await patchLocation(req, res);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
   } else {
     await getLocation(req, res);
   }
