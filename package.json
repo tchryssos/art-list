@@ -8,7 +8,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "build:serve": "yarn build && yarn next start -p 3003",
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
