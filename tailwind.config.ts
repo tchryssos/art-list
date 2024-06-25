@@ -9,7 +9,7 @@ export const colors = {
   accentHeavy: '#adadad',
   accentLight: '#e8e8e8',
   smudge: 'rgba(0,0,0,0.05)',
-  primary: '#9E788F',
+  primary: '#9e9d78',
   textContrast: '#f1f2eb',
 };
 
