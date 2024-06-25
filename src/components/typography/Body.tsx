@@ -1,13 +1,18 @@
-import styled from '@emotion/styled';
+import { twMerge } from 'tailwind-merge';
 
-import { MarginProps } from '../box/types';
-import { createTextSharedStyles } from './styles';
 import { TypographyProps } from './types';
 
-type BodyProps = Pick<MarginProps, 'mb'> & TypographyProps;
-
-export const Body = styled.p<BodyProps>`
-  ${({ theme, variant = 'normal', ...rest }) =>
-    createTextSharedStyles(theme, { ...rest, variant })}
-  font-size: ${({ theme }) => theme.fontSize.body};
-`;
+export function Body({ children, className, bold, italic }: TypographyProps) {
+  return (
+    <p
+      className={twMerge(
+        'text-text leading-4 text-sm font-semibold',
+        bold && 'font-bold',
+        italic && 'italic',
+        className
+      )}
+    >
+      {children}
+    </p>
+  );
+}

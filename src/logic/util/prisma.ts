@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientOptions } from '@prisma/client/runtime';
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
@@ -8,7 +7,7 @@ import { PrismaClientOptions } from '@prisma/client/runtime';
 // https://pris.ly/d/help/next-js-best-practices
 
 /* eslint import/no-mutable-exports: "off" */
-export let prisma: PrismaClient<PrismaClientOptions>;
+export let prisma: InstanceType<typeof PrismaClient>;
 
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient();

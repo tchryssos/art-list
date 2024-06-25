@@ -1,50 +1,52 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext } from 'react';
 
 import { ArtForm } from '~/components/form/ArtForm';
-import { Layout, NavVariant } from '~/components/meta/Layout';
-import { createArtApiRoute, LIST_ROUTE } from '~/constants/routing';
+import { Layout } from '~/components/meta/Layout';
+import { AUTH_PROPS_KEY } from '~/constants/auth';
+import { createArtApiRoute, HOME_ROUTE } from '~/constants/routing';
+import { isCookieAuthorized } from '~/logic/api/auth';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
+import { prisma } from '~/logic/util/prisma';
 import { CompleteArt } from '~/typings/art';
 
-const artDetailNav: NavVariant[] = ['art'];
+interface ArtDetailProps {
+  art: CompleteArt;
+}
 
-const ArtDetail: React.FC = () => {
-  const [art, setArt] = useState<CompleteArt | null>(null);
-
+function ArtDetail({ art }: ArtDetailProps) {
   const {
     query: { id },
     push,
   } = useRouter();
 
-  useEffect(() => {
-    if (id) {
-      const fetchArt = async () => {
-        const resp = await fetch(createArtApiRoute(id as `${number}`), {
-          method: 'GET',
-        });
-        const artwork: CompleteArt = await resp.json();
-        setArt(artwork);
-      };
-      fetchArt();
-    }
-  }, [id]);
+  const { isAuthorized } = useContext(AuthContext);
 
   const onSubmit = async (e: FormEvent) => {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const resp = await fetch(createArtApiRoute(id as `${number}`), {
-      method: 'PATCH',
-      body: formDataToJson(formData),
-    });
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const resp = await fetch(createArtApiRoute(id as `${number}`), {
+        method: 'PATCH',
+        body: formDataToJson(formData),
+      });
 
-    if (resp.status === 200) {
-      push(LIST_ROUTE);
+      if (resp.status === 200) {
+        push(HOME_ROUTE);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
-    <Layout nav={artDetailNav} pageTitle={`Edit '${art?.name || 'Art'}'`}>
+    <Layout
+      nav="art"
+      pageTitle={`Edit "${art?.name || 'Art'}"`}
+      title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
+    >
       {art && (
         <ArtForm
           defaultValues={{
@@ -54,11 +56,49 @@ const ArtDetail: React.FC = () => {
             location: art.Location.name,
             imgSrc: art.imgSrc || '',
           }}
+          readOnly={!isAuthorized}
           onSubmit={onSubmit}
         />
       )}
     </Layout>
   );
-};
+}
 
 export default ArtDetail;
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
+  const { id } = params || {};
+
+  try {
+    const art = await prisma.art.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        Artist: true,
+        Location: true,
+      },
+    });
+
+    if (!art) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        art,
+        [AUTH_PROPS_KEY]: isCookieAuthorized(req),
+      },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      notFound: true,
+    };
+  }
+};

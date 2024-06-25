@@ -4,3 +4,5 @@ import { PrismaClientOptions } from '@prisma/client/runtime';
 export declare global {
   var prisma: PrismaClient<PrismaClientOptions>;
 }
+
+declare module '*.css';

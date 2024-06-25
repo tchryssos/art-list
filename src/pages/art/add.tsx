@@ -1,36 +1,35 @@
-import styled from '@emotion/styled';
-import padStart from 'lodash.padstart';
+import { padStart } from 'lodash';
+import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
-import { Layout, NavVariant } from '~/components/meta/Layout';
+import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
-import { ART_CREATE_ROUTE } from '~/constants/routing';
+import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 
-const homeNav: NavVariant[] = ['list'];
-
-const ResetButton = styled(Button)`
-  padding: ${({ theme }) => theme.spacing[8]};
-  height: ${({ theme }) => theme.spacing[48]};
-`;
-
-const Home: React.FC = () => {
+function AddArtPage() {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
     null
   );
 
   const onSubmit = async (e: FormEvent) => {
-    const formData = new FormData(e.target as HTMLFormElement);
-    const resp = await fetch(ART_CREATE_ROUTE, {
-      method: 'POST',
-      body: formDataToJson(formData),
-    });
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const resp = await fetch(ART_CREATE_ROUTE, {
+        method: 'POST',
+        body: formDataToJson(formData),
+      });
 
-    if (resp.status === 200) {
-      setSubmitSuccessful(true);
-    } else {
+      if (resp.status === 200) {
+        setSubmitSuccessful(true);
+      } else {
+        setSubmitSuccessful(false);
+      }
+    } catch (error) {
+      console.error(error);
       setSubmitSuccessful(false);
     }
   };
@@ -45,13 +44,16 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Layout nav={homeNav} pageTitle="Add New Artwork">
+    <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
       {submitSuccessful ? (
         <>
-          <Body mb={16}>Submit Successful!</Body>
-          <ResetButton onClick={() => setSubmitSuccessful(null)}>
+          <Body className="mb-4">Submit Successful!</Body>
+          <Button
+            className="p-2 h-12"
+            onClick={() => setSubmitSuccessful(null)}
+          >
             <Body>Submit Another?</Body>
-          </ResetButton>
+          </Button>
         </>
       ) : (
         <ArtForm
@@ -61,6 +63,23 @@ const Home: React.FC = () => {
       )}
     </Layout>
   );
-};
+}
 
-export default Home;
+export default AddArtPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const isAuthorized = isCookieAuthorized(req);
+
+  if (!isAuthorized) {
+    return {
+      redirect: {
+        destination: LOGIN_ROUTE,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

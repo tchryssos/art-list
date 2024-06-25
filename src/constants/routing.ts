@@ -1,24 +1,20 @@
 // CLIENT ROUTES
 export const HOME_ROUTE = '/';
-
-export const LIST_ROUTE = '/list';
+export const LOGIN_ROUTE = '/login';
 
 export const ART_ADD_ROUTE = '/art/add';
 
 type DetailRouteId = `${number}` | 'new';
 
 export const createArtDetailRoute = (id: DetailRouteId) => `/art/view/${id}`;
-export const ART_DETAIL_ROUTE_PATTERN = createArtDetailRoute(
-  '[id]' as DetailRouteId
-);
-export const createArtistDetailRoute = (id: DetailRouteId) => `/artists/${id}`;
-export const ARTIST_DETAIL_ROUTE_PATTERN = createArtistDetailRoute(
+const ART_DETAIL_ROUTE_PATTERN = createArtDetailRoute('[id]' as DetailRouteId);
+const createArtistDetailRoute = (id: DetailRouteId) => `/artists/${id}`;
+const ARTIST_DETAIL_ROUTE_PATTERN = createArtistDetailRoute(
   '[id]' as DetailRouteId
 );
 
-export const createLocationDetailRoute = (id: DetailRouteId) =>
-  `/locations/${id}`;
-export const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
+const createLocationDetailRoute = (id: DetailRouteId) => `/locations/${id}`;
+const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
   '[id]' as DetailRouteId
 );
 
@@ -29,6 +25,7 @@ export const createArtApiRoute = (id: DetailRouteId) => `/api/art/${id}`;
 export const ARTISTS_LIST_ROUTE = '/api/artists';
 export const LOCATION_LIST_ROUTE = '/api/locations';
 export const AUTH_ROUTE = '/api/authorize';
+export const AUTH_ME_ROUTE = '/api/authorize/me';
 
 export const AUTH_ROUTE_PATTERNS = [
   ART_ADD_ROUTE,

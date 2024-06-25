@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import clsx from 'clsx';
 import { useContext } from 'react';
 
 import { IS_URL } from '~/constants/regex';
@@ -8,7 +8,6 @@ import { formatDate } from '~/logic/util/date';
 import { CompleteArt } from '~/typings/art';
 
 import { ArtImg } from './ArtImg';
-import { FlexBox } from './box/FlexBox';
 import { Link } from './Link';
 import { Body } from './typography/Body';
 
@@ -16,40 +15,27 @@ interface ArtListItemProps {
   art: CompleteArt;
 }
 
-const Frame = styled(FlexBox)<{ isAuthorized: boolean }>(
-  ({ theme, isAuthorized }) => ({
-    border: `${theme.border.borderWidth[1]} solid ${theme.colors.accentHeavy}`,
-    padding: theme.spacing[16],
-    gap: theme.spacing[8],
-    ...(isAuthorized && {
-      '&:hover, &:active': {
-        borderColor: theme.colors.text,
-        backgroundColor: theme.colors.smudge,
-      },
-    }),
-  })
-);
-
 interface ListItemWrapperProps {
   children: React.ReactNode;
   isAuthorized: boolean;
   artId: number;
 }
 
-const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
+function ListItemWrapper({
   children,
   isAuthorized,
   artId,
-}) =>
-  isAuthorized ? (
-    <Link darkenOnHover={false} href={createArtDetailRoute(`${artId}`)}>
+}: ListItemWrapperProps) {
+  return isAuthorized ? (
+    <Link className="h-full" href={createArtDetailRoute(`${artId}`)}>
       {children}
     </Link>
   ) : (
     <>{children}</>
   );
+}
 
-export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
+export function ArtListItem({ art }: ArtListItemProps) {
   const {
     name,
     dateSeen,
@@ -66,24 +52,38 @@ export const ArtListItem: React.FC<ArtListItemProps> = ({ art }) => {
   }
 
   return (
-    <ListItemWrapper artId={art.id} isAuthorized={isAuthorized}>
-      <Frame column isAuthorized={isAuthorized}>
-        <Body>{name}</Body>
-        <Body>{artistName}</Body>
+    <ListItemWrapper artId={art.id} isAuthorized={Boolean(isAuthorized)}>
+      <div
+        className={clsx(
+          'flex flex-col border border-solid border-accentLight p-3 gap-1 h-full',
+          isAuthorized &&
+            'hover:border-accentHeavy hover:bg-smudge active:border-accentHeavy  active:bg-smudge'
+        )}
+      >
         {imgSrc?.match(IS_URL) && (
           <ArtImg
+            alt={`Artwork: ${name} by ${artistName}`}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoAQMAAAC2MCouAAAAA1BMVEXo6Og4/a9sAAAAC0lEQVQI12MYYQAAAPAAAU6V2N8AAAAASUVORK5CYII=
             "
-            layout="fill"
-            objectFit="scale-down"
-            objectPosition="left center"
+            fill
             placeholder="blur"
             src={imgSrc}
+            style={{
+              objectPosition: 'left center',
+              objectFit: 'scale-down',
+            }}
           />
         )}
-        <Body>{locationName || '???'}</Body>
-        <Body>{formatDate(dateSeen) || '???'}</Body>
-      </Frame>
+        <Body>{name}</Body>
+        <Body>{artistName}</Body>
+
+        <Body className="text-xs leading-2 font-medium">
+          {locationName || '???'}
+        </Body>
+        <Body className="text-xs leading-2 font-medium">
+          {formatDate(dateSeen) || '???'}
+        </Body>
+      </div>
     </ListItemWrapper>
   );
-};
+}

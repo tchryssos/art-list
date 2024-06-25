@@ -1,44 +1,34 @@
-import styled from '@emotion/styled';
+import clsx from 'clsx';
 import NextLink from 'next/link';
+import { ComponentProps } from 'react';
 
-interface LinkProps {
+interface LinkProps extends ComponentProps<typeof NextLink> {
   href: string;
   isInternal?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
-  underline?: boolean;
-  darkenOnHover?: boolean;
+  onClick?: () => void;
 }
 
-interface StyledProps extends Pick<LinkProps, 'underline' | 'darkenOnHover'> {}
-
-const StyledLink = styled.a<StyledProps>`
-  color: ${({ theme }) => theme.colors.text};
-  display: inline-block;
-  text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
-  :hover {
-    filter: brightness(
-      ${({ theme, darkenOnHover }) =>
-        darkenOnHover ? theme.filters.brightnessMod : ''}
-    );
-  }
-`;
-
-export const Link: React.FC<LinkProps> = ({
+export function Link({
   href,
   isInternal = true,
   children,
   className,
-  darkenOnHover = true,
-}) => (
-  <NextLink href={href} passHref>
-    <StyledLink
-      className={className}
-      darkenOnHover={darkenOnHover}
+  onClick,
+  ...rest
+}: LinkProps) {
+  return (
+    <NextLink
+      className={clsx(className, 'display-inline-block text-text')}
+      href={href}
       rel="noopener noreferrer"
       target={isInternal ? '_self' : '_blank'}
+      onClick={onClick}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...rest}
     >
       {children}
-    </StyledLink>
-  </NextLink>
-);
+    </NextLink>
+  );
+}

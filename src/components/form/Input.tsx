@@ -1,12 +1,11 @@
-import styled from '@emotion/styled';
+import clsx from 'clsx';
 import { FocusEventHandler, useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
-import { FlexBox } from '../box/FlexBox';
 import { Body } from '../typography/Body';
 import { AutoComplete } from './AutoComplete';
-import { createInputStyles } from './styles';
 
-export type InputProps<T extends Record<string, unknown>> = {
+type InputProps<T extends Record<string, unknown>> = {
   name: Extract<keyof T, string>;
   label: string;
   required?: boolean;
@@ -17,6 +16,7 @@ export type InputProps<T extends Record<string, unknown>> = {
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   error?: string;
+  readOnly?: boolean;
 };
 
 type AutocompleteProps =
@@ -28,28 +28,6 @@ type AutocompleteProps =
       autoCompleteList: string[];
       autoCompleteActive: boolean;
     };
-
-const InputWrapper = styled(FlexBox)`
-  width: 100%;
-`;
-
-const StyledInput = styled.input<{ error: boolean }>`
-  ${({ theme }) => createInputStyles(theme)};
-  width: 100%;
-  border-color: ${({ error, theme }) =>
-    error ? theme.colors.danger : theme.colors.accentHeavy};
-`;
-
-const Error = styled(Body)(({ theme }) => ({
-  color: theme.colors.danger,
-  fontSize: theme.fontSize.subBody,
-  marginTop: theme.spacing[4],
-}));
-
-const Label = styled.label(({ theme }) => ({
-  fontSize: theme.fontSize.subBody,
-  fontWeight: theme.fontWeight.regular,
-}));
 
 export function Input<T extends Record<string, unknown>>(
   props: InputProps<T> & AutocompleteProps
@@ -66,6 +44,7 @@ export function Input<T extends Record<string, unknown>>(
     autoCompleteList,
     autoCompleteActive,
     error,
+    readOnly,
   } = props;
 
   const [value, setValue] = useState(defaultValue);
@@ -79,13 +58,19 @@ export function Input<T extends Record<string, unknown>>(
   }, [autoCompleteActive]);
 
   return (
-    <InputWrapper className={className} column>
-      <Label htmlFor={name}>{label}</Label>
-      <StyledInput
+    <div className={twMerge('flex flex-col w-full', className)}>
+      <label className="text-xs font-semibold" htmlFor={name}>
+        {label}
+      </label>
+      <input
         aria-activedescendant={activeDescendant}
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}
-        error={Boolean(error)}
+        className={clsx(
+          'p-4 text-base font-light bg-background text-text border border-solid  font-jp w-full',
+          error ? 'border-danger' : 'border-accentHeavy'
+        )}
         name={name}
+        readOnly={readOnly}
         required={required}
         type={type}
         value={value}
@@ -95,7 +80,7 @@ export function Input<T extends Record<string, unknown>>(
         }}
         onFocus={onFocus}
       />
-      {error && <Error>{error}</Error>}
+      {error && <Body className="text-danger text-xs mt-1">{error}</Body>}
       {showAutoComplete && autoCompleteList && (
         <AutoComplete
           inputValue={value}
@@ -105,6 +90,6 @@ export function Input<T extends Record<string, unknown>>(
           setShowAutoComplete={setShowAutoComplete}
         />
       )}
-    </InputWrapper>
+    </div>
   );
 }

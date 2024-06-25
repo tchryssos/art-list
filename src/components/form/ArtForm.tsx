@@ -11,11 +11,9 @@ import { Input } from './Input';
 interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => Promise<void> | void;
+  readOnly?: boolean;
 }
-export const ArtForm: React.FC<ArtFormProps> = ({
-  onSubmit,
-  defaultValues,
-}) => {
+export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
@@ -48,8 +46,15 @@ export const ArtForm: React.FC<ArtFormProps> = ({
   }, []);
 
   const _onSubmit = async (e: FormEvent) => {
+    if (readOnly) {
+      return;
+    }
     setIsSubmitting(true);
-    await onSubmit(e);
+    try {
+      await onSubmit(e);
+    } catch (error) {
+      console.error(error);
+    }
     setIsSubmitting(false);
   };
 
@@ -61,17 +66,19 @@ export const ArtForm: React.FC<ArtFormProps> = ({
         defaultValue={defaultValues?.artist}
         label="Artist"
         name="artist"
+        readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete('artist')}
+        onFocus={() => !readOnly && setActiveAutoComplete('artist')}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.name}
         label="Artwork Name"
         name="name"
+        readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       <Input<ArtSubmitData>
         autoCompleteActive={activeAutoComplete === 'location'}
@@ -79,26 +86,29 @@ export const ArtForm: React.FC<ArtFormProps> = ({
         defaultValue={defaultValues?.location}
         label="Location Seen"
         name="location"
+        readOnly={readOnly}
         required
         type="text"
-        onFocus={() => setActiveAutoComplete('location')}
+        onFocus={() => !readOnly && setActiveAutoComplete('location')}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.dateSeen}
         label="Date Seen"
         name="dateSeen"
+        readOnly={readOnly}
         required
         type="date"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.imgSrc}
         label="Image Url"
         name="imgSrc"
+        readOnly={readOnly}
         type="text"
-        onFocus={() => setActiveAutoComplete(null)}
+        onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
-      <SubmitButton isSubmitting={isSubmitting} />
+      {!readOnly && <SubmitButton isSubmitting={isSubmitting} />}
     </Form>
   );
-};
+}

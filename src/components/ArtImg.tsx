@@ -1,16 +1,21 @@
-import styled from '@emotion/styled';
-
-import { pxToRem } from '~/logic/util/styles';
+/* eslint-disable react/jsx-props-no-spreading */
+import { ComponentProps } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { Image } from './Image';
 
-export const ArtImg = styled(Image)`
-  width: 100%;
-  min-height: ${pxToRem(320)};
-  position: relative;
-  display: block;
-  margin-bottom: ${({ theme }) => theme.spacing[8]};
-  ${({ theme }) => theme.breakpoints.sm} {
-    min-height: ${pxToRem(400)};
-  }
-`;
+interface ArtImgProps extends ComponentProps<typeof Image> {}
+
+export function ArtImg(props: ArtImgProps) {
+  const { className, ...rest } = props;
+  return (
+    // eslint-disable-next-line jsx-a11y/alt-text
+    <Image
+      {...rest}
+      className={twMerge(
+        'w-full min-h-80 relative block mb-2 md:min-h-[400]',
+        className
+      )}
+    />
+  );
+}

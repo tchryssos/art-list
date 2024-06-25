@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 
 import { HOME_ROUTE } from '~/constants/routing';
 
-const FourOhFour: React.FC = () => {
-  const { push } = useRouter();
+function FourOhFour() {
+  const router = useRouter();
 
   useEffect(() => {
-    push(HOME_ROUTE);
-  }, [push]);
+    router.replace(HOME_ROUTE);
+  }, [router]);
 
   return null;
-};
+}
 
 export default FourOhFour;

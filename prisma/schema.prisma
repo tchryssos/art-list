@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,33 +8,31 @@ datasource db {
 }
 
 model Art {
-  id             Int      @id @default(autoincrement())
-  createdOn      DateTime @db.Timestamp(6)
-  lastModifiedOn DateTime @db.Timestamp(6)
+  id             Int       @id @default(autoincrement())
+  createdOn      DateTime  @db.Timestamp(6)
+  lastModifiedOn DateTime  @db.Timestamp(6)
   name           String
-  dateSeen       DateTime @db.Date
+  dateSeen       DateTime  @db.Date
+  locationId     Int?
+  artistId       Int?
   imgSrc         String?
-
-
-  Location   Location? @relation(fields: [locationId], references: [id])
-  locationId Int?
-  Artist     Artist?   @relation(fields: [artistId], references: [id])
-  artistId   Int?
+  Artist         Artist?   @relation(fields: [artistId], references: [id])
+  Location       Location? @relation(fields: [locationId], references: [id])
 }
 
 model Location {
   id             Int      @id @default(autoincrement())
   name           String   @unique
   shortName      String?
-  art            Art[]
   createdOn      DateTime @db.Timestamp(6)
   lastModifiedOn DateTime @db.Timestamp(6)
+  art            Art[]
 }
 
 model Artist {
   id             Int      @id @default(autoincrement())
   name           String   @unique
-  art            Art[]
   createdOn      DateTime @db.Timestamp(6)
   lastModifiedOn DateTime @db.Timestamp(6)
+  art            Art[]
 }
