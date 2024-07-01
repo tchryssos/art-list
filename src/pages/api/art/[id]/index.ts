@@ -56,17 +56,50 @@ const patchArt: NextApiHandler = async (req, res) => {
   }
 };
 
+const deleteArt: NextApiHandler = async (req, res) => {
+  try {
+    const { id } = req.query as { id: `${number}` };
+
+    await prisma.art.delete({
+      where: {
+        id: parseInt(id, 10),
+      },
+    });
+
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+};
+
 const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
-  if (method === 'PATCH') {
-    if (isCookieAuthorized(req)) {
-      await patchArt(req, res);
-    } else {
-      res.status(401).json({ error: 'Unauthorized' });
+  switch (method) {
+    case 'PATCH': {
+      if (isCookieAuthorized(req)) {
+        await patchArt(req, res);
+      } else {
+        res.status(401).json({ error: 'Unauthorized' });
+      }
+      break;
     }
-  } else {
-    await getArt(req, res);
+
+    case 'GET':
+      await getArt(req, res);
+      break;
+
+    case 'DELETE': {
+      if (isCookieAuthorized(req)) {
+        await deleteArt(req, res);
+      } else {
+        res.status(401).json({ error: 'Unauthorized' });
+      }
+      break;
+    }
+
+    default:
+      res.status(405).json({ error: 'Method not allowed' });
   }
 };
 

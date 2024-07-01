@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Body } from '../typography/Body';
 import { Button } from './Button';
@@ -7,10 +9,15 @@ interface SubmitButtonProps {
   label?: string;
 }
 
+export const submitButtonSizeClassName = 'h-13 p-4';
+
 export function SubmitButton({ isSubmitting, label }: SubmitButtonProps) {
   return (
     <Button
-      className="h-13 p-4  border-none hover:bg-accentHeavy active:bg-accentHeavy"
+      className={clsx(
+        submitButtonSizeClassName,
+        'border-none hover:bg-accentHeavy active:bg-accentHeavy'
+      )}
       type="submit"
     >
       {isSubmitting ? (
