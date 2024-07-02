@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 
 import { ArtListItem } from '~/components/ArtListItem';
-import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout } from '~/components/meta/Layout';
-import { Body } from '~/components/typography/Body';
+import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
 import { ART_LIST_ROUTE } from '~/constants/routing';
+import { getArtList } from '~/logic/api/art';
 import { CompleteArt } from '~/typings/art';
 import { PrismaError } from '~/typings/util';
 
@@ -15,14 +15,6 @@ interface ListContentsProps {
 }
 
 function ListContents({ artList }: ListContentsProps) {
-  if (!artList) {
-    return <LoadingPageSpinner />;
-  }
-
-  if ((artList as PrismaError).error) {
-    return <Body>Something went wrong fetching the art list!</Body>;
-  }
-
   return (
     <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {(artList as CompleteArt[]).map((a) => (
@@ -32,25 +24,39 @@ function ListContents({ artList }: ListContentsProps) {
   );
 }
 
-function List() {
-  const [artList, setArtList] = useState<ArtList>();
+interface ListProps {
+  artList: ArtList;
+}
 
-  useEffect(() => {
-    const fetchArt = async () => {
-      const resp = await fetch(ART_LIST_ROUTE, {
-        method: 'GET',
-      });
-      const list: CompleteArt[] = await resp.json();
-      setArtList(list);
-    };
-    fetchArt();
-  }, []);
-
+function List({ artList }: ListProps) {
   return (
     <Layout nav="art" title="Troy's Art List">
       <ListContents artList={artList} />
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<ListProps> = async ({
+  params,
+}) => {
+  let artList: ArtList = [];
+
+  try {
+    const pageNumber = Number((params || {})[PAGE_QUERY_PARAM]) || 1;
+    const reqList = (await getArtList(pageNumber)) as CompleteArt[];
+
+    if (reqList) {
+      artList = reqList;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  return {
+    props: {
+      artList,
+    },
+  };
+};
 
 export default List;

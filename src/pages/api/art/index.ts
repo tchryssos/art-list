@@ -1,29 +1,14 @@
 import { NextApiHandler } from 'next';
 
-import { prisma } from '~/logic/util/prisma';
+import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
+import { getArtList } from '~/logic/api/art';
 
-export const PAGE_SIZE = 25;
+const handleGetArtList: NextApiHandler = async (req, res) => {
+  const pageQuery = req.query?.[PAGE_QUERY_PARAM];
+  const numberQuery = Number(pageQuery);
 
-const getArtList: NextApiHandler = async (req, res) => {
-  const { page } = req.query;
   try {
-    const artList = await prisma.art.findMany({
-      take: PAGE_SIZE,
-      skip: (Number(page) || 0) * PAGE_SIZE,
-
-      orderBy: [
-        {
-          createdOn: 'desc',
-        },
-        {
-          dateSeen: 'desc',
-        },
-      ],
-      include: {
-        Artist: true,
-        Location: true,
-      },
-    });
+    const artList = await getArtList(numberQuery);
 
     res.status(200).json(artList);
   } catch (e) {
@@ -31,4 +16,4 @@ const getArtList: NextApiHandler = async (req, res) => {
   }
 };
 
-export default getArtList;
+export default handleGetArtList;
