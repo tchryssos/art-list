@@ -29,13 +29,26 @@ interface DeleteButtonProps {
 function DeleteButton({ art }: DeleteButtonProps) {
   const [areYouSure, setAreYouSure] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { push } = useRouter();
 
   const onDeleteOne = () => {
     setAreYouSure(true);
   };
 
-  const onDeleteTwo = () => {
-    console.log('delete');
+  const onDeleteTwo = async () => {
+    setIsDeleting(true);
+    try {
+      const resp = await fetch(createArtApiRoute(art.id), {
+        method: 'DELETE',
+      });
+
+      if (resp.status === 200) {
+        push(HOME_ROUTE);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setIsDeleting(false);
   };
 
   return (
