@@ -1,3 +1,4 @@
+import { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -125,14 +126,14 @@ function ArtDetail({ art }: ArtDetailProps) {
 
 export default ArtDetail;
 
-export const getServerSideProps: GetServerSideProps = async ({
+export const getServerSideProps: GetServerSideProps<ArtDetailProps> = async ({
   req,
   params,
 }) => {
   const { id } = params || {};
 
   try {
-    const art = await prisma.art.findUnique({
+    const art = (await prisma.art.findUnique({
       where: {
         id: id as string,
       },
@@ -140,7 +141,10 @@ export const getServerSideProps: GetServerSideProps = async ({
         Artist: true,
         Location: true,
       },
-    });
+    })) as CompleteArt & {
+      Artist: Artist;
+      Location: Location;
+    };
 
     if (!art) {
       return {
