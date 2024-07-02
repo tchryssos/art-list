@@ -2,12 +2,21 @@ import { NextApiHandler } from 'next';
 
 import { prisma } from '~/logic/util/prisma';
 
-const getArtList: NextApiHandler = async (_req, res) => {
+export const PAGE_SIZE = 25;
+
+const getArtList: NextApiHandler = async (req, res) => {
+  const { page } = req.query;
   try {
     const artList = await prisma.art.findMany({
+      take: PAGE_SIZE,
+      skip: (Number(page) || 0) * PAGE_SIZE,
+
       orderBy: [
         {
           createdOn: 'desc',
+        },
+        {
+          dateSeen: 'desc',
         },
       ],
       include: {
