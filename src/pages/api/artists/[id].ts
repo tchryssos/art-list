@@ -1,15 +1,16 @@
 import { NextApiHandler } from 'next';
 
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
 import { ArtistSubmitData } from '~/typings/artist';
 
 const getArtist: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const artist = await prisma.artist.findUnique({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
     });
 
@@ -21,14 +22,14 @@ const getArtist: NextApiHandler = async (req, res) => {
 
 const patchArtist: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const body: ArtistSubmitData = await JSON.parse(req.body);
     const now = new Date();
 
     const updatedArtist = await prisma.artist.update({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       data: {
         name: body.name,
@@ -45,7 +46,11 @@ const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   if (method === 'PATCH') {
-    await patchArtist(req, res);
+    if (isCookieAuthorized(req)) {
+      await patchArtist(req, res);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
   } else {
     await getArtist(req, res);
   }

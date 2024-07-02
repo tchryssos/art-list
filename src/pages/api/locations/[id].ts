@@ -1,15 +1,16 @@
 import { NextApiHandler } from 'next';
 
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
 import { LocationSubmitData } from '~/typings/location';
 
 const getLocation: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const location = await prisma.location.findUnique({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
     });
 
@@ -21,14 +22,14 @@ const getLocation: NextApiHandler = async (req, res) => {
 
 const patchLocation: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const body: LocationSubmitData = await JSON.parse(req.body);
     const now = new Date();
 
     const updatedLocation = await prisma.location.update({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       data: {
         name: body.name,
@@ -45,7 +46,11 @@ const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
   if (method === 'PATCH') {
-    await patchLocation(req, res);
+    if (isCookieAuthorized(req)) {
+      await patchLocation(req, res);
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
   } else {
     await getLocation(req, res);
   }

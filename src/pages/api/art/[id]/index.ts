@@ -2,17 +2,18 @@ import { parseISO } from 'date-fns';
 import { NextApiHandler } from 'next';
 
 import { artistFindOrCreate } from '~/logic/api/artists';
+import { isCookieAuthorized } from '~/logic/api/auth';
 import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
 import { ArtSubmitData } from '~/typings/art';
 
 const getArt: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const art = await prisma.art.findUnique({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       include: {
         Artist: true,
@@ -28,7 +29,7 @@ const getArt: NextApiHandler = async (req, res) => {
 
 const patchArt: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const body: ArtSubmitData = await JSON.parse(req.body);
     const now = new Date();
@@ -38,7 +39,7 @@ const patchArt: NextApiHandler = async (req, res) => {
 
     const updatedArt = await prisma.art.update({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       data: {
         name: body.name,
@@ -55,13 +56,50 @@ const patchArt: NextApiHandler = async (req, res) => {
   }
 };
 
+const deleteArt: NextApiHandler = async (req, res) => {
+  try {
+    const { id } = req.query as { id: string };
+
+    await prisma.art.delete({
+      where: {
+        id,
+      },
+    });
+
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: (e as Error).message });
+  }
+};
+
 const handleRequest: NextApiHandler = async (req, res) => {
   const { method } = req;
 
-  if (method === 'PATCH') {
-    await patchArt(req, res);
-  } else {
-    await getArt(req, res);
+  switch (method) {
+    case 'PATCH': {
+      if (isCookieAuthorized(req)) {
+        await patchArt(req, res);
+      } else {
+        res.status(401).json({ error: 'Unauthorized' });
+      }
+      break;
+    }
+
+    case 'GET':
+      await getArt(req, res);
+      break;
+
+    case 'DELETE': {
+      if (isCookieAuthorized(req)) {
+        await deleteArt(req, res);
+      } else {
+        res.status(401).json({ error: 'Unauthorized' });
+      }
+      break;
+    }
+
+    default:
+      res.status(405).json({ error: 'Method not allowed' });
   }
 };
 

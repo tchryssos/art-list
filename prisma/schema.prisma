@@ -8,20 +8,20 @@ datasource db {
 }
 
 model Art {
-  id             Int       @id @default(autoincrement())
+  id             String    @id @default(cuid())
   createdOn      DateTime  @db.Timestamp(6)
   lastModifiedOn DateTime  @db.Timestamp(6)
   name           String
   dateSeen       DateTime  @db.Date
-  locationId     Int?
-  artistId       Int?
+  locationId     String?
+  artistId       String?
   imgSrc         String?
   Artist         Artist?   @relation(fields: [artistId], references: [id])
   Location       Location? @relation(fields: [locationId], references: [id])
 }
 
 model Location {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(cuid())
   name           String   @unique
   shortName      String?
   createdOn      DateTime @db.Timestamp(6)
@@ -30,7 +30,7 @@ model Location {
 }
 
 model Artist {
-  id             Int      @id @default(autoincrement())
+  id             String   @id @default(cuid())
   name           String   @unique
   createdOn      DateTime @db.Timestamp(6)
   lastModifiedOn DateTime @db.Timestamp(6)

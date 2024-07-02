@@ -10,7 +10,11 @@ import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 
-function AddArtPage() {
+interface AddArtPageProps {
+  lastLocation: string;
+}
+
+function AddArtPage({ lastLocation }: AddArtPageProps) {
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
     null
   );
@@ -57,7 +61,10 @@ function AddArtPage() {
         </>
       ) : (
         <ArtForm
-          defaultValues={{ dateSeen: getTodayDefaultValue() }}
+          defaultValues={{
+            dateSeen: getTodayDefaultValue(),
+            location: lastLocation,
+          }}
           onSubmit={onSubmit}
         />
       )}
@@ -67,7 +74,9 @@ function AddArtPage() {
 
 export default AddArtPage;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<AddArtPageProps> = async ({
+  req,
+}) => {
   const isAuthorized = isCookieAuthorized(req);
 
   if (!isAuthorized) {
@@ -79,7 +88,33 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
   }
 
+  let lastLocation: string = '';
+
+  try {
+    const art = await prisma.art.findMany({
+      take: 1,
+      orderBy: [
+        {
+          createdOn: 'desc',
+        },
+        {
+          dateSeen: 'desc',
+        },
+      ],
+      include: {
+        Location: true,
+      },
+    });
+    if (art.length) {
+      lastLocation = art[0].Location?.name || '';
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
   return {
-    props: {},
+    props: {
+      lastLocation,
+    },
   };
 };

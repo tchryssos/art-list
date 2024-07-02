@@ -18,7 +18,7 @@ interface ArtListItemProps {
 interface ListItemWrapperProps {
   children: React.ReactNode;
   isAuthorized: boolean;
-  artId: number;
+  artId: string;
 }
 
 function ListItemWrapper({
@@ -27,7 +27,7 @@ function ListItemWrapper({
   artId,
 }: ListItemWrapperProps) {
   return isAuthorized ? (
-    <Link className="h-full" href={createArtDetailRoute(`${artId}`)}>
+    <Link className="h-full" href={createArtDetailRoute(artId)}>
       {children}
     </Link>
   ) : (
