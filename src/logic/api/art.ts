@@ -12,25 +12,31 @@ export const getArtList = async (queryPageNumber: number) => {
   try {
     const page = Math.max(0, queryPageNumber ? queryPageNumber - 1 : 0);
 
-    const artList = await prisma.art.findMany({
-      take: PAGE_SIZE,
-      skip: page * PAGE_SIZE,
+    const [artList, count] = await Promise.all([
+      prisma.art.findMany({
+        take: PAGE_SIZE,
+        skip: page * PAGE_SIZE,
 
-      orderBy: [
-        {
-          createdOn: 'desc',
+        orderBy: [
+          {
+            createdOn: 'desc',
+          },
+          {
+            dateSeen: 'desc',
+          },
+        ],
+        include: {
+          Artist: true,
+          Location: true,
         },
-        {
-          dateSeen: 'desc',
-        },
-      ],
-      include: {
-        Artist: true,
-        Location: true,
-      },
-    });
+      }),
+      prisma.art.count(),
+    ]);
 
-    return artList;
+    return {
+      artList,
+      count,
+    };
   } catch (e) {
     throw new Error((e as Error).message);
   }

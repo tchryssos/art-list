@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 import NextLink from 'next/link';
-import { ComponentProps } from 'react';
+import { ComponentProps, PropsWithChildren } from 'react';
 
 interface LinkProps extends ComponentProps<typeof NextLink> {
   href: string;
   isInternal?: boolean;
-  children?: React.ReactNode;
   className?: string;
   onClick?: () => void;
 }
@@ -17,7 +16,7 @@ export function Link({
   className,
   onClick,
   ...rest
-}: LinkProps) {
+}: PropsWithChildren<LinkProps>) {
   return (
     <NextLink
       className={clsx(className, 'display-inline-block text-text')}
