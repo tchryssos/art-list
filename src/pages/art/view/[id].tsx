@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const art = await prisma.art.findUnique({
       where: {
-        id: Number(id),
+        id: id as string,
       },
       include: {
         Artist: true,

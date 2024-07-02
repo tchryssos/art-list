@@ -6,11 +6,11 @@ import { LocationSubmitData } from '~/typings/location';
 
 const getLocation: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const location = await prisma.location.findUnique({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
     });
 
@@ -22,14 +22,14 @@ const getLocation: NextApiHandler = async (req, res) => {
 
 const patchLocation: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const body: LocationSubmitData = await JSON.parse(req.body);
     const now = new Date();
 
     const updatedLocation = await prisma.location.update({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       data: {
         name: body.name,

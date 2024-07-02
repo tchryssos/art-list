@@ -9,11 +9,11 @@ import { ArtSubmitData } from '~/typings/art';
 
 const getArt: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const art = await prisma.art.findUnique({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       include: {
         Artist: true,
@@ -29,7 +29,7 @@ const getArt: NextApiHandler = async (req, res) => {
 
 const patchArt: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     const body: ArtSubmitData = await JSON.parse(req.body);
     const now = new Date();
@@ -39,7 +39,7 @@ const patchArt: NextApiHandler = async (req, res) => {
 
     const updatedArt = await prisma.art.update({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
       data: {
         name: body.name,
@@ -58,11 +58,11 @@ const patchArt: NextApiHandler = async (req, res) => {
 
 const deleteArt: NextApiHandler = async (req, res) => {
   try {
-    const { id } = req.query as { id: `${number}` };
+    const { id } = req.query as { id: string };
 
     await prisma.art.delete({
       where: {
-        id: parseInt(id, 10),
+        id,
       },
     });
 

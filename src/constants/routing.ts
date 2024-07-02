@@ -4,7 +4,7 @@ export const LOGIN_ROUTE = '/login';
 
 export const ART_ADD_ROUTE = '/art/add';
 
-type DetailRouteId = `${number}` | 'new';
+type DetailRouteId = string;
 
 export const createArtDetailRoute = (id: DetailRouteId) => `/art/view/${id}`;
 const ART_DETAIL_ROUTE_PATTERN = createArtDetailRoute('[id]' as DetailRouteId);
