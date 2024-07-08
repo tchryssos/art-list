@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 import { ArtListItem } from '~/components/ArtListItem';
-import { LoadingPageSpinner } from '~/components/LoadingSpinner';
 import { Layout } from '~/components/meta/Layout';
+import { Pagination } from '~/components/Pagination';
 import { Body } from '~/components/typography/Body';
-import { ART_LIST_ROUTE } from '~/constants/routing';
+import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
+import { getArtList, PAGE_SIZE } from '~/logic/api/art';
 import { CompleteArt } from '~/typings/art';
 import { PrismaError } from '~/typings/util';
 
@@ -15,14 +17,6 @@ interface ListContentsProps {
 }
 
 function ListContents({ artList }: ListContentsProps) {
-  if (!artList) {
-    return <LoadingPageSpinner />;
-  }
-
-  if ((artList as PrismaError).error) {
-    return <Body>Something went wrong fetching the art list!</Body>;
-  }
-
   return (
     <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {(artList as CompleteArt[]).map((a) => (
@@ -32,25 +26,55 @@ function ListContents({ artList }: ListContentsProps) {
   );
 }
 
-function List() {
-  const [artList, setArtList] = useState<ArtList>();
+interface ListProps {
+  artList: ArtList;
+  count: number;
+}
 
-  useEffect(() => {
-    const fetchArt = async () => {
-      const resp = await fetch(ART_LIST_ROUTE, {
-        method: 'GET',
-      });
-      const list: CompleteArt[] = await resp.json();
-      setArtList(list);
-    };
-    fetchArt();
-  }, []);
-
+function List({ artList, count }: ListProps) {
+  const router = useRouter();
+  const currentPage = Number(router.query[PAGE_QUERY_PARAM] || 1);
   return (
     <Layout nav="art" title="Troy's Art List">
+      <Body className="text-xs mb-2">
+        Showing {PAGE_SIZE * (currentPage - 1) + 1} -{' '}
+        {Math.min(count, currentPage * PAGE_SIZE)} of {count}
+      </Body>
       <ListContents artList={artList} />
+      <Pagination
+        count={count}
+        currentPage={currentPage}
+        pageSize={PAGE_SIZE}
+      />
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<ListProps> = async ({
+  query,
+}) => {
+  let artList: ArtList = [];
+  let count = 0;
+
+  try {
+    const pageNumber = Number((query || {})[PAGE_QUERY_PARAM]) || 1;
+
+    const { artList: reqList, count: reqCount } = await getArtList(pageNumber);
+
+    if (reqList) {
+      artList = reqList as CompleteArt[];
+      count = reqCount || 0;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  return {
+    props: {
+      artList,
+      count,
+    },
+  };
+};
 
 export default List;

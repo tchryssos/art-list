@@ -20,7 +20,6 @@ const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
 
 // API ROUTES
 export const ART_CREATE_ROUTE = '/api/art/new/create';
-export const ART_LIST_ROUTE = '/api/art';
 export const createArtApiRoute = (id: DetailRouteId) => `/api/art/${id}`;
 export const ARTISTS_LIST_ROUTE = '/api/artists';
 export const LOCATION_LIST_ROUTE = '/api/locations';

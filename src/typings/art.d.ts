@@ -1,13 +1,5 @@
 import { Art, Artist, Location } from '@prisma/client';
 
-export type TEMPart = {
-  artist: string;
-  name: string;
-  date: string;
-  location: string;
-  imgSrc: string;
-};
-
 export type ArtSubmitData = {
   location: string;
   artist: string;
@@ -16,8 +8,7 @@ export type ArtSubmitData = {
   imgSrc?: string;
 };
 
-export type CompleteArt = Omit<Art, 'dateSeen'> & {
+export type CompleteArt = Art & {
   Artist: Artist;
   Location: Location;
-  dateSeen: string;
 };
