@@ -1,14 +1,11 @@
-import { times } from 'lodash';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { ArtListItem } from '~/components/ArtListItem';
-import { Link } from '~/components/Link';
 import { Layout } from '~/components/meta/Layout';
-import { Body } from '~/components/typography/Body';
+import { Pagination } from '~/components/Pagination';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
-import { ART_LIST_ROUTE } from '~/constants/routing';
-import { getArtList, PAGE_SIZE } from '~/logic/api/art';
+import { getArtList } from '~/logic/api/art';
 import { CompleteArt } from '~/typings/art';
 import { PrismaError } from '~/typings/util';
 
@@ -28,94 +25,20 @@ function ListContents({ artList }: ListContentsProps) {
   );
 }
 
-interface PaginationProps {
-  count: number;
-}
-
-interface PaginationLinkProps {
-  page: number;
-  currentPage: number;
-}
-
-function PaginationLink({ page, currentPage }: PaginationLinkProps) {
-  return (
-    <Link
-      className="min-w-10 min-h-10 text-center"
-      href={`${ART_LIST_ROUTE}?${PAGE_QUERY_PARAM}=${page}`}
-    >
-      <Body className={currentPage === page ? 'underline' : ''}>{page}</Body>
-    </Link>
-  );
-}
-
-const MAX_MIDDLE_LINKS = 3;
-
-interface MiddleLinkProps {
-  index: number;
-  currentPage: number;
-  pages: number;
-  lastPage: number;
-}
-
-function MiddleLink({ index, currentPage, pages, lastPage }: MiddleLinkProps) {
-  let showDots: null | 'start' | 'end' = null;
-
-  if (index === 0 && currentPage > 4) {
-    showDots = 'start';
-  }
-
-  if (index === MAX_MIDDLE_LINKS - 1 && currentPage <= pages - 4) {
-    showDots = 'end';
-  }
-
-  const page = currentPage + index + 1;
-
-  if (page >= lastPage) {
-    return null;
-  }
-
-  return (
-    <>
-      {showDots === 'start' && <Body>...</Body>}
-      <PaginationLink currentPage={currentPage} page={page} />
-      {showDots === 'end' && <Body>...</Body>}
-    </>
-  );
-}
-
-function Pagination({ count }: PaginationProps) {
-  const router = useRouter();
-  const pages = count / PAGE_SIZE;
-  const currentPage = Number(router.query[PAGE_QUERY_PARAM] || 1);
-  const lastPage = Math.ceil(pages);
-
-  return (
-    <div className="flex gap-2 mt-4 w-full justify-center">
-      <PaginationLink currentPage={currentPage} page={1} />
-      {times(MAX_MIDDLE_LINKS, (i) => (
-        <MiddleLink
-          currentPage={currentPage}
-          index={i}
-          key={i}
-          lastPage={lastPage}
-          pages={pages}
-        />
-      ))}
-      <PaginationLink currentPage={currentPage} page={lastPage} />
-    </div>
-  );
-}
-
 interface ListProps {
   artList: ArtList;
   count: number;
 }
 
 function List({ artList, count }: ListProps) {
+  const router = useRouter();
   return (
     <Layout nav="art" title="Troy's Art List">
       <ListContents artList={artList} />
-      <Pagination count={count} />
+      <Pagination
+        count={count}
+        currentPage={Number(router.query[PAGE_QUERY_PARAM] || 1)}
+      />
     </Layout>
   );
 }
