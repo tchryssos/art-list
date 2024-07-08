@@ -94,8 +94,8 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex flex-1 justify-center p-4 sm:p-8 sm:pt-14 pt-14 relative">
-        <div className="absolute top-0 left-0 w-full h-14 z-50 justify-center flex px-4 sm:px-8">
+      <div className="flex flex-1 justify-center px-4 sm:px-8 pt-14 pb-24 sm:pb-14 relative">
+        <div className="absolute top-0 left-0 w-full h-14 z-50 justify-center flex px-2 sm:px-6">
           <div
             className={clsx(
               boundingClassName,

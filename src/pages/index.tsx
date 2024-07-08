@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ArtListItem } from '~/components/ArtListItem';
 import { Layout } from '~/components/meta/Layout';
 import { Pagination } from '~/components/Pagination';
+import { Body } from '~/components/typography/Body';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
 import { getArtList, PAGE_SIZE } from '~/logic/api/art';
 import { CompleteArt } from '~/typings/art';
@@ -32,12 +33,17 @@ interface ListProps {
 
 function List({ artList, count }: ListProps) {
   const router = useRouter();
+  const currentPage = Number(router.query[PAGE_QUERY_PARAM] || 1);
   return (
     <Layout nav="art" title="Troy's Art List">
+      <Body className="text-xs mb-2">
+        Showing {PAGE_SIZE * (currentPage - 1) + 1} -{' '}
+        {Math.min(count, currentPage * PAGE_SIZE)} of {count}
+      </Body>
       <ListContents artList={artList} />
       <Pagination
         count={count}
-        currentPage={Number(router.query[PAGE_QUERY_PARAM] || 1)}
+        currentPage={currentPage}
         pageSize={PAGE_SIZE}
       />
     </Layout>
