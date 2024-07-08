@@ -44,13 +44,14 @@ function List({ artList, count }: ListProps) {
 }
 
 export const getServerSideProps: GetServerSideProps<ListProps> = async ({
-  params,
+  query,
 }) => {
   let artList: ArtList = [];
   let count = 0;
 
   try {
-    const pageNumber = Number((params || {})[PAGE_QUERY_PARAM]) || 1;
+    const pageNumber = Number((query || {})[PAGE_QUERY_PARAM]) || 1;
+
     const { artList: reqList, count: reqCount } = await getArtList(pageNumber);
 
     if (reqList) {

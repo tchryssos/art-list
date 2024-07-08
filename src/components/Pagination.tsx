@@ -2,7 +2,7 @@ import { times } from 'lodash';
 
 import { Body } from '~/components/typography/Body';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
-import { ART_LIST_ROUTE } from '~/constants/routing';
+import { HOME_ROUTE } from '~/constants/routing';
 import { PAGE_SIZE } from '~/logic/api/art';
 
 import { Link } from './Link';
@@ -17,14 +17,24 @@ interface PaginationLinkProps {
   currentPage: number;
 }
 
+const linkClassName = 'min-w-8 min-h-8 flex items-center justify-center';
+
 function PaginationLink({ page, currentPage }: PaginationLinkProps) {
   return (
     <Link
-      className="min-w-10 min-h-10 text-center"
-      href={`${ART_LIST_ROUTE}?${PAGE_QUERY_PARAM}=${page}`}
+      className={linkClassName}
+      href={`${HOME_ROUTE}?${PAGE_QUERY_PARAM}=${page}`}
     >
       <Body className={currentPage === page ? 'underline' : ''}>{page}</Body>
     </Link>
+  );
+}
+
+function Dots() {
+  return (
+    <div className={linkClassName}>
+      <Body>...</Body>
+    </div>
   );
 }
 
@@ -56,9 +66,9 @@ function MiddleLink({ index, currentPage, pages, lastPage }: MiddleLinkProps) {
 
   return (
     <>
-      {showDots === 'start' && <Body>...</Body>}
+      {showDots === 'start' && <Dots />}
       <PaginationLink currentPage={currentPage} page={page} />
-      {showDots === 'end' && <Body>...</Body>}
+      {showDots === 'end' && <Dots />}
     </>
   );
 }
