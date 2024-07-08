@@ -1,15 +1,15 @@
-import { times } from 'lodash';
+import usePagination from '@mui/material/usePagination';
 
 import { Body } from '~/components/typography/Body';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
 import { HOME_ROUTE } from '~/constants/routing';
-import { PAGE_SIZE } from '~/logic/api/art';
 
 import { Link } from './Link';
 
 interface PaginationProps {
   count: number;
   currentPage: number;
+  pageSize: number;
 }
 
 interface PaginationLinkProps {
@@ -38,58 +38,34 @@ function Dots() {
   );
 }
 
-const MAX_MIDDLE_LINKS = 3;
+export function Pagination({ count, currentPage, pageSize }: PaginationProps) {
+  const pages = count / pageSize;
 
-interface MiddleLinkProps {
-  index: number;
-  currentPage: number;
-  pages: number;
-  lastPage: number;
-}
-
-function MiddleLink({ index, currentPage, pages, lastPage }: MiddleLinkProps) {
-  let showDots: null | 'start' | 'end' = null;
-
-  if (index === 0 && currentPage >= 4) {
-    showDots = 'start';
-  }
-
-  if (index === MAX_MIDDLE_LINKS - 1 && currentPage <= pages - 3) {
-    showDots = 'end';
-  }
-
-  const page = currentPage + index - 1;
-
-  if (page <= 1 || page >= lastPage) {
-    return null;
-  }
-
-  return (
-    <>
-      {showDots === 'start' && <Dots />}
-      <PaginationLink currentPage={currentPage} page={page} />
-      {showDots === 'end' && <Dots />}
-    </>
-  );
-}
-
-export function Pagination({ count, currentPage }: PaginationProps) {
-  const pages = count / PAGE_SIZE;
-  const lastPage = Math.ceil(pages);
+  const { items } = usePagination({
+    boundaryCount: 1,
+    count: Math.ceil(pages),
+    page: currentPage,
+  });
 
   return (
     <div className="flex gap-2 mt-4 w-full justify-center">
-      <PaginationLink currentPage={currentPage} page={1} />
-      {times(MAX_MIDDLE_LINKS, (i) => (
-        <MiddleLink
-          currentPage={currentPage}
-          index={i}
-          key={i}
-          lastPage={lastPage}
-          pages={pages}
-        />
-      ))}
-      <PaginationLink currentPage={currentPage} page={lastPage} />
+      {items.map((item) => {
+        if (item.type === 'start-ellipsis' || item.type === 'end-ellipsis') {
+          return <Dots key={item.type} />;
+        }
+
+        if (item.type === 'page') {
+          return (
+            <PaginationLink
+              currentPage={currentPage}
+              key={item.page}
+              page={item.page || 1}
+            />
+          );
+        }
+
+        return null;
+      })}
     </div>
   );
 }

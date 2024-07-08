@@ -5,7 +5,7 @@ import { ArtListItem } from '~/components/ArtListItem';
 import { Layout } from '~/components/meta/Layout';
 import { Pagination } from '~/components/Pagination';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
-import { getArtList } from '~/logic/api/art';
+import { getArtList, PAGE_SIZE } from '~/logic/api/art';
 import { CompleteArt } from '~/typings/art';
 import { PrismaError } from '~/typings/util';
 
@@ -38,6 +38,7 @@ function List({ artList, count }: ListProps) {
       <Pagination
         count={count}
         currentPage={Number(router.query[PAGE_QUERY_PARAM] || 1)}
+        pageSize={PAGE_SIZE}
       />
     </Layout>
   );

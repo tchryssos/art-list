@@ -2,7 +2,7 @@ import { prisma } from '~/logic/util/prisma';
 
 import { isOnClient } from '../util/service';
 
-export const PAGE_SIZE = 25;
+export const PAGE_SIZE = 24;
 
 export const getArtList = async (queryPageNumber: number) => {
   if (isOnClient()) {
