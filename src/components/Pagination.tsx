@@ -50,17 +50,17 @@ interface MiddleLinkProps {
 function MiddleLink({ index, currentPage, pages, lastPage }: MiddleLinkProps) {
   let showDots: null | 'start' | 'end' = null;
 
-  if (index === 0 && currentPage > 4) {
+  if (index === 0 && currentPage >= 4) {
     showDots = 'start';
   }
 
-  if (index === MAX_MIDDLE_LINKS - 1 && currentPage <= pages - 4) {
+  if (index === MAX_MIDDLE_LINKS - 1 && currentPage <= pages - 3) {
     showDots = 'end';
   }
 
-  const page = currentPage + index + 1;
+  const page = currentPage + index - 1;
 
-  if (page >= lastPage) {
+  if (page <= 1 || page >= lastPage) {
     return null;
   }
 
