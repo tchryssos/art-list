@@ -9,6 +9,7 @@ import { Body } from '~/components/typography/Body';
 import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
+import { prisma } from '~/logic/util/prisma';
 
 interface AddArtPageProps {
   lastLocation: string;
