@@ -1,7 +1,9 @@
+import argon2 from 'argon2';
 import { serialize } from 'cookie';
+import jwt from 'jsonwebtoken';
 import { NextApiHandler } from 'next';
 
-import { AUTH_COOKIE_KEY } from '~/constants/auth';
+import { AUTH_COOKIE_KEY, JwtBody } from '~/constants/auth';
 import { HOME_ROUTE } from '~/constants/routing';
 
 export type AuthData = {
@@ -13,13 +15,23 @@ const authorize: NextApiHandler = async (req, res) => {
   const body: AuthData = await JSON.parse(req.body);
 
   try {
-    if (
-      body.password === process.env.PASSWORD &&
-      body.username === process.env.USERNAME
-    ) {
-      const cookie = serialize(AUTH_COOKIE_KEY, 'true', {
+    const pwVerified = await argon2.verify(
+      process.env.PASSWORD || '',
+      body.password
+    );
+    if (pwVerified && body.username === process.env.USERNAME) {
+      const token = jwt.sign(
+        {
+          username: body.username,
+        } as JwtBody,
+        process.env.JWT_SECRET || 'default_secret',
+        { expiresIn: '1d' }
+      );
+
+      const cookie = serialize(AUTH_COOKIE_KEY, token, {
         sameSite: 'strict',
         httpOnly: true,
+        secure: true,
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         path: HOME_ROUTE,
       });
