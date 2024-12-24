@@ -1,3 +1,4 @@
+import argon2 from 'argon2';
 import { serialize } from 'cookie';
 import { NextApiHandler } from 'next';
 
@@ -13,10 +14,11 @@ const authorize: NextApiHandler = async (req, res) => {
   const body: AuthData = await JSON.parse(req.body);
 
   try {
-    if (
-      body.password === process.env.PASSWORD &&
-      body.username === process.env.USERNAME
-    ) {
+    const pwVerified = await argon2.verify(
+      process.env.PASSWORD || '',
+      body.password
+    );
+    if (pwVerified && body.username === process.env.USERNAME) {
       const cookie = serialize(AUTH_COOKIE_KEY, 'true', {
         sameSite: 'strict',
         httpOnly: true,

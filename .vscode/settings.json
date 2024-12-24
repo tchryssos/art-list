@@ -19,5 +19,8 @@
     "className",
     "ngClass",
     ".*ClassName"
-  ]
+  ],
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
 }
