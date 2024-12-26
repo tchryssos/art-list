@@ -1,4 +1,3 @@
-import { ListeningTo } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 
@@ -11,6 +10,7 @@ import {
   NOW_PLAYING_ROUTE,
 } from '~/constants/routing';
 import { NOW_PLAYING_TOKEN_QUERY } from '~/pages/api/listening-to';
+import { ArtSubmitData } from '~/typings/art';
 import { SpotifyNowPlayingResp } from '~/typings/spotify';
 
 import { AuthContext } from '../contexts/authContext';
@@ -52,7 +52,7 @@ export const useSpotify = (spotifyId: string) => {
   const { spotifyToken, setSpotifyToken } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [nowPlaying, setNowPlaying] = useState<
-    Partial<ListeningTo> | null | undefined
+    ArtSubmitData['listeningTo'] | null
   >();
 
   const stateMatches =
@@ -99,6 +99,7 @@ export const useSpotify = (spotifyId: string) => {
               externalId: data.item.id,
               duration: data.item.duration_ms,
               externalProvider: ListeningToProviders.Spotify,
+              externalUrl: data.item.external_urls.spotify,
               imageUrl: data.item.album.images[0].url,
             });
           }
@@ -119,5 +120,6 @@ export const useSpotify = (spotifyId: string) => {
 
   return {
     spotifyToken,
+    nowPlaying,
   };
 };

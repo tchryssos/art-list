@@ -22,7 +22,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     null
   );
 
-  const { spotifyToken } = useSpotify(spotifyId || '');
+  const { spotifyToken, nowPlaying } = useSpotify(spotifyId || '');
 
   const onSubmit = async (e: FormEvent) => {
     try {
@@ -73,6 +73,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
           defaultValues={{
             dateSeen: getTodayDefaultValue(),
             location: lastLocation,
+            listeningTo: nowPlaying ?? undefined,
           }}
           onSubmit={onSubmit}
         />

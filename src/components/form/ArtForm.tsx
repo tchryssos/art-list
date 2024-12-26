@@ -12,24 +12,14 @@ interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
   onSubmit: (e: FormEvent) => Promise<void> | void;
   readOnly?: boolean;
-  token?: string;
 }
-export function ArtForm({
-  onSubmit,
-  defaultValues,
-  readOnly,
-  token: _token,
-}: ArtFormProps) {
+export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
-  const [token, setToken] = useState<string | null>(_token || null);
   const [activeAutoComplete, setActiveAutoComplete] = useState<
     keyof ArtSubmitData | null
   >(null);
-
-  // Probably not SUPER thorough, but good enough
-  const isEditMode = defaultValues?.name !== undefined;
 
   const formRef = useRef<HTMLFormElement>(null);
 

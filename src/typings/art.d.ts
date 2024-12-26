@@ -1,4 +1,4 @@
-import { Art, Artist, Location } from '@prisma/client';
+import { Art, Artist, ListeningTo, Location } from '@prisma/client';
 
 export type ArtSubmitData = {
   location: string;
@@ -6,6 +6,7 @@ export type ArtSubmitData = {
   name: string;
   dateSeen: string;
   imgSrc?: string;
+  listeningTo?: Omit<ListeningTo, 'id' | 'createdOn' | 'art'>;
 };
 
 export type CompleteArt = Art & {
