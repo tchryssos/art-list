@@ -112,14 +112,13 @@ export const useSpotify = (spotifyId: string) => {
   useEffect(() => {
     if (error) {
       console.error(error);
-      // eslint-disable-next-line no-alert
-      window.alert(error);
-      setError(null);
     }
   }, [error]);
 
   return {
     spotifyToken,
     nowPlaying,
+    error,
+    clearError: () => setError(null),
   };
 };

@@ -1,6 +1,6 @@
 import { padStart } from 'lodash';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -80,7 +80,15 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     null
   );
 
-  const { spotifyToken, nowPlaying } = useSpotify(spotifyId || '');
+  const { spotifyToken, nowPlaying, error, clearError } = useSpotify(
+    spotifyId || ''
+  );
+
+  useEffect(() => {
+    if (error && submitSuccessful !== null) {
+      clearError();
+    }
+  }, [submitSuccessful, error, clearError]);
 
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
@@ -95,12 +103,15 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
           </Button>
         </>
       ) : (
-        <ConditionalArtForm
-          lastLocation={lastLocation}
-          loading={spotifyToken === undefined || nowPlaying === undefined}
-          nowPlaying={nowPlaying}
-          setSubmitSuccessful={setSubmitSuccessful}
-        />
+        <>
+          {error && <span className="text-danger text-sm">{error}</span>}
+          <ConditionalArtForm
+            lastLocation={lastLocation}
+            loading={spotifyToken === undefined || nowPlaying === undefined}
+            nowPlaying={error ? null : nowPlaying}
+            setSubmitSuccessful={setSubmitSuccessful}
+          />
+        </>
       )}
     </Layout>
   );
