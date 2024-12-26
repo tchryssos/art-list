@@ -9,7 +9,7 @@
   "scripts": {
     "------- setup -------": "",
     "prepare": "husky install",
-    "setup": "chmod +x ./scripts/ && yarn install && yarn prepare",
+    "setup": "chmod -R +x ./scripts/ && yarn install && yarn prepare",
     "------- builds -------": "",
     "dev": "next dev",
     "build": "prisma generate && next build",
