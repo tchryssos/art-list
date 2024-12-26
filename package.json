@@ -7,18 +7,23 @@
   "license": "MIT",
   "type": "commonjs",
   "scripts": {
+    "------- setup -------": "",
+    "prepare": "husky install",
+    "setup": "chmod +x ./scripts/ && yarn install && yarn prepare",
+    "------- builds -------": "",
     "dev": "next dev",
     "build": "prisma generate && next build",
     "build:serve": "yarn build && yarn next start -p 3003",
-    "prepare": "husky install",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "------- generators -------": "",
+    "generate:env-types": "./scripts/get-env-types.sh",
+    "------- lint & test -------": "",
     "test": "jest",
     "lint": "next lint && npx stylelint '**/*.css' && yarn knip:prune",
     "lint:prune": "! ts-prune -i src/pages/* | grep -v -e src/pages",
+    "knip:prune": "knip --include exports,types",
+    "------- prisma -------": "",
     "prisma:regenerate": "npx prisma generate",
-    "prisma:db-update-schema": "npx prisma db push",
-    "knip:prune": "knip --include exports,types"
+    "prisma:db-update-schema": "npx prisma db push"
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
