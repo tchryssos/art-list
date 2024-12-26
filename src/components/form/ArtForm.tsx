@@ -27,8 +27,6 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     const fetchAutocompleteLists = async () => {
       const artistsResp = await fetch(ARTISTS_LIST_ROUTE, {

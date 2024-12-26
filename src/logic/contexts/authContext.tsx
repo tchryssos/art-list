@@ -11,8 +11,8 @@ import { AUTH_ME_ROUTE } from '~/constants/routing';
 type AuthContextType = {
   isAuthorized: boolean | null;
   setIsAuthorized: (isAuthorized: boolean) => void;
-  spotifyToken: string | null;
-  setSpotifyToken: (token: string) => void;
+  spotifyToken: string | null | undefined;
+  setSpotifyToken: (token: string | null) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -33,7 +33,9 @@ export function AuthContextProvider({
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(
     _authorized === undefined ? null : _authorized
   );
-  const [spotifyToken, setSpotifyToken] = useState<string | null>(null);
+  const [spotifyToken, setSpotifyToken] = useState<string | null | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const checkMe = async () => {

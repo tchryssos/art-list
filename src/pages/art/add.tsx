@@ -11,19 +11,35 @@ import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
 import { useSpotify } from '~/logic/util/spotify';
+import { ArtSubmitData } from '~/typings/art';
 
 interface AddArtPageProps {
   lastLocation: string;
   spotifyId: string | null;
 }
 
-function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
-  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
-    null
-  );
+interface ConditionalArtFormProps {
+  loading: boolean;
+  lastLocation: string;
+  nowPlaying: ArtSubmitData['listeningTo'] | null;
+  setSubmitSuccessful: (success: boolean) => void;
+}
 
-  const { spotifyToken, nowPlaying } = useSpotify(spotifyId || '');
+const getTodayDefaultValue = () => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = padStart(String(d.getMonth() + 1), 2, '0');
+  const day = padStart(String(d.getDate()), 2, '0');
 
+  return `${year}-${month}-${day}`;
+};
+
+function ConditionalArtForm({
+  loading,
+  lastLocation,
+  nowPlaying,
+  setSubmitSuccessful,
+}: ConditionalArtFormProps) {
   const onSubmit = async (e: FormEvent) => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
@@ -43,18 +59,28 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     }
   };
 
-  const getTodayDefaultValue = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = padStart(String(d.getMonth() + 1), 2, '0');
-    const day = padStart(String(d.getDate()), 2, '0');
-
-    return `${year}-${month}-${day}`;
-  };
-
-  if (spotifyToken === null) {
+  if (loading) {
     return null;
   }
+
+  return (
+    <ArtForm
+      defaultValues={{
+        dateSeen: getTodayDefaultValue(),
+        location: lastLocation,
+        listeningTo: nowPlaying || undefined,
+      }}
+      onSubmit={onSubmit}
+    />
+  );
+}
+
+function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
+  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
+    null
+  );
+
+  const { spotifyToken, nowPlaying } = useSpotify(spotifyId || '');
 
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
@@ -69,13 +95,11 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
           </Button>
         </>
       ) : (
-        <ArtForm
-          defaultValues={{
-            dateSeen: getTodayDefaultValue(),
-            location: lastLocation,
-            listeningTo: nowPlaying ?? undefined,
-          }}
-          onSubmit={onSubmit}
+        <ConditionalArtForm
+          lastLocation={lastLocation}
+          loading={spotifyToken === undefined || nowPlaying === undefined}
+          nowPlaying={nowPlaying}
+          setSubmitSuccessful={setSubmitSuccessful}
         />
       )}
     </Layout>

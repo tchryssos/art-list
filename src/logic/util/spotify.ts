@@ -59,7 +59,7 @@ export const useSpotify = (spotifyId: string) => {
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
 
   useEffect(() => {
-    if (spotifyToken === null && !(code || error)) {
+    if (spotifyToken === undefined && !(code || error)) {
       const freshState = getUnsafeRandomString(16);
       localStorage.setItem(SPOTIFY_CODE_STATE_KEY, freshState);
       const redirect = createSpotifyOauthRoute({
@@ -75,7 +75,7 @@ export const useSpotify = (spotifyId: string) => {
     if (stateMatches) {
       if (queryError) {
         setError(queryError);
-        setSpotifyToken('');
+        setSpotifyToken(null);
       } else if (code) {
         setSpotifyToken(code);
       }
