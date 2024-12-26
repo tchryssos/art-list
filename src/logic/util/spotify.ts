@@ -1,6 +1,8 @@
+import { ListeningTo } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 
+import { ListeningToProviders } from '~/constants/listeningTo';
 import { SPOTIFY_CODE_STATE_KEY } from '~/constants/localStorage';
 import {
   ART_ADD_ROUTE,
@@ -22,7 +24,7 @@ interface SpotifyParams {
 
 const fetchNowPlaying = async (
   token: string,
-  callback: (data: SpotifyNowPlayingResp) => void,
+  callback: (data: SpotifyNowPlayingResp | null) => void,
   setError: (error: string) => void
 ) => {
   const resp = await fetch(
@@ -32,8 +34,12 @@ const fetchNowPlaying = async (
     }
   );
   if (resp.ok) {
-    const data: SpotifyNowPlayingResp = await resp.json();
-    callback(data);
+    if (resp.status === 204) {
+      callback(null);
+    } else {
+      const data: SpotifyNowPlayingResp = await resp.json();
+      callback(data);
+    }
   } else {
     const { error } = await resp.json();
     setError(error);
@@ -45,6 +51,9 @@ export const useSpotify = (spotifyId: string) => {
   const { code, error: queryError, state } = query as Partial<SpotifyParams>;
   const { spotifyToken, setSpotifyToken } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
+  const [nowPlaying, setNowPlaying] = useState<
+    Partial<ListeningTo> | null | undefined
+  >();
 
   const stateMatches =
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
@@ -80,7 +89,19 @@ export const useSpotify = (spotifyId: string) => {
       fetchNowPlaying(
         spotifyToken,
         (data) => {
-          console.log(data);
+          if (!data) {
+            setNowPlaying(null);
+          } else {
+            setNowPlaying({
+              artistName: data.item.artists.map((a) => a.name).join(', '),
+              albumName: data.item.album.name,
+              trackName: data.item.name,
+              externalId: data.item.id,
+              duration: data.item.duration_ms,
+              externalProvider: ListeningToProviders.Spotify,
+              imageUrl: data.item.album.images[0].url,
+            });
+          }
         },
         setError
       );
