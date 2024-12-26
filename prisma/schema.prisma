@@ -16,6 +16,7 @@ model Art {
   locationId     String?
   artistId       String?
   imgSrc         String?
+  listeningToUrl String?
   Artist         Artist?   @relation(fields: [artistId], references: [id])
   Location       Location? @relation(fields: [locationId], references: [id])
 }

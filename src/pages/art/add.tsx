@@ -1,6 +1,7 @@
 import { padStart } from 'lodash';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -8,6 +9,7 @@ import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
 import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
+import { AuthContext } from '~/logic/contexts/authContext';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
 
@@ -16,9 +18,15 @@ interface AddArtPageProps {
 }
 
 function AddArtPage({ lastLocation }: AddArtPageProps) {
+  const { push } = useRouter();
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
     null
   );
+  const { spotifyToken } = useContext(AuthContext);
+
+  useEffect(() => {
+    // do stuff
+  }, spotifyToken);
 
   const onSubmit = async (e: FormEvent) => {
     try {
@@ -47,6 +55,10 @@ function AddArtPage({ lastLocation }: AddArtPageProps) {
 
     return `${year}-${month}-${day}`;
   };
+
+  if (spotifyToken === null) {
+    return null;
+  }
 
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">

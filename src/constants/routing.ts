@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+import { getUnsafeRandomString } from '~/logic/util/getUnsafeRandomString';
+
 // CLIENT ROUTES
 export const HOME_ROUTE = '/';
 export const LOGIN_ROUTE = '/login';
@@ -17,6 +20,22 @@ const createLocationDetailRoute = (id: DetailRouteId) => `/locations/${id}`;
 const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
   '[id]' as DetailRouteId
 );
+
+interface CreateSpotifyOauthRouteArgs {
+  client_id: string;
+  redirect_uri: string;
+}
+
+export const createSpotifyOauthRoute = ({
+  client_id,
+  redirect_uri,
+}: CreateSpotifyOauthRouteArgs) =>
+  `https://accounts.spotify.com/authorize?${new URLSearchParams({
+    client_id,
+    redirect_uri,
+    scope: 'user-read-currently-playing',
+    state: getUnsafeRandomString(16),
+  }).toString()}`;
 
 // API ROUTES
 export const ART_CREATE_ROUTE = '/api/art/new/create';

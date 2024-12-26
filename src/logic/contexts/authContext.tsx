@@ -11,11 +11,15 @@ import { AUTH_ME_ROUTE } from '~/constants/routing';
 type AuthContextType = {
   isAuthorized: boolean | null;
   setIsAuthorized: (isAuthorized: boolean) => void;
+  spotifyToken: string | null;
+  setSpotifyToken: (token: string) => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   isAuthorized: null,
   setIsAuthorized: () => null,
+  spotifyToken: null,
+  setSpotifyToken: () => null,
 });
 
 interface AuthContextProviderProps {
@@ -29,6 +33,7 @@ export function AuthContextProvider({
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(
     _authorized === undefined ? null : _authorized
   );
+  const [spotifyToken, setSpotifyToken] = useState<string | null>(null);
 
   useEffect(() => {
     const checkMe = async () => {
@@ -40,8 +45,8 @@ export function AuthContextProvider({
   }, []);
 
   const providerValue = useMemo(
-    () => ({ isAuthorized, setIsAuthorized }),
-    [isAuthorized]
+    () => ({ isAuthorized, setIsAuthorized, spotifyToken, setSpotifyToken }),
+    [isAuthorized, spotifyToken]
   );
 
   return (
