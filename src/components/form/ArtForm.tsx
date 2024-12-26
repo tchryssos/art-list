@@ -109,12 +109,33 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         <input
           checked={useListeningTo}
           className="w-6 h-6"
+          disabled={!defaultValues?.listeningTo}
           name="listeningTo"
           type="checkbox"
           onChange={() => {
             setUseListeningTo(!useListeningTo);
           }}
         />
+        {useListeningTo && (
+          <div className="flex gap-4 mt-4 items-center">
+            {defaultValues?.listeningTo?.imageUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                alt={defaultValues.listeningTo.trackName || 'Now Playing'}
+                height={100}
+                src={defaultValues.listeningTo.imageUrl}
+                width={100}
+              />
+            )}
+            <div className="flex flex-col">
+              <p>{defaultValues?.listeningTo?.trackName}</p>
+              <p className="text-sm">
+                {defaultValues?.listeningTo?.artistName}
+              </p>
+              <p className="text-sm">{defaultValues?.listeningTo?.albumName}</p>
+            </div>
+          </div>
+        )}
       </div>
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.imgSrc}
