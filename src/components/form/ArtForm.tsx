@@ -7,6 +7,7 @@ import { ArtSubmitData } from '~/typings/art';
 import { SubmitButton } from '../buttons/SubmitButton';
 import { Form } from './Form';
 import { Input } from './Input';
+import { Label } from './Label';
 
 interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
@@ -17,6 +18,9 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
+  const [useListeningTo, setUseListeningTo] = useState(
+    Boolean(defaultValues?.listeningTo)
+  );
   const [activeAutoComplete, setActiveAutoComplete] = useState<
     keyof ArtSubmitData | null
   >(null);
@@ -102,6 +106,18 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         type="date"
         onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
+      <div className="flex flex-col items-start">
+        <Label label={'Use "Now Playing?"'} name="listeningTo" />
+        <input
+          checked={useListeningTo}
+          className="w-6 h-6"
+          name="listeningTo"
+          type="checkbox"
+          onChange={() => {
+            setUseListeningTo(!useListeningTo);
+          }}
+        />
+      </div>
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.imgSrc}
         label="Image Url"
