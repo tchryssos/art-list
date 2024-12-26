@@ -16,7 +16,7 @@ interface SpotifyParams {
 export const useSpotifyAuth = (spotifyId: string) => {
   const { push, query } = useRouter();
   const { code, error, state } = query as Partial<SpotifyParams>;
-  const { spotifyToken } = useContext(AuthContext);
+  const { spotifyToken, setSpotifyToken } = useContext(AuthContext);
 
   useEffect(() => {
     if (spotifyToken === null && !(code || error)) {
@@ -30,6 +30,13 @@ export const useSpotifyAuth = (spotifyId: string) => {
       push(redirect);
     }
   }, [spotifyToken, push, code, error, spotifyId]);
+
+  useEffect(() => {
+    if (code && state === localStorage.getItem(SPOTIFY_CODE_STATE_KEY)) {
+      setSpotifyToken(code);
+      localStorage.removeItem(SPOTIFY_CODE_STATE_KEY);
+    }
+  }, [code, state, setSpotifyToken]);
 
   return {
     spotifyToken,

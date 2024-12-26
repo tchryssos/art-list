@@ -22,7 +22,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     null
   );
 
-  const spotifyToken = useSpotifyAuth(spotifyId || '');
+  const { spotifyToken } = useSpotifyAuth(spotifyId || '');
 
   const onSubmit = async (e: FormEvent) => {
     try {
