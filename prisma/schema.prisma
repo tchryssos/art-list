@@ -43,8 +43,10 @@ model Artist {
 model ListeningTo {
   id               String   @id @default(cuid())
   createdOn        DateTime @db.Timestamp(6)
-  artist           String
-  album            String
+  artist_name      String
+  album_name       String
+  song_name        String
+  artUrl           String
   externalUrl      String
   externalId       String
   externalProvider String
