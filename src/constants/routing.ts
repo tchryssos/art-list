@@ -38,6 +38,15 @@ export const createSpotifyOauthRoute = ({
     response_type: 'code',
   }).toString()}`;
 
+export const getSpotifyRedirectUri = (origin?: string) => {
+  const { window } = globalThis;
+  const _origin = origin || window?.location.origin;
+  if (_origin) {
+    return `${_origin}${ART_ADD_ROUTE}`;
+  }
+  return '';
+};
+
 // API ROUTES
 export const ART_CREATE_ROUTE = '/api/art/new/create';
 export const createArtApiRoute = (id: DetailRouteId) => `/api/art/${id}`;
@@ -45,6 +54,7 @@ export const ARTISTS_LIST_ROUTE = '/api/artists';
 export const LOCATION_LIST_ROUTE = '/api/locations';
 export const AUTH_ROUTE = '/api/authorize';
 export const AUTH_ME_ROUTE = '/api/authorize/me';
+export const NOW_PLAYING_ROUTE = '/api/listening-to';
 
 export const AUTH_ROUTE_PATTERNS = [
   ART_ADD_ROUTE,

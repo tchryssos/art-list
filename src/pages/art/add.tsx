@@ -10,7 +10,7 @@ import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
-import { useSpotifyAuth } from '~/logic/util/spotify';
+import { useSpotify } from '~/logic/util/spotify';
 
 interface AddArtPageProps {
   lastLocation: string;
@@ -22,7 +22,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     null
   );
 
-  const { spotifyToken } = useSpotifyAuth(spotifyId || '');
+  const { spotifyToken } = useSpotify(spotifyId || '');
 
   const onSubmit = async (e: FormEvent) => {
     try {

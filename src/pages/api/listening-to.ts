@@ -1,39 +1,108 @@
-import { NextApiHandler } from 'next';
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
-import { SpotifyTokenResponse } from '~/typings/spotify';
+import { getSpotifyRedirectUri } from '~/constants/routing';
+import { SpotifyNowPlayingResp } from '~/typings/spotify';
+
+export const NOW_PLAYING_TOKEN_QUERY = 'token';
+
+const spotifyOrigin = 'https://api.spotify.com/v1';
 
 const spotifyTokenUrl = 'https://accounts.spotify.com/api/token';
+const spotifyNowPlayingUrl = `${spotifyOrigin}/me/player/currently-playing`;
 
-interface ListeningToBody {
-  token?: string;
+// https://developer.spotify.com/documentation/web-api/tutorials/code-flow
+interface SpotifyAccessTokenBody {
+  grant_type: string;
+  code: string;
+  redirect_uri: string;
 }
 
-const fetchSpotifyToken = async () =>
-  fetch(spotifyTokenUrl, {
+interface SpotifyAccessTokenResp {
+  access_token: string;
+  token_type: 'Bearer';
+  expires_in: 3600;
+  refresh_token: string;
+  scope: 'user-read-currently-playing';
+}
+
+const fetchSpotifyToken = async (code: string, origin: string) => {
+  const body = {
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: getSpotifyRedirectUri(origin),
+  } satisfies SpotifyAccessTokenBody;
+
+  return fetch(spotifyTokenUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
     },
-    body: new URLSearchParams({
-      grant_type: 'client_credentials',
-      client_id: 'your-client-id',
-      client_secret: 'your-client-secret',
-    }),
+    body: new URLSearchParams(body).toString(),
   });
+};
+
+const getToken = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const code = req.query[NOW_PLAYING_TOKEN_QUERY];
+    if (!code) {
+      res.status(400).json({ error: 'No code provided' });
+      res.end();
+    }
+    const rawOrigin = req.headers.origin || req.headers.referer;
+
+    if (!rawOrigin) {
+      res.status(400).json({ error: 'Bad origin' });
+      res.end();
+    }
+
+    const tokenResp = await fetchSpotifyToken(
+      code as string,
+      new URL(rawOrigin!).origin
+    );
+
+    if (!tokenResp.ok) {
+      const err = await tokenResp.json();
+      if (err.error_description) {
+        if (err.error_description === 'Authorization code expired') {
+          res.status(401).json({ error: 'Authorization code expired' });
+          res.end();
+        }
+      }
+      console.error(tokenResp.status, '\n', tokenResp.statusText, '\n', err);
+      res.status(tokenResp.status).json({ error: 'Failed to fetch token' });
+      res.end();
+    }
+
+    const data: SpotifyAccessTokenResp = await tokenResp.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Failed to fetch token' });
+    res.end();
+  }
+  return undefined;
+};
 
 const getHandler: NextApiHandler = async (req, res) => {
-  const { token: bodyToken } = req.body as ListeningToBody;
-  let token = bodyToken;
-  let fresh = false;
+  const spotifyAccessToken = await getToken(req, res);
 
-  if (!token) {
-    const resp = await fetchSpotifyToken();
+  if (!spotifyAccessToken) {
+    res.status(500).json({ error: 'Failed to fetch token' });
+    res.end();
+  } else {
+    const resp = await fetch(spotifyNowPlayingUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${spotifyAccessToken.access_token}`,
+      },
+    });
+
     if (resp.ok) {
-      const data: SpotifyTokenResponse = await resp.json();
-      token = data.access_token;
-      fresh = true;
+      const data: SpotifyNowPlayingResp = await resp.json();
+      res.status(200).json(data);
     } else {
-      res.status(500).json({ error: 'Failed to get token' });
+      res.status(resp.status).json({ error: 'Failed to fetch now playing' });
     }
   }
 };
