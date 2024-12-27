@@ -43,9 +43,15 @@ function ConditionalArtForm({
   const onSubmit = async (e: FormEvent) => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
+
+      const includeListeningTo = formData.get('listeningTo') !== null;
+
       const resp = await fetch(ART_CREATE_ROUTE, {
         method: 'POST',
-        body: formDataToJson(formData),
+        body: formDataToJson(
+          formData,
+          includeListeningTo ? nowPlaying || undefined : undefined
+        ),
       });
 
       if (resp.status === 200) {
