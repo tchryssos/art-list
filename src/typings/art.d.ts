@@ -12,4 +12,5 @@ export type ArtSubmitData = {
 export type CompleteArt = Art & {
   Artist: Artist;
   Location: Location;
+  ListeningTo?: ListeningTo;
 };

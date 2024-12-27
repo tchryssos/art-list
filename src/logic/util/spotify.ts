@@ -43,6 +43,7 @@ const fetchNowPlaying = async (
   } else {
     const { error } = await resp.json();
     setError(error);
+    callback(null);
   }
 };
 

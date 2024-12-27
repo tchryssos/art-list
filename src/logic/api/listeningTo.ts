@@ -2,7 +2,9 @@ import { ArtSubmitData } from '~/typings/art';
 
 import { isOnClient } from '../util/service';
 
-export function listeningToFindOrCreate(data: ArtSubmitData['listeningTo']) {
+export async function listeningToFindOrCreate(
+  data: ArtSubmitData['listeningTo']
+) {
   if (isOnClient()) {
     throw new Error('This function should only be called on the server');
   }
@@ -14,7 +16,7 @@ export function listeningToFindOrCreate(data: ArtSubmitData['listeningTo']) {
   try {
     const now = new Date();
 
-    let listeningTo = prisma.listeningTo.findFirst({
+    let listeningTo = await prisma.listeningTo.findFirst({
       where: {
         externalProvider: data.externalProvider,
         externalId: data.externalId,
@@ -22,7 +24,7 @@ export function listeningToFindOrCreate(data: ArtSubmitData['listeningTo']) {
     });
 
     if (!listeningTo) {
-      listeningTo = prisma.listeningTo.create({
+      listeningTo = await prisma.listeningTo.create({
         data: {
           ...data,
           createdOn: now,

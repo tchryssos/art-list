@@ -28,6 +28,7 @@ export const getArtList = async (queryPageNumber: number) => {
         include: {
           Artist: true,
           Location: true,
+          ListeningTo: true,
         },
       }),
       prisma.art.count(),

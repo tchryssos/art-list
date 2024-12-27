@@ -50,7 +50,11 @@ function ConditionalArtForm({
         method: 'POST',
         body: formDataToJson(
           formData,
-          includeListeningTo ? nowPlaying || undefined : undefined
+          includeListeningTo && nowPlaying
+            ? {
+                listeningTo: nowPlaying,
+              }
+            : undefined
         ),
       });
 

@@ -5,6 +5,7 @@ import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
 import { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
+import { ListeningToCard } from '../ListeningToCard';
 import { Form } from './Form';
 import { Input } from './Input';
 import { Label } from './Label';
@@ -117,24 +118,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
           }}
         />
         {useListeningTo && (
-          <div className="flex gap-4 mt-4 items-center">
-            {defaultValues?.listeningTo?.imageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                alt={defaultValues.listeningTo.trackName || 'Now Playing'}
-                height={100}
-                src={defaultValues.listeningTo.imageUrl}
-                width={100}
-              />
-            )}
-            <div className="flex flex-col">
-              <p>{defaultValues?.listeningTo?.trackName}</p>
-              <p className="text-sm">
-                {defaultValues?.listeningTo?.artistName}
-              </p>
-              <p className="text-sm">{defaultValues?.listeningTo?.albumName}</p>
-            </div>
-          </div>
+          <ListeningToCard listeningTo={defaultValues?.listeningTo} />
         )}
       </div>
       <Input<ArtSubmitData>
