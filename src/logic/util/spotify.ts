@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
@@ -10,7 +11,10 @@ import {
   getSpotifyRedirectUri,
   NOW_PLAYING_ROUTE,
 } from '~/constants/routing';
-import { NOW_PLAYING_TOKEN_QUERY } from '~/pages/api/listening-to';
+import {
+  ListeningToResp,
+  NOW_PLAYING_TOKEN_QUERY,
+} from '~/pages/api/listening-to';
 import { ArtSubmitData } from '~/typings/art';
 import { SpotifyNowPlayingResp } from '~/typings/spotify';
 
@@ -27,8 +31,16 @@ const nowPlayingKey = 'now-playing-query';
 
 export const useSpotify = (spotifyId: string) => {
   const { push, query } = useRouter();
+  /**
+   * Okay, since this is confusing:
+   * - `code` is the code returned from Spotify's OAuth flow verifying my user, also known as an "Authorization Code" in their docs
+   * - `spotifyAuthorizationCode` is ALSO that code, but just saved to state rather than the url bar
+   * - `access` is an object containing the "Access Token" we get back from Spotify (by providing the Authorization Code), as well as a refresh token and some meta data about that "Access Token"
+   */
   const { code, error: paramError, state } = query as Partial<SpotifyParams>;
-  const { spotifyToken, setSpotifyToken } = useContext(AuthContext);
+  const [access, setAccess] = useState<ListeningToResp['access'] | null>(null);
+  const { spotifyAuthorizationCode, setSpotifyAuthorizationCode } =
+    useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [nowPlaying, setNowPlaying] = useState<
     ArtSubmitData['listeningTo'] | null
@@ -38,7 +50,7 @@ export const useSpotify = (spotifyId: string) => {
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
 
   useEffect(() => {
-    if (spotifyToken === undefined && !(code || error)) {
+    if (spotifyAuthorizationCode === undefined && !(code || error)) {
       const freshState = getUnsafeRandomString(16);
       localStorage.setItem(SPOTIFY_CODE_STATE_KEY, freshState);
       const redirect = createSpotifyOauthRoute({
@@ -48,31 +60,33 @@ export const useSpotify = (spotifyId: string) => {
       });
       push(redirect);
     }
-  }, [spotifyToken, push, code, error, spotifyId]);
+  }, [spotifyAuthorizationCode, push, code, error, spotifyId]);
 
   useEffect(() => {
     if (stateMatches) {
       if (paramError) {
         setError(paramError);
-        setSpotifyToken(null);
+        setSpotifyAuthorizationCode(null);
       } else if (code) {
-        setSpotifyToken(code);
+        setSpotifyAuthorizationCode(code);
       }
       localStorage.removeItem(SPOTIFY_CODE_STATE_KEY);
       push(ART_ADD_ROUTE, undefined, { shallow: true });
     }
-  }, [code, stateMatches, setSpotifyToken, push, paramError]);
+  }, [code, stateMatches, setSpotifyAuthorizationCode, push, paramError]);
 
   const {
     error: queryError,
     data,
     isLoading,
     refetch,
-  } = useQuery<SpotifyNowPlayingResp | null>({
-    queryKey: [nowPlayingKey, spotifyToken],
+    isRefetching,
+  } = useQuery<ListeningToResp | null>({
+    queryKey: [nowPlayingKey, spotifyAuthorizationCode],
     queryFn: async () => {
+      console.log('running query');
       const resp = await fetch(
-        `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_TOKEN_QUERY}=${spotifyToken}`,
+        `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_TOKEN_QUERY}=${spotifyAuthorizationCode}`,
         {
           method: 'GET',
         }
@@ -86,23 +100,29 @@ export const useSpotify = (spotifyId: string) => {
       const { error: respError } = await resp.json();
       throw new Error(respError);
     },
-    enabled: Boolean(spotifyToken),
+    enabled: Boolean(spotifyAuthorizationCode),
   });
 
   useEffect(() => {
-    if (data === null) {
+    if (data === null || data?.nowPlaying === null) {
       setNowPlaying(null);
-    } else if (data) {
+    } else if (data?.nowPlaying) {
+      const { artists, album, name, id, duration_ms, external_urls } =
+        data.nowPlaying.item;
       setNowPlaying({
-        artistName: data.item.artists.map((a) => a.name).join(', '),
-        albumName: data.item.album.name,
-        trackName: data.item.name,
-        externalId: data.item.id,
-        duration: data.item.duration_ms,
+        artistName: artists.map((a) => a.name).join(', '),
+        albumName: album.name,
+        trackName: name,
+        externalId: id,
+        duration: duration_ms,
         externalProvider: ListeningToProviders.Spotify,
-        externalUrl: data.item.external_urls.spotify,
-        imageUrl: data.item.album.images[0].url,
+        externalUrl: external_urls.spotify,
+        imageUrl: album.images[0].url,
       });
+    }
+
+    if (data?.access) {
+      setAccess(data.access);
     }
   }, [data, isLoading]);
 
@@ -119,10 +139,11 @@ export const useSpotify = (spotifyId: string) => {
   }, [error]);
 
   return {
-    spotifyToken,
+    spotifyAuthorizationCode,
     nowPlaying,
     error,
     clearError: () => setError(null),
     refetchQuery: refetch,
+    isLoading: isLoading || isRefetching,
   };
 };

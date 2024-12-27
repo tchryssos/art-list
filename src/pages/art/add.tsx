@@ -1,6 +1,6 @@
 import { padStart } from 'lodash';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -20,6 +20,7 @@ interface AddArtPageProps {
 
 interface ConditionalArtFormProps {
   loading: boolean;
+  nowPlayingLoading: boolean;
   lastLocation: string;
   nowPlaying: ArtSubmitData['listeningTo'] | null;
   setSubmitSuccessful: (success: boolean) => void;
@@ -39,34 +40,36 @@ function ConditionalArtForm({
   lastLocation,
   nowPlaying,
   setSubmitSuccessful,
+  nowPlayingLoading,
 }: ConditionalArtFormProps) {
   const onSubmit = async (e: FormEvent) => {
-    try {
-      const formData = new FormData(e.target as HTMLFormElement);
+    // try {
+    //   const formData = new FormData(e.target as HTMLFormElement);
 
-      const includeListeningTo = formData.get('listeningTo') !== null;
+    //   const includeListeningTo = formData.get('listeningTo') !== null;
 
-      const resp = await fetch(ART_CREATE_ROUTE, {
-        method: 'POST',
-        body: formDataToJson(
-          formData,
-          includeListeningTo && nowPlaying
-            ? {
-                listeningTo: nowPlaying,
-              }
-            : undefined
-        ),
-      });
+    //   const resp = await fetch(ART_CREATE_ROUTE, {
+    //     method: 'POST',
+    //     body: formDataToJson(
+    //       formData,
+    //       includeListeningTo && nowPlaying
+    //         ? {
+    //             listeningTo: nowPlaying,
+    //           }
+    //         : undefined
+    //     ),
+    //   });
 
-      if (resp.status === 200) {
-        setSubmitSuccessful(true);
-      } else {
-        setSubmitSuccessful(false);
-      }
-    } catch (error) {
-      console.error(error);
-      setSubmitSuccessful(false);
-    }
+    //   if (resp.status === 200) {
+    //     setSubmitSuccessful(true);
+    //   } else {
+    //     setSubmitSuccessful(false);
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   setSubmitSuccessful(false);
+    // }
+    setSubmitSuccessful(true);
   };
 
   if (loading) {
@@ -80,6 +83,7 @@ function ConditionalArtForm({
         location: lastLocation,
         listeningTo: nowPlaying || undefined,
       }}
+      listeningToLoading={nowPlayingLoading}
       onSubmit={onSubmit}
     />
   );
@@ -90,17 +94,24 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     boolean | null | undefined
   >(undefined);
 
-  const { spotifyToken, nowPlaying, error, clearError, refetchQuery } =
-    useSpotify(spotifyId || '');
+  const {
+    spotifyToken,
+    nowPlaying,
+    error,
+    clearError,
+    refetchQuery,
+    isLoading,
+  } = useSpotify(spotifyId || '');
 
   useEffect(() => {
     if (submitSuccessful === null) {
+      console.log('refetching');
       refetchQuery();
     }
   }, [submitSuccessful, refetchQuery]);
 
   useEffect(() => {
-    if (error && submitSuccessful !== undefined) {
+    if (error && submitSuccessful !== null) {
       clearError();
     }
   }, [submitSuccessful, error, clearError]);
@@ -124,6 +135,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
             lastLocation={lastLocation}
             loading={spotifyToken === undefined || nowPlaying === undefined}
             nowPlaying={error ? null : nowPlaying}
+            nowPlayingLoading={isLoading}
             setSubmitSuccessful={setSubmitSuccessful}
           />
         </>
