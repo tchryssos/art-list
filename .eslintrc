@@ -13,6 +13,7 @@
     "eslint:recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@tanstack/query/recommended",
     "next",
   ],
   "root": true,

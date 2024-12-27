@@ -86,16 +86,21 @@ function ConditionalArtForm({
 }
 
 function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
-  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
-    null
-  );
+  const [submitSuccessful, setSubmitSuccessful] = useState<
+    boolean | null | undefined
+  >(undefined);
 
-  const { spotifyToken, nowPlaying, error, clearError } = useSpotify(
-    spotifyId || ''
-  );
+  const { spotifyToken, nowPlaying, error, clearError, refetchQuery } =
+    useSpotify(spotifyId || '');
 
   useEffect(() => {
-    if (error && submitSuccessful !== null) {
+    if (submitSuccessful === null) {
+      refetchQuery();
+    }
+  }, [submitSuccessful, refetchQuery]);
+
+  useEffect(() => {
+    if (error && submitSuccessful !== undefined) {
       clearError();
     }
   }, [submitSuccessful, error, clearError]);

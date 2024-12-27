@@ -106,7 +106,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
       <div className="flex flex-col items-start">
-        <Label label={'Use "Now Playing?"'} name="listeningTo" />
+        <Label label={'Use "Now Playing"?'} name="listeningTo" />
         <input
           checked={useListeningTo}
           className="w-6 h-6"

@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 
@@ -22,34 +23,11 @@ interface SpotifyParams {
   state: string;
 }
 
-const fetchNowPlaying = async (
-  token: string,
-  callback: (data: SpotifyNowPlayingResp | null) => void,
-  setError: (error: string) => void
-) => {
-  const resp = await fetch(
-    `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_TOKEN_QUERY}=${token}`,
-    {
-      method: 'GET',
-    }
-  );
-  if (resp.ok) {
-    if (resp.status === 204) {
-      callback(null);
-    } else {
-      const data: SpotifyNowPlayingResp = await resp.json();
-      callback(data);
-    }
-  } else {
-    const { error } = await resp.json();
-    setError(error);
-    callback(null);
-  }
-};
+const nowPlayingKey = 'now-playing-query';
 
 export const useSpotify = (spotifyId: string) => {
   const { push, query } = useRouter();
-  const { code, error: queryError, state } = query as Partial<SpotifyParams>;
+  const { code, error: paramError, state } = query as Partial<SpotifyParams>;
   const { spotifyToken, setSpotifyToken } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [nowPlaying, setNowPlaying] = useState<
@@ -74,8 +52,8 @@ export const useSpotify = (spotifyId: string) => {
 
   useEffect(() => {
     if (stateMatches) {
-      if (queryError) {
-        setError(queryError);
+      if (paramError) {
+        setError(paramError);
         setSpotifyToken(null);
       } else if (code) {
         setSpotifyToken(code);
@@ -83,32 +61,56 @@ export const useSpotify = (spotifyId: string) => {
       localStorage.removeItem(SPOTIFY_CODE_STATE_KEY);
       push(ART_ADD_ROUTE, undefined, { shallow: true });
     }
-  }, [code, stateMatches, setSpotifyToken, push, queryError]);
+  }, [code, stateMatches, setSpotifyToken, push, paramError]);
+
+  const {
+    error: queryError,
+    data,
+    isLoading,
+    refetch,
+  } = useQuery<SpotifyNowPlayingResp | null>({
+    queryKey: [nowPlayingKey, spotifyToken],
+    queryFn: async () => {
+      const resp = await fetch(
+        `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_TOKEN_QUERY}=${spotifyToken}`,
+        {
+          method: 'GET',
+        }
+      );
+      if (resp.ok) {
+        if (resp.status === 204) {
+          return null;
+        }
+        return resp.json();
+      }
+      const { error: respError } = await resp.json();
+      throw new Error(respError);
+    },
+    enabled: Boolean(spotifyToken),
+  });
 
   useEffect(() => {
-    if (spotifyToken) {
-      fetchNowPlaying(
-        spotifyToken,
-        (data) => {
-          if (!data) {
-            setNowPlaying(null);
-          } else {
-            setNowPlaying({
-              artistName: data.item.artists.map((a) => a.name).join(', '),
-              albumName: data.item.album.name,
-              trackName: data.item.name,
-              externalId: data.item.id,
-              duration: data.item.duration_ms,
-              externalProvider: ListeningToProviders.Spotify,
-              externalUrl: data.item.external_urls.spotify,
-              imageUrl: data.item.album.images[0].url,
-            });
-          }
-        },
-        setError
-      );
+    if (data === null) {
+      setNowPlaying(null);
+    } else if (data) {
+      setNowPlaying({
+        artistName: data.item.artists.map((a) => a.name).join(', '),
+        albumName: data.item.album.name,
+        trackName: data.item.name,
+        externalId: data.item.id,
+        duration: data.item.duration_ms,
+        externalProvider: ListeningToProviders.Spotify,
+        externalUrl: data.item.external_urls.spotify,
+        imageUrl: data.item.album.images[0].url,
+      });
     }
-  }, [spotifyToken]);
+  }, [data, isLoading]);
+
+  useEffect(() => {
+    if (queryError) {
+      setError(queryError.message);
+    }
+  }, [queryError]);
 
   useEffect(() => {
     if (error) {
@@ -121,5 +123,6 @@ export const useSpotify = (spotifyId: string) => {
     nowPlaying,
     error,
     clearError: () => setError(null),
+    refetchQuery: refetch,
   };
 };
