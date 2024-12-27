@@ -6,6 +6,7 @@
   "description": "A 'photo-blog' to track the art that resonates with me. ",
   "license": "MIT",
   "type": "commonjs",
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "------- setup -------": "",
     "prepare": "husky install",

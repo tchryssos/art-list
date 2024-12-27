@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/yarn
+      - uses: ./.github/actions/pnpm
       - name: Regenerate the prisma client
         run: yarn prisma:regenerate
       - name: Run linting
