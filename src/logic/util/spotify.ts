@@ -104,6 +104,7 @@ export const useSpotify = (spotifyId: string) => {
   });
 
   useEffect(() => {
+    console.log(data);
     if (data === null || data?.nowPlaying === null) {
       setNowPlaying(null);
     } else if (data?.nowPlaying) {

@@ -95,7 +95,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
   >(undefined);
 
   const {
-    spotifyToken,
+    spotifyAuthorizationCode,
     nowPlaying,
     error,
     clearError,
@@ -133,7 +133,9 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
           {error && <span className="text-danger text-sm">{error}</span>}
           <ConditionalArtForm
             lastLocation={lastLocation}
-            loading={spotifyToken === undefined || nowPlaying === undefined}
+            loading={
+              spotifyAuthorizationCode === undefined || nowPlaying === undefined
+            }
             nowPlaying={error ? null : nowPlaying}
             nowPlayingLoading={isLoading}
             setSubmitSuccessful={setSubmitSuccessful}

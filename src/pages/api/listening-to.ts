@@ -78,7 +78,6 @@ const getToken = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(tokenResp.status).json({
       error: `Failed to fetch token: ${tokenResp.statusText}\n${err.error_description || ''}`,
     });
-    res.end();
   } else {
     const data: SpotifyAccessTokenResp = await tokenResp.json();
     return data;
