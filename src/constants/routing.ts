@@ -8,16 +8,8 @@ export const ART_ADD_ROUTE = '/art/add';
 type DetailRouteId = string;
 
 export const createArtDetailRoute = (id: DetailRouteId) => `/art/view/${id}`;
-const ART_DETAIL_ROUTE_PATTERN = createArtDetailRoute('[id]' as DetailRouteId);
-const createArtistDetailRoute = (id: DetailRouteId) => `/artists/${id}`;
-const ARTIST_DETAIL_ROUTE_PATTERN = createArtistDetailRoute(
-  '[id]' as DetailRouteId
-);
-
-const createLocationDetailRoute = (id: DetailRouteId) => `/locations/${id}`;
-const LOCATION_DETAIL_ROUTE_PATTERN = createLocationDetailRoute(
-  '[id]' as DetailRouteId
-);
+// const createArtistDetailRoute = (id: DetailRouteId) => `/artists/${id}`;
+// const createLocationDetailRoute = (id: DetailRouteId) => `/locations/${id}`;
 
 interface CreateSpotifyOauthRouteArgs {
   redirect_uri: string;
@@ -55,10 +47,3 @@ export const LOCATION_LIST_ROUTE = '/api/locations';
 export const AUTH_ROUTE = '/api/authorize';
 export const AUTH_ME_ROUTE = '/api/authorize/me';
 export const NOW_PLAYING_ROUTE = '/api/listening-to';
-
-export const AUTH_ROUTE_PATTERNS = [
-  ART_ADD_ROUTE,
-  ART_DETAIL_ROUTE_PATTERN,
-  ARTIST_DETAIL_ROUTE_PATTERN,
-  LOCATION_DETAIL_ROUTE_PATTERN,
-];

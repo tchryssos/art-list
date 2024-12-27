@@ -10,8 +10,11 @@ import { ArtForm } from '~/components/form/ArtForm';
 import { LoadingSpinner } from '~/components/LoadingSpinner';
 import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
-import { AUTH_PROPS_KEY } from '~/constants/auth';
-import { createArtApiRoute, HOME_ROUTE } from '~/constants/routing';
+import {
+  createArtApiRoute,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+} from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
@@ -132,6 +135,17 @@ export const getServerSideProps: GetServerSideProps<ArtDetailProps> = async ({
 }) => {
   const { id } = params || {};
 
+  const isAuthorized = isCookieAuthorized(req);
+
+  if (!isAuthorized) {
+    return {
+      redirect: {
+        destination: LOGIN_ROUTE,
+        permanent: false,
+      },
+    };
+  }
+
   try {
     const art = (await prisma.art.findUnique({
       where: {
@@ -155,7 +169,6 @@ export const getServerSideProps: GetServerSideProps<ArtDetailProps> = async ({
     return {
       props: {
         art,
-        [AUTH_PROPS_KEY]: isCookieAuthorized(req),
       },
     };
   } catch (e) {

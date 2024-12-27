@@ -14,7 +14,7 @@ import { Link } from './Link';
 import { Body } from './typography/Body';
 
 export function Unauthorized() {
-  const { setIsAuthorized } = useContext(AuthContext);
+  const { setIsAuthorized, isAuthorized } = useContext(AuthContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const { push } = useRouter();
@@ -37,30 +37,36 @@ export function Unauthorized() {
       setError('Invalid username or password. Please try again.');
     }
   };
-  return (
-    <Form onSubmit={onSubmit}>
-      <Input<AuthData>
-        error={error}
-        label="Username"
-        name="username"
-        required
-        type="text"
-      />
-      <Input<AuthData>
-        error={error}
-        label="Password"
-        name="password"
-        required
-        type="password"
-      />
-      <div className="grid gap-4 grid-cols-2">
-        <SubmitButton isSubmitting={isSubmitting} label="Log In" />
-        <Link href={HOME_ROUTE}>
-          <Button buttonLike className="h-full border" transparent>
-            <Body>Back to List</Body>
-          </Button>
-        </Link>
-      </div>
-    </Form>
-  );
+  // Auth starts as null until determined
+  // We don't want this to flash while we're figuring out if you're authed
+  if (isAuthorized === false) {
+    return (
+      <Form onSubmit={onSubmit}>
+        <Input<AuthData>
+          error={error}
+          label="Username"
+          name="username"
+          required
+          type="text"
+        />
+        <Input<AuthData>
+          error={error}
+          label="Password"
+          name="password"
+          required
+          type="password"
+        />
+        <div className="grid gap-4 grid-cols-2">
+          <SubmitButton isSubmitting={isSubmitting} label="Log In" />
+          <Link href={HOME_ROUTE}>
+            <Button buttonLike className="h-full border" transparent>
+              <Body>Back to List</Body>
+            </Button>
+          </Link>
+        </div>
+      </Form>
+    );
+  }
+
+  return null;
 }
