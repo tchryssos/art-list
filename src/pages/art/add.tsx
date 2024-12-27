@@ -105,7 +105,6 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
 
   useEffect(() => {
     if (submitSuccessful === null) {
-      console.log('refetching');
       refetchQuery();
     }
   }, [submitSuccessful, refetchQuery]);

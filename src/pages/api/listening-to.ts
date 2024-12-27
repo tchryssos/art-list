@@ -3,7 +3,9 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { getSpotifyRedirectUri } from '~/constants/routing';
 import { SpotifyNowPlayingResp } from '~/typings/spotify';
 
-export const NOW_PLAYING_TOKEN_QUERY = 'token';
+export const NOW_PLAYING_AUTH_CODE_QUERY = 'auth_code';
+export const NOW_PLAYING_ACCESS_TOKEN_QUERY = 'access_token';
+export const NOW_PLAYING_REFRESH_TOKEN_QUERY = 'refresh_token';
 
 const spotifyOrigin = 'https://api.spotify.com/v1';
 
@@ -19,10 +21,10 @@ interface SpotifyAccessTokenBody {
 
 interface SpotifyAccessTokenResp {
   access_token: string;
-  token_type: 'Bearer';
-  expires_in: 3600;
+  token_type?: 'Bearer';
+  expires_in?: 3600;
   refresh_token: string;
-  scope: 'user-read-currently-playing';
+  scope?: 'user-read-currently-playing';
 }
 
 export interface ListeningToResp {
@@ -30,7 +32,7 @@ export interface ListeningToResp {
   nowPlaying: SpotifyNowPlayingResp;
 }
 
-const fetchSpotifyToken = async (code: string, origin: string) => {
+const fetchSpotifyAccessToken = async (code: string, origin: string) => {
   const body = {
     grant_type: 'authorization_code',
     code,
@@ -49,7 +51,7 @@ const fetchSpotifyToken = async (code: string, origin: string) => {
 
 // eslint-disable-next-line consistent-return
 const getToken = async (req: NextApiRequest, res: NextApiResponse) => {
-  const code = req.query[NOW_PLAYING_TOKEN_QUERY];
+  const code = req.query[NOW_PLAYING_AUTH_CODE_QUERY];
   if (!code) {
     res.status(400).json({ error: 'No code provided' });
     res.end();
@@ -61,7 +63,7 @@ const getToken = async (req: NextApiRequest, res: NextApiResponse) => {
     res.end();
   }
 
-  const tokenResp = await fetchSpotifyToken(
+  const tokenResp = await fetchSpotifyAccessToken(
     code as string,
     new URL(rawOrigin!).origin
   );
@@ -85,34 +87,52 @@ const getToken = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const getHandler: NextApiHandler = async (req, res) => {
-  try {
-    const spotifyAccessTokenResp = await getToken(req, res);
-    if (!spotifyAccessTokenResp) {
-      // In general, we shouldn't reach this if, because the `res` object
-      // is .end()'ed in getToken() if there's an error
-      res.status(500).json({ error: 'Failed to fetch token' });
-      res.end();
-    } else {
-      const resp = await fetch(spotifyNowPlayingUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${spotifyAccessTokenResp.access_token}`,
-        },
-      });
+  const { query } = req;
+  let spotifyAccessToken = query[NOW_PLAYING_ACCESS_TOKEN_QUERY] as
+    | string
+    | undefined;
+  let accessTokenResp: SpotifyAccessTokenResp = {
+    access_token: spotifyAccessToken || '',
+    refresh_token:
+      (query[NOW_PLAYING_REFRESH_TOKEN_QUERY] as string | undefined) || '',
+  };
 
-      if (resp.ok) {
-        if (resp.status === 204) {
-          res.status(204).end();
-        } else {
-          const data: SpotifyNowPlayingResp = await resp.json();
-          res.status(200).json({
-            access: spotifyAccessTokenResp,
-            nowPlaying: data,
-          });
-        }
+  try {
+    if (!spotifyAccessToken) {
+      const spotifyAccessTokenResp = await getToken(req, res);
+      if (!spotifyAccessTokenResp) {
+        // In general, we shouldn't reach this if, because the `res` object
+        // is .end()'ed in getToken() if there's an error
+        res.status(500).json({ error: 'Failed to fetch token' });
+        res.end();
       } else {
-        res.status(resp.status).json({ error: 'Failed to fetch now playing' });
+        spotifyAccessToken = spotifyAccessTokenResp.access_token;
+        accessTokenResp = spotifyAccessTokenResp;
       }
+    }
+
+    const resp = await fetch(spotifyNowPlayingUrl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${spotifyAccessToken}`,
+      },
+    });
+
+    if (resp.ok) {
+      if (resp.status === 204) {
+        res.status(204).end();
+      } else {
+        const data: SpotifyNowPlayingResp = await resp.json();
+        res.status(200).json({
+          access: accessTokenResp,
+          nowPlaying: data,
+        });
+      }
+    } else {
+      const whyNotOk = await resp.text();
+      res
+        .status(resp.status)
+        .json({ error: `Failed to fetch now playing: ${whyNotOk}` });
     }
   } catch (e) {
     console.error(e);

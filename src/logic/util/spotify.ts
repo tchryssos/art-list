@@ -13,10 +13,11 @@ import {
 } from '~/constants/routing';
 import {
   ListeningToResp,
-  NOW_PLAYING_TOKEN_QUERY,
+  NOW_PLAYING_ACCESS_TOKEN_QUERY,
+  NOW_PLAYING_AUTH_CODE_QUERY,
+  NOW_PLAYING_REFRESH_TOKEN_QUERY,
 } from '~/pages/api/listening-to';
 import { ArtSubmitData } from '~/typings/art';
-import { SpotifyNowPlayingResp } from '~/typings/spotify';
 
 import { AuthContext } from '../contexts/authContext';
 import { getUnsafeRandomString } from './getUnsafeRandomString';
@@ -34,7 +35,7 @@ export const useSpotify = (spotifyId: string) => {
   /**
    * Okay, since this is confusing:
    * - `code` is the code returned from Spotify's OAuth flow verifying my user, also known as an "Authorization Code" in their docs
-   * - `spotifyAuthorizationCode` is ALSO that code, but just saved to state rather than the url bar
+   * - `spotifyAuthorizationCode` is ALSO that code, but just saved to a context rather than the url bar
    * - `access` is an object containing the "Access Token" we get back from Spotify (by providing the Authorization Code), as well as a refresh token and some meta data about that "Access Token"
    */
   const { code, error: paramError, state } = query as Partial<SpotifyParams>;
@@ -82,11 +83,22 @@ export const useSpotify = (spotifyId: string) => {
     refetch,
     isRefetching,
   } = useQuery<ListeningToResp | null>({
-    queryKey: [nowPlayingKey, spotifyAuthorizationCode],
+    queryKey: [
+      nowPlayingKey,
+      spotifyAuthorizationCode,
+      access?.access_token,
+      access?.refresh_token,
+    ],
     queryFn: async () => {
-      console.log('running query');
+      const accessQuery = access?.access_token
+        ? `&${NOW_PLAYING_ACCESS_TOKEN_QUERY}=${access.access_token}`
+        : '';
+      const refreshQuery = access?.refresh_token
+        ? `&${NOW_PLAYING_REFRESH_TOKEN_QUERY}=${access.refresh_token}`
+        : '';
+
       const resp = await fetch(
-        `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_TOKEN_QUERY}=${spotifyAuthorizationCode}`,
+        `${NOW_PLAYING_ROUTE}?${NOW_PLAYING_AUTH_CODE_QUERY}=${spotifyAuthorizationCode}${accessQuery}${refreshQuery}`,
         {
           method: 'GET',
         }
@@ -104,7 +116,6 @@ export const useSpotify = (spotifyId: string) => {
   });
 
   useEffect(() => {
-    console.log(data);
     if (data === null || data?.nowPlaying === null) {
       setNowPlaying(null);
     } else if (data?.nowPlaying) {
