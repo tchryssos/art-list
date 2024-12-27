@@ -1,4 +1,5 @@
 import { ListeningTo } from '@prisma/client';
+import clsx from 'clsx';
 
 interface ListeningToCardProps {
   listeningTo?: Pick<
@@ -6,11 +7,13 @@ interface ListeningToCardProps {
     'imageUrl' | 'trackName' | 'artistName' | 'albumName'
   >;
   size?: 'sm' | 'md';
+  className?: string;
 }
 
 export function ListeningToCard({
   listeningTo,
   size = 'md',
+  className,
 }: ListeningToCardProps) {
   if (!listeningTo) {
     return null;
@@ -18,9 +21,9 @@ export function ListeningToCard({
 
   const { imageUrl, trackName, artistName, albumName } = listeningTo;
 
-  const dimension = size === 'sm' ? 60 : 100;
+  const dimension = size === 'sm' ? 64 : 100;
   return (
-    <div className="flex gap-4 mt-4 items-center">
+    <div className={clsx('flex gap-4 items-center', className)}>
       {imageUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img

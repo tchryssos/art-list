@@ -118,7 +118,10 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
           }}
         />
         {useListeningTo && (
-          <ListeningToCard listeningTo={defaultValues?.listeningTo} />
+          <ListeningToCard
+            className="mt-4"
+            listeningTo={defaultValues?.listeningTo}
+          />
         )}
       </div>
       <Input<ArtSubmitData>

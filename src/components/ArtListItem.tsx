@@ -82,10 +82,10 @@ export function ArtListItem({ art }: ArtListItemProps) {
         <Body className="text-xs leading-2 font-medium">
           {locationName || 'Unknown'}
         </Body>
-        <ListeningToCard listeningTo={ListeningTo} size="sm" />
         <Body className="text-xs leading-2 font-medium">
           {formatDate(dateSeen) || 'Unknown'}
         </Body>
+        <ListeningToCard listeningTo={ListeningTo} size="sm" />
       </div>
     </ListItemWrapper>
   );
