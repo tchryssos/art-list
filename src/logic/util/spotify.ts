@@ -50,8 +50,10 @@ export const useSpotify = (spotifyId: string) => {
   const stateMatches =
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
 
+  // If we haven't already stored the auth code, and we don't have a code nor an error
+  // in the url, start the Spotify OAuth flow
   useEffect(() => {
-    if (spotifyAuthorizationCode === undefined && !(code || error)) {
+    if (spotifyAuthorizationCode === undefined && !(code || paramError)) {
       const freshState = getUnsafeRandomString(16);
       localStorage.setItem(SPOTIFY_CODE_STATE_KEY, freshState);
       const redirect = createSpotifyOauthRoute({
@@ -61,9 +63,13 @@ export const useSpotify = (spotifyId: string) => {
       });
       push(redirect);
     }
-  }, [spotifyAuthorizationCode, push, code, error, spotifyId]);
+  }, [spotifyAuthorizationCode, push, code, paramError, spotifyId]);
 
   useEffect(() => {
+    // If we have a legitimate code or error in the url (validated by state),
+    // set the code/error in state and remove the crazy params from the url bar just so
+    // it looks nice
+    // (TBH we might want to keep the code in the url bar for debugging purposes)
     if (stateMatches) {
       if (paramError) {
         setError(paramError);
@@ -116,6 +122,8 @@ export const useSpotify = (spotifyId: string) => {
   });
 
   useEffect(() => {
+    // If we don't have any now playing data, set it to null
+    // so that we know we TRIED but either got nothing or failed
     if (data === null || data?.nowPlaying === null) {
       setNowPlaying(null);
     } else if (data?.nowPlaying) {
@@ -156,6 +164,6 @@ export const useSpotify = (spotifyId: string) => {
     error,
     clearError: () => setError(null),
     refetchQuery: refetch,
-    isLoading: isLoading || isRefetching,
+    nowPlayingLoading: isLoading || isRefetching,
   };
 };

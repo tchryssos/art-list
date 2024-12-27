@@ -1,6 +1,6 @@
 import { padStart } from 'lodash';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -43,32 +43,32 @@ function ConditionalArtForm({
   nowPlayingLoading,
 }: ConditionalArtFormProps) {
   const onSubmit = async (e: FormEvent) => {
-    // try {
-    //   const formData = new FormData(e.target as HTMLFormElement);
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
 
-    //   const includeListeningTo = formData.get('listeningTo') !== null;
+      const includeListeningTo = formData.get('listeningTo') !== null;
 
-    //   const resp = await fetch(ART_CREATE_ROUTE, {
-    //     method: 'POST',
-    //     body: formDataToJson(
-    //       formData,
-    //       includeListeningTo && nowPlaying
-    //         ? {
-    //             listeningTo: nowPlaying,
-    //           }
-    //         : undefined
-    //     ),
-    //   });
+      const resp = await fetch(ART_CREATE_ROUTE, {
+        method: 'POST',
+        body: formDataToJson(
+          formData,
+          includeListeningTo && nowPlaying
+            ? {
+                listeningTo: nowPlaying,
+              }
+            : undefined
+        ),
+      });
 
-    //   if (resp.status === 200) {
-    //     setSubmitSuccessful(true);
-    //   } else {
-    //     setSubmitSuccessful(false);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   setSubmitSuccessful(false);
-    // }
+      if (resp.status === 200) {
+        setSubmitSuccessful(true);
+      } else {
+        setSubmitSuccessful(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setSubmitSuccessful(false);
+    }
     setSubmitSuccessful(true);
   };
 
@@ -100,7 +100,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     error,
     clearError,
     refetchQuery,
-    isLoading,
+    nowPlayingLoading,
   } = useSpotify(spotifyId || '');
 
   useEffect(() => {
@@ -136,7 +136,7 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
               spotifyAuthorizationCode === undefined || nowPlaying === undefined
             }
             nowPlaying={error ? null : nowPlaying}
-            nowPlayingLoading={isLoading}
+            nowPlayingLoading={nowPlayingLoading}
             setSubmitSuccessful={setSubmitSuccessful}
           />
         </>
