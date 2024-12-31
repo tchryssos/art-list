@@ -4,10 +4,12 @@ description: 'Setup a NodeJS environment and restore cache if any, given a node 
 runs:
   using: 'composite'
   steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version-file: .nvmrc
+        node-version-file: '.nvmrc'
 
     - uses: actions/cache@v3
       with:
@@ -15,6 +17,8 @@ runs:
           **/node_modules
         key: v1-pnpm-${{ runner.os }}-${{ hashFiles('.nvmrc') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-    - name: Install Dependencies If Not Cached
-      run: \[ -d node_modules \] || pnpm setup
-      shell: bash
+    - name: Setup apps
+      run: \[ -d node_modules \] || pnpm run setup
+      shell: 'bash'
+      env:
+        CI: true
