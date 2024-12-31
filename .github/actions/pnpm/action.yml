@@ -1,0 +1,24 @@
+name: 'Restore pnpm Cache'
+description: 'Setup a NodeJS environment and restore cache if any, given a node version'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+        key: v1-pnpm-${{ runner.os }}-${{ hashFiles('.nvmrc') }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+    - name: Setup apps
+      run: \[ -d node_modules \] || pnpm run setup
+      shell: 'bash'
+      env:
+        CI: true

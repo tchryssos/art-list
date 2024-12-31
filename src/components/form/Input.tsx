@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge';
 
 import { Body } from '../typography/Body';
 import { AutoComplete } from './AutoComplete';
+import { Label } from './Label';
 
 type InputProps<T extends Record<string, unknown>> = {
   name: Extract<keyof T, string>;
@@ -59,9 +60,7 @@ export function Input<T extends Record<string, unknown>>(
 
   return (
     <div className={twMerge('flex flex-col w-full', className)}>
-      <label className="text-xs font-semibold" htmlFor={name}>
-        {label}
-      </label>
+      <Label label={label} name={name} />
       <input
         aria-activedescendant={activeDescendant}
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}

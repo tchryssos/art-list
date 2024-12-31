@@ -9,6 +9,7 @@ import { CompleteArt } from '~/typings/art';
 
 import { ArtImg } from './ArtImg';
 import { Link } from './Link';
+import { ListeningToCard } from './ListeningToCard';
 import { Body } from './typography/Body';
 
 interface ArtListItemProps {
@@ -43,6 +44,7 @@ export function ArtListItem({ art }: ArtListItemProps) {
     Location: { name: locationName },
     imgSrc,
     artistId,
+    ListeningTo,
   } = art;
 
   const { isAuthorized } = useContext(AuthContext);
@@ -78,11 +80,12 @@ export function ArtListItem({ art }: ArtListItemProps) {
         <Body>{artistName}</Body>
 
         <Body className="text-xs leading-2 font-medium">
-          {locationName || '???'}
+          {locationName || 'Unknown'}
         </Body>
         <Body className="text-xs leading-2 font-medium">
-          {formatDate(dateSeen) || '???'}
+          {formatDate(dateSeen) || 'Unknown'}
         </Body>
+        <ListeningToCard listeningTo={ListeningTo} size="sm" />
       </div>
     </ListItemWrapper>
   );

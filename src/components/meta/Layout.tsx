@@ -2,21 +2,15 @@ import { mdiHomeOutline, mdiImageSearchOutline, mdiPlus } from '@mdi/js';
 import Icon from '@mdi/react';
 import clsx from 'clsx';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
-import {
-  ART_ADD_ROUTE,
-  AUTH_ROUTE_PATTERNS,
-  HOME_ROUTE,
-} from '~/constants/routing';
+import { ART_ADD_ROUTE, HOME_ROUTE } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 
 import { Button } from '../buttons/Button';
 import { Link } from '../Link';
 import { Body } from '../typography/Body';
 import { Title } from '../typography/Title';
-import { Unauthorized } from '../Unauthorized';
 
 type NavVariant = 'art' | 'list';
 
@@ -79,13 +73,7 @@ function HomeLink() {
 }
 
 export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
-  const { pathname } = useRouter();
-
   const { isAuthorized } = useContext(AuthContext);
-
-  const unauthorizedPage = AUTH_ROUTE_PATTERNS.some(
-    (p) => pathname === p && !isAuthorized
-  );
 
   const boundingClassName = 'max-w-breakpoint-lg xl:max-w-breakpoint-xl';
 
@@ -111,15 +99,9 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
             'flex flex-col w-full h-full relative'
           )}
         >
-          {unauthorizedPage ? (
-            <Unauthorized />
-          ) : (
-            <>
-              {pageTitle && <Title className="mb-4">{pageTitle}</Title>}
-              {children}
-              <Nav isAuthorized={isAuthorized} nav={nav} />
-            </>
-          )}
+          {pageTitle && <Title className="mb-4">{pageTitle}</Title>}
+          {children}
+          <Nav isAuthorized={isAuthorized} nav={nav} />
         </div>
       </div>
     </>

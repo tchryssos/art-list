@@ -1,6 +1,6 @@
 import { padStart } from 'lodash';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -10,22 +10,54 @@ import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
+import { useSpotify } from '~/logic/util/spotify';
+import { ArtSubmitData } from '~/typings/art';
 
 interface AddArtPageProps {
   lastLocation: string;
+  spotifyId: string | null;
 }
 
-function AddArtPage({ lastLocation }: AddArtPageProps) {
-  const [submitSuccessful, setSubmitSuccessful] = useState<boolean | null>(
-    null
-  );
+interface ConditionalArtFormProps {
+  loading: boolean;
+  nowPlayingLoading: boolean;
+  lastLocation: string;
+  nowPlaying: ArtSubmitData['listeningTo'] | null;
+  setSubmitSuccessful: (success: boolean) => void;
+}
 
+const getTodayDefaultValue = () => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = padStart(String(d.getMonth() + 1), 2, '0');
+  const day = padStart(String(d.getDate()), 2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+function ConditionalArtForm({
+  loading,
+  lastLocation,
+  nowPlaying,
+  setSubmitSuccessful,
+  nowPlayingLoading,
+}: ConditionalArtFormProps) {
   const onSubmit = async (e: FormEvent) => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
+
+      const includeListeningTo = formData.get('listeningTo') !== null;
+
       const resp = await fetch(ART_CREATE_ROUTE, {
         method: 'POST',
-        body: formDataToJson(formData),
+        body: formDataToJson(
+          formData,
+          includeListeningTo && nowPlaying
+            ? {
+                listeningTo: nowPlaying,
+              }
+            : undefined
+        ),
       });
 
       if (resp.status === 200) {
@@ -37,16 +69,51 @@ function AddArtPage({ lastLocation }: AddArtPageProps) {
       console.error(error);
       setSubmitSuccessful(false);
     }
+    setSubmitSuccessful(true);
   };
 
-  const getTodayDefaultValue = () => {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = padStart(String(d.getMonth() + 1), 2, '0');
-    const day = padStart(String(d.getDate()), 2, '0');
+  if (loading) {
+    return null;
+  }
 
-    return `${year}-${month}-${day}`;
-  };
+  return (
+    <ArtForm
+      defaultValues={{
+        dateSeen: getTodayDefaultValue(),
+        location: lastLocation,
+        listeningTo: nowPlaying || undefined,
+      }}
+      listeningToLoading={nowPlayingLoading}
+      onSubmit={onSubmit}
+    />
+  );
+}
+
+function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
+  const [submitSuccessful, setSubmitSuccessful] = useState<
+    boolean | null | undefined
+  >(undefined);
+
+  const {
+    spotifyAuthorizationCode,
+    nowPlaying,
+    error,
+    clearError,
+    refetchQuery,
+    nowPlayingLoading,
+  } = useSpotify(spotifyId || '');
+
+  useEffect(() => {
+    if (submitSuccessful === null) {
+      refetchQuery();
+    }
+  }, [submitSuccessful, refetchQuery]);
+
+  useEffect(() => {
+    if (error && submitSuccessful !== null) {
+      clearError();
+    }
+  }, [submitSuccessful, error, clearError]);
 
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
@@ -61,13 +128,18 @@ function AddArtPage({ lastLocation }: AddArtPageProps) {
           </Button>
         </>
       ) : (
-        <ArtForm
-          defaultValues={{
-            dateSeen: getTodayDefaultValue(),
-            location: lastLocation,
-          }}
-          onSubmit={onSubmit}
-        />
+        <>
+          {error && <span className="text-danger text-sm">{error}</span>}
+          <ConditionalArtForm
+            lastLocation={lastLocation}
+            loading={
+              spotifyAuthorizationCode === undefined || nowPlaying === undefined
+            }
+            nowPlaying={error ? null : nowPlaying}
+            nowPlayingLoading={nowPlayingLoading}
+            setSubmitSuccessful={setSubmitSuccessful}
+          />
+        </>
       )}
     </Layout>
   );
@@ -116,6 +188,7 @@ export const getServerSideProps: GetServerSideProps<AddArtPageProps> = async ({
   return {
     props: {
       lastLocation,
+      spotifyId: process.env.SPOTIFY_CLIENT_ID || null,
     },
   };
 };

@@ -8,16 +8,19 @@ datasource db {
 }
 
 model Art {
-  id             String    @id @default(cuid())
-  createdOn      DateTime  @db.Timestamp(6)
-  lastModifiedOn DateTime  @db.Timestamp(6)
+  id             String       @id @default(cuid())
+  createdOn      DateTime     @db.Timestamp(6)
+  lastModifiedOn DateTime     @db.Timestamp(6)
   name           String
-  dateSeen       DateTime  @db.Date
+  dateSeen       DateTime     @db.Date
   locationId     String?
   artistId       String?
   imgSrc         String?
-  Artist         Artist?   @relation(fields: [artistId], references: [id])
-  Location       Location? @relation(fields: [locationId], references: [id])
+  listeningToUrl String?
+  Artist         Artist?      @relation(fields: [artistId], references: [id])
+  Location       Location?    @relation(fields: [locationId], references: [id])
+  ListeningTo    ListeningTo? @relation(fields: [listeningToId], references: [id])
+  listeningToId  String?
 }
 
 model Location {
@@ -35,4 +38,18 @@ model Artist {
   createdOn      DateTime @db.Timestamp(6)
   lastModifiedOn DateTime @db.Timestamp(6)
   art            Art[]
+}
+
+model ListeningTo {
+  id               String   @id @default(cuid())
+  createdOn        DateTime @db.Timestamp(6)
+  artistName       String
+  albumName        String
+  trackName        String
+  imageUrl         String
+  externalUrl      String
+  externalId       String
+  externalProvider String
+  duration         Int
+  art              Art[]
 }

@@ -3,6 +3,7 @@ import { NextApiHandler } from 'next';
 
 import { artistFindOrCreate } from '~/logic/api/artists';
 import { isCookieAuthorized } from '~/logic/api/auth';
+import { listeningToFindOrCreate } from '~/logic/api/listeningTo';
 import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
 import { ArtSubmitData } from '~/typings/art';
@@ -16,6 +17,7 @@ const createArt: NextApiHandler = async (req, res) => {
 
       const artist = await artistFindOrCreate(body.artist);
       const location = await locationFindOrCreate(body.location);
+      const listeningTo = await listeningToFindOrCreate(body.listeningTo);
 
       const newArt = await prisma.art.create({
         data: {
@@ -26,6 +28,7 @@ const createArt: NextApiHandler = async (req, res) => {
           createdOn: now,
           lastModifiedOn: now,
           imgSrc: body.imgSrc || '',
+          listeningToId: listeningTo?.id || undefined,
         },
       });
 

@@ -1,22 +1,35 @@
 import { Artist, Location } from '@prisma/client';
+import clsx from 'clsx';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
 import { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
+import { ListeningToCard } from '../ListeningToCard';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { Form } from './Form';
 import { Input } from './Input';
+import { Label } from './Label';
 
 interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
+  listeningToLoading?: boolean;
   onSubmit: (e: FormEvent) => Promise<void> | void;
   readOnly?: boolean;
 }
-export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
+export function ArtForm({
+  onSubmit,
+  defaultValues,
+  readOnly,
+  listeningToLoading,
+}: ArtFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
+  const [useListeningTo, setUseListeningTo] = useState(
+    Boolean(defaultValues?.listeningTo)
+  );
   const [activeAutoComplete, setActiveAutoComplete] = useState<
     keyof ArtSubmitData | null
   >(null);
@@ -57,6 +70,8 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
     }
     setIsSubmitting(false);
   };
+
+  const disableListeningTo = !defaultValues?.listeningTo || listeningToLoading;
 
   return (
     <Form formRef={formRef} onSubmit={_onSubmit}>
@@ -100,6 +115,31 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         type="date"
         onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
+      <div className="flex flex-col items-start">
+        <div className="flex gap-2 items-center">
+          <Label label={'Use "Now Playing"?'} name="listeningTo" />
+          {listeningToLoading && <LoadingSpinner size={0.5} />}
+        </div>
+        <input
+          checked={useListeningTo}
+          className={clsx(
+            'w-6 h-6',
+            disableListeningTo && 'cursor-not-allowed'
+          )}
+          disabled={disableListeningTo}
+          name="listeningTo"
+          type="checkbox"
+          onChange={() => {
+            setUseListeningTo(!useListeningTo);
+          }}
+        />
+        {useListeningTo && (
+          <ListeningToCard
+            className="mt-4"
+            listeningTo={defaultValues?.listeningTo}
+          />
+        )}
+      </div>
       <Input<ArtSubmitData>
         defaultValue={defaultValues?.imgSrc}
         label="Image Url"
