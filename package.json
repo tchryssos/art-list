@@ -10,7 +10,7 @@
   "scripts": {
     "------- setup -------": "",
     "prepare": "husky install",
-    "setup": "chmod -R +x ./scripts/ && pnpm run install && pnpm run prepare",
+    "setup": "chmod -R +x ./scripts/ && pnpm install && pnpm run prepare",
     "preinstall": "npx only-allow pnpm",
     "------- builds -------": "",
     "dev": "next dev",
