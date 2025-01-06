@@ -73,8 +73,8 @@ importers:
         specifier: ^5.62.9
         version: 5.62.9(eslint@8.57.0)(typescript@5.4.2)
       '@tsconfig/recommended':
-        specifier: ^1.0.3
-        version: 1.0.3
+        specifier: ^1.0.8
+        version: 1.0.8
       '@types/cookie':
         specifier: ^0.6.0
         version: 0.6.0
@@ -608,8 +608,8 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tsconfig/recommended@1.0.3':
-    resolution: {integrity: sha512-+jby/Guq9H8O7NWgCv6X8VAiQE8Dr/nccsCtL74xyHKhu2Knu5EAKmOZj3nLCnLm1KooUzKY+5DsnGVqhM8/wQ==}
+  '@tsconfig/recommended@1.0.8':
+    resolution: {integrity: sha512-TotjFaaXveVUdsrXCdalyF6E5RyG6+7hHHQVZonQtdlk1rJZ1myDIvPUUKPhoYv+JAzThb2lQJh9+9ZfF46hsA==}
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -3453,7 +3453,7 @@ snapshots:
       '@tanstack/query-core': 5.62.9
       react: 18.2.0
 
-  '@tsconfig/recommended@1.0.3': {}
+  '@tsconfig/recommended@1.0.8': {}
 
   '@types/cookie@0.6.0': {}
 
