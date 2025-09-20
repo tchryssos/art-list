@@ -1,10 +1,13 @@
-/* eslint-disable camelcase */
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { ListeningToProviders } from '~/constants/listeningTo';
-import { SPOTIFY_CODE_STATE_KEY } from '~/constants/localStorage';
+import {
+  SPOTIFY_CODE_STATE_KEY,
+  USE_NOW_PLAYING_PREFERENCE_KEY,
+} from '~/constants/localStorage';
 import {
   ART_ADD_ROUTE,
   createSpotifyOauthRoute,
@@ -19,8 +22,8 @@ import {
 } from '~/pages/api/listening-to';
 import type { ArtSubmitData } from '~/typings/art';
 
-import { AuthContext } from '../contexts/authContext';
-import { getUnsafeRandomString } from './getUnsafeRandomString';
+import { getUnsafeRandomString } from '../util/getUnsafeRandomString';
+import { AuthContext } from './authContext';
 
 interface SpotifyParams {
   code?: string;
@@ -28,16 +31,55 @@ interface SpotifyParams {
   state: string;
 }
 
+interface NowPlayingContextType {
+  // Preference
+  enabled: boolean;
+  setEnabled: (value: boolean) => void;
+
+  // Data
+  nowPlaying: ArtSubmitData['listeningTo'] | null | undefined;
+  loading: boolean;
+  error: string | null;
+
+  // Actions
+  clearError: () => void;
+  refetch: () => void;
+}
+
+const NowPlayingContext = createContext<NowPlayingContextType>({
+  enabled: false,
+  setEnabled: () => null,
+  nowPlaying: undefined,
+  loading: false,
+  error: null,
+  clearError: () => null,
+  refetch: () => null,
+});
+
+interface NowPlayingProviderProps {
+  spotifyId: string;
+}
+
 const nowPlayingKey = 'now-playing-query';
 
-export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
+export function NowPlayingProvider({
+  children,
+  spotifyId,
+}: PropsWithChildren<NowPlayingProviderProps>) {
   const { push, query } = useRouter();
-  /**
-   * Okay, since this is confusing:
-   * - `code` is the code returned from Spotify's OAuth flow verifying my user, also known as an "Authorization Code" in their docs
-   * - `spotifyAuthorizationCode` is ALSO that code, but just saved to a context rather than the url bar
-   * - `access` is an object containing the "Access Token" we get back from Spotify (by providing the Authorization Code), as well as a refresh token and some meta data about that "Access Token"
-   */
+
+  // Preference state with localStorage persistence
+  const [enabled, setEnabledState] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem(USE_NOW_PLAYING_PREFERENCE_KEY) === 'true';
+  });
+
+  const setEnabled = (value: boolean) => {
+    setEnabledState(value);
+    localStorage.setItem(USE_NOW_PLAYING_PREFERENCE_KEY, String(value));
+  };
+
+  // Spotify OAuth state
   const { code, error: paramError, state } = query as Partial<SpotifyParams>;
   const [access, setAccess] = useState<ListeningToResp['access'] | null>(null);
   const { spotifyAuthorizationCode, setSpotifyAuthorizationCode } =
@@ -50,8 +92,7 @@ export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
   const stateMatches =
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
 
-  // If we haven't already stored the auth code, and we don't have a code nor an error
-  // in the url, start the Spotify OAuth flow (only if enabled)
+  // OAuth flow initiation
   useEffect(() => {
     if (
       enabled &&
@@ -70,24 +111,23 @@ export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
     }
   }, [enabled, spotifyAuthorizationCode, push, code, paramError, spotifyId]);
 
+  // Handle OAuth callback
   useEffect(() => {
-    // If we have a legitimate code or error in the url (validated by state),
-    // set the code/error in state and remove the crazy params from the url bar just so
-    // it looks nice
     if (stateMatches && (code || paramError)) {
       if (paramError) {
         setError(paramError);
         setSpotifyAuthorizationCode(null);
-        setNowPlaying(null); // Clear now playing on error
+        setNowPlaying(null);
       } else if (code) {
         setSpotifyAuthorizationCode(code);
-        setError(null); // Clear any previous errors
+        setError(null);
       }
       localStorage.removeItem(SPOTIFY_CODE_STATE_KEY);
       push(ART_ADD_ROUTE, undefined, { shallow: true });
     }
   }, [code, stateMatches, setSpotifyAuthorizationCode, push, paramError]);
 
+  // Fetch now playing data
   const {
     error: queryError,
     data,
@@ -139,7 +179,6 @@ export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
     },
     enabled: enabled && Boolean(spotifyAuthorizationCode) && !error,
     retry: (failureCount, retryError) => {
-      // Don't retry on auth errors
       if (
         retryError.message.includes('Authorization') ||
         retryError.message.includes('expired')
@@ -152,27 +191,31 @@ export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
     gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
   });
 
-  // Process the query data and update local state
+  // Process query data
   useEffect(() => {
     if (data === null) {
-      // No music playing
       setNowPlaying(null);
     } else if (data?.nowPlaying?.item) {
-      const { artists, album, name, id, duration_ms, external_urls } =
-        data.nowPlaying.item;
+      const {
+        artists,
+        album,
+        name,
+        id,
+        duration_ms: duration,
+        external_urls: externalUrls,
+      } = data.nowPlaying.item;
       setNowPlaying({
         artistName: artists.map((a) => a.name).join(', '),
         albumName: album.name,
         trackName: name,
         externalId: id,
-        duration: duration_ms,
+        duration,
         externalProvider: ListeningToProviders.Spotify,
-        externalUrl: external_urls.spotify,
+        externalUrl: externalUrls.spotify,
         imageUrl: album.images[0]?.url || '',
       });
     }
 
-    // Update access token if we got a new one
     if (data?.access) {
       setAccess(data.access);
     }
@@ -187,15 +230,35 @@ export const useSpotify = (spotifyId: string, enabled: boolean = false) => {
     }
   }, [queryError]);
 
-  return {
-    spotifyAuthorizationCode,
-    nowPlaying,
-    error,
-    clearError: () => {
-      setError(null);
-      setNowPlaying(null);
-    },
-    refetchQuery: refetch,
-    nowPlayingLoading: isLoading || isRefetching,
+  const clearError = () => {
+    setError(null);
+    setNowPlaying(null);
   };
+
+  const contextValue = useMemo(
+    () => ({
+      enabled,
+      setEnabled,
+      nowPlaying: error ? null : nowPlaying,
+      loading: isLoading || isRefetching,
+      error,
+      clearError,
+      refetch,
+    }),
+    [enabled, nowPlaying, isLoading, isRefetching, error, refetch]
+  );
+
+  return (
+    <NowPlayingContext.Provider value={contextValue}>
+      {children}
+    </NowPlayingContext.Provider>
+  );
+}
+
+export const useNowPlaying = () => {
+  const context = useContext(NowPlayingContext);
+  if (!context) {
+    throw new Error('useNowPlaying must be used within a NowPlayingProvider');
+  }
+  return context;
 };
