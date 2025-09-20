@@ -59,7 +59,7 @@ function Nav({ nav, isAuthorized }: NavProps) {
 
 function HomeLink() {
   return (
-    <Link className="min-w-12 px-2 py-1 group" href={HOME_ROUTE}>
+    <Link className="min-w-12 py-1 group" href={HOME_ROUTE}>
       <span className="flex items-center gap-1">
         <Body>Art List</Body>
         <Icon
@@ -82,8 +82,8 @@ export function Layout({ children, title, nav, pageTitle }: LayoutProps) {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex flex-1 justify-center px-4 sm:px-8 pt-14 pb-24 sm:pb-14 relative">
-        <div className="absolute top-0 left-0 w-full h-14 z-50 justify-center flex px-2 sm:px-6">
+      <div className="flex flex-col items-center px-4 sm:px-8 pb-24 sm:pb-14 relative">
+        <div className="w-full h-14 z-50 justify-center flex">
           <div
             className={clsx(
               boundingClassName,
