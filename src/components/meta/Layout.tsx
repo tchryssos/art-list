@@ -46,7 +46,7 @@ function Nav({ nav, isAuthorized }: NavProps) {
         <Link href={route}>
           <Button
             buttonLike
-            className="h-16 w-16 p-4 rounded-full shadow-nav-button bg-primary hover:bg-accentHeavy active:bg-accentHeavy opacity-75 border border-solid border-smudge"
+            className="h-16 w-16 p-4 rounded-full shadow-nav-button bg-primary hover:bg-accent-heavy active:bg-accent-heavy opacity-75 border border-solid border-smudge"
           >
             <Icon className="text-background" path={path} />
           </Button>

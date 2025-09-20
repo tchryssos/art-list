@@ -69,7 +69,7 @@ function DeleteButton({ art }: DeleteButtonProps) {
           <LoadingSpinner size={1} />
         </div>
       ) : (
-        <Body className="text-textContrast">
+        <Body className="text-text-contrast">
           {areYouSure ? 'Are You Sure?' : 'Delete'}
         </Body>
       )}

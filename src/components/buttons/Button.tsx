@@ -15,11 +15,11 @@ export function Button({
   id,
 }: BaseButtonProps) {
   const buttonClassName =
-    'text-text cursor-pointer min-h-8 min-w-8 py-1 px-[6] disabled:cursor-not-allowed disabled:bg-accentHeavy disabled:border-none uppercase disabled:filter-[brightness(1.0)] hover:filter-[brightness(0.9)] active:filter-[brightness(0.9)]';
+    'text-text cursor-pointer min-h-8 min-w-8 py-1 px-[6] disabled:cursor-not-allowed disabled:bg-accent-heavy disabled:border-none uppercase disabled:filter-[brightness(1.0)] hover:filter-[brightness(0.9)] active:filter-[brightness(0.9)]';
 
   const buttonClasses = twMerge(
     buttonClassName,
-    transparent ? 'bg-[transparent]' : 'bg-accentLight',
+    transparent ? 'bg-transparent' : 'bg-accent-light',
     !transparent && 'border border-text border-solid',
     className
   );

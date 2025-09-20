@@ -16,7 +16,7 @@ export function SubmitButton({ isSubmitting, label }: SubmitButtonProps) {
     <Button
       className={clsx(
         submitButtonSizeClassName,
-        'border-none hover:bg-accentHeavy active:bg-accentHeavy'
+        'border-none hover:bg-accent-heavy active:bg-accent-heavy'
       )}
       type="submit"
     >

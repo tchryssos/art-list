@@ -66,7 +66,7 @@ export function Input<T extends Record<string, unknown>>(
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}
         className={clsx(
           'p-4 text-base font-light bg-background text-text border border-solid  font-jp w-full',
-          error ? 'border-danger' : 'border-accentHeavy'
+          error ? 'border-danger' : 'border-accent-heavy'
         )}
         name={name}
         readOnly={readOnly}
