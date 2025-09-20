@@ -116,6 +116,7 @@ function ArtDetail({ art }: ArtDetailProps) {
               dateSeen: formatDate(art.dateSeen, 'yyyy-MM-dd'),
               location: art.Location.name,
               imgSrc: art.imgSrc || '',
+              listeningTo: art.ListeningTo,
             }}
             readOnly={!isAuthorized}
             onSubmit={onSubmit}
