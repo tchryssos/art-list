@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { FocusEventHandler, useEffect, useState } from 'react';
+import type { FocusEventHandler } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { Body } from '../typography/Body';

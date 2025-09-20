@@ -1,4 +1,4 @@
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
 import { isOnClient } from '../util/service';
 

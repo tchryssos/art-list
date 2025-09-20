@@ -1,10 +1,5 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
 import { AUTH_ME_ROUTE } from '~/constants/routing';
 

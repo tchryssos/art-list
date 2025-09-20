@@ -1,6 +1,6 @@
 import { mdiLoading } from '@mdi/js';
 import Icon from '@mdi/react';
-import { ComponentProps } from 'react';
+import type { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface LoadingSpinnerProps {

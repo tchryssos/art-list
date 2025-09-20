@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { BaseButtonProps } from './types';
+import type { BaseButtonProps } from './types';
 
 export function Button({
   onClick,

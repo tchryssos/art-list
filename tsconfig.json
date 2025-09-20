@@ -30,7 +30,6 @@
     "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
-    "exactOptionalPropertyTypes": true,
     "assumeChangesOnlyAffectDirectDependencies": true,
     "plugins": [
       {

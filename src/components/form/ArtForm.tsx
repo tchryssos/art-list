@@ -1,9 +1,10 @@
-import { Artist, Location } from '@prisma/client';
+import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
 import { ListeningToCard } from '../ListeningToCard';

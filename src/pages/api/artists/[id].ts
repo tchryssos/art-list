@@ -1,8 +1,8 @@
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
-import { ArtistSubmitData } from '~/typings/artist';
+import type { ArtistSubmitData } from '~/typings/artist';
 
 const getArtist: NextApiHandler = async (req, res) => {
   try {

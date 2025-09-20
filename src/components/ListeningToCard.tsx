@@ -1,4 +1,4 @@
-import { ListeningTo } from '@prisma/client';
+import type { ListeningTo } from '@prisma/client';
 import clsx from 'clsx';
 
 interface ListeningToCardProps {

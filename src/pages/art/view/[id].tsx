@@ -1,8 +1,9 @@
-import { Artist, Location } from '@prisma/client';
+import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useContext, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useContext, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { submitButtonSizeClassName } from '~/components/buttons/SubmitButton';
@@ -20,7 +21,7 @@ import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
-import { CompleteArt } from '~/typings/art';
+import type { CompleteArt } from '~/typings/art';
 
 interface ArtDetailProps {
   art: CompleteArt;

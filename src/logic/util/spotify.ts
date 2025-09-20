@@ -11,13 +11,13 @@ import {
   getSpotifyRedirectUri,
   NOW_PLAYING_ROUTE,
 } from '~/constants/routing';
+import type { ListeningToResp } from '~/pages/api/listening-to';
 import {
-  ListeningToResp,
   NOW_PLAYING_ACCESS_TOKEN_QUERY,
   NOW_PLAYING_AUTH_CODE_QUERY,
   NOW_PLAYING_REFRESH_TOKEN_QUERY,
 } from '~/pages/api/listening-to';
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
 import { AuthContext } from '../contexts/authContext';
 import { getUnsafeRandomString } from './getUnsafeRandomString';
@@ -137,7 +137,7 @@ export const useSpotify = (spotifyId: string) => {
         duration: duration_ms,
         externalProvider: ListeningToProviders.Spotify,
         externalUrl: external_urls.spotify,
-        imageUrl: album.images[0].url,
+        imageUrl: album.images[0]?.url || '',
       });
     }
 

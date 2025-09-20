@@ -1,8 +1,8 @@
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { prisma } from '~/logic/util/prisma';
-import { LocationSubmitData } from '~/typings/location';
+import type { LocationSubmitData } from '~/typings/location';
 
 const getLocation: NextApiHandler = async (req, res) => {
   try {

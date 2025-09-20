@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { ArtListItem } from '~/components/ArtListItem';
@@ -7,8 +7,8 @@ import { Pagination } from '~/components/Pagination';
 import { Body } from '~/components/typography/Body';
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
 import { getArtList, PAGE_SIZE } from '~/logic/api/art';
-import { CompleteArt } from '~/typings/art';
-import { PrismaError } from '~/typings/util';
+import type { CompleteArt } from '~/typings/art';
+import type { PrismaError } from '~/typings/util';
 
 type ArtList = CompleteArt[] | PrismaError | undefined;
 

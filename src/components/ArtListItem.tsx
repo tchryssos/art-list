@@ -5,7 +5,7 @@ import { IS_URL } from '~/constants/regex';
 import { createArtDetailRoute } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
-import { CompleteArt } from '~/typings/art';
+import type { CompleteArt } from '~/typings/art';
 
 import { ArtImg } from './ArtImg';
 import { Link } from './Link';

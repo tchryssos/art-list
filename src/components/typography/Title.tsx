@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { TypographyProps } from './types';
+import type { TypographyProps } from './types';
 
 export function Title({
   children,

@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 
-import { TypographyProps } from './types';
+import type { TypographyProps } from './types';
 
 export function Body({ children, className, bold, italic }: TypographyProps) {
   return (

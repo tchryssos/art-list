@@ -1,6 +1,7 @@
 import { padStart } from 'lodash';
-import { GetServerSideProps } from 'next';
-import { FormEvent, useEffect, useState } from 'react';
+import type { GetServerSideProps } from 'next';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -11,7 +12,7 @@ import { isCookieAuthorized } from '~/logic/api/auth';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
 import { useSpotify } from '~/logic/util/spotify';
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
 interface AddArtPageProps {
   lastLocation: string;
@@ -179,7 +180,7 @@ export const getServerSideProps: GetServerSideProps<AddArtPageProps> = async ({
       },
     });
     if (art.length) {
-      lastLocation = art[0].Location?.name || '';
+      lastLocation = art[0]?.Location?.name || '';
     }
   } catch (e) {
     console.error(e);

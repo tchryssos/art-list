@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import { FormEvent, useContext, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useContext, useState } from 'react';
 
 import { AUTH_ROUTE, HOME_ROUTE } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formDataToJson } from '~/logic/util/forms';
-import { AuthData } from '~/pages/api/authorize';
+import type { AuthData } from '~/pages/api/authorize';
 
 import { Button } from './buttons/Button';
 import { SubmitButton } from './buttons/SubmitButton';

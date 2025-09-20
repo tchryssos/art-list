@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { GetServerSidePropsContext } from 'next';
+import type { GetServerSidePropsContext } from 'next';
 
-import { AUTH_COOKIE_KEY, JwtBody } from '~/constants/auth';
+import type { JwtBody } from '~/constants/auth';
+import { AUTH_COOKIE_KEY } from '~/constants/auth';
 
 export const isCookieAuthorized = (req: GetServerSidePropsContext['req']) => {
   const token = req.cookies?.[AUTH_COOKIE_KEY];

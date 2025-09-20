@@ -1,9 +1,10 @@
 import argon2 from 'argon2';
 import { serialize } from 'cookie';
 import jwt from 'jsonwebtoken';
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
-import { AUTH_COOKIE_KEY, JwtBody } from '~/constants/auth';
+import type { JwtBody } from '~/constants/auth';
+import { AUTH_COOKIE_KEY } from '~/constants/auth';
 import { HOME_ROUTE } from '~/constants/routing';
 
 export type AuthData = {
