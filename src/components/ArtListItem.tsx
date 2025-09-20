@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { decode } from 'html-entities';
 import { useContext } from 'react';
 
 import { IS_URL } from '~/constants/regex';
@@ -64,7 +65,7 @@ export function ArtListItem({ art }: ArtListItemProps) {
       >
         {imgSrc?.match(IS_URL) && (
           <ArtImg
-            alt={`Artwork: ${name} by ${artistName}`}
+            alt={`Artwork: ${decode(name)} by ${decode(artistName)}`}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoAQMAAAC2MCouAAAAA1BMVEXo6Og4/a9sAAAAC0lEQVQI12MYYQAAAPAAAU6V2N8AAAAASUVORK5CYII=
             "
             fill
@@ -76,13 +77,13 @@ export function ArtListItem({ art }: ArtListItemProps) {
             }}
           />
         )}
-        <Body>{name}</Body>
-        <Body>{artistName}</Body>
+        <Body>{decode(name)}</Body>
+        <Body>{decode(artistName)}</Body>
 
-        <Body className="text-xs leading-2 font-medium">
-          {locationName || 'Unknown'}
+        <Body className="text-xs leading-3 font-medium">
+          {decode(locationName || 'Unknown')}
         </Body>
-        <Body className="text-xs leading-2 font-medium">
+        <Body className="text-xs leading-3 font-medium">
           {formatDate(dateSeen) || 'Unknown'}
         </Body>
         <ListeningToCard listeningTo={ListeningTo} size="sm" />

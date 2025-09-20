@@ -1,5 +1,6 @@
 import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
+import { decode } from 'html-entities';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import type { FormEvent } from 'react';
@@ -105,8 +106,8 @@ function ArtDetail({ art }: ArtDetailProps) {
   return (
     <Layout
       nav="art"
-      pageTitle={`Edit "${art?.name || 'Art'}"`}
-      title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
+      pageTitle={`Edit "${decode(art?.name || 'Art')}"`}
+      title={`${decode(art?.name || 'Art')} - ${decode(art?.Artist.name || 'Unknown')}`}
     >
       {art && (
         <>
