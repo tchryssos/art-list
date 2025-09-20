@@ -44,8 +44,8 @@ export const useSpotify = (spotifyId: string) => {
     useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [nowPlaying, setNowPlaying] = useState<
-    ArtSubmitData['listeningTo'] | null
-  >();
+    ArtSubmitData['listeningTo'] | null | undefined
+  >(undefined);
 
   const stateMatches =
     state === globalThis.localStorage?.getItem(SPOTIFY_CODE_STATE_KEY);
@@ -53,13 +53,17 @@ export const useSpotify = (spotifyId: string) => {
   // If we haven't already stored the auth code, and we don't have a code nor an error
   // in the url, start the Spotify OAuth flow
   useEffect(() => {
-    if (spotifyAuthorizationCode === undefined && !(code || paramError)) {
+    if (
+      spotifyAuthorizationCode === undefined &&
+      !(code || paramError) &&
+      spotifyId
+    ) {
       const freshState = getUnsafeRandomString(16);
       localStorage.setItem(SPOTIFY_CODE_STATE_KEY, freshState);
       const redirect = createSpotifyOauthRoute({
         state: freshState,
         redirect_uri: getSpotifyRedirectUri(),
-        client_id: spotifyId || '',
+        client_id: spotifyId,
       });
       push(redirect);
     }
@@ -69,13 +73,14 @@ export const useSpotify = (spotifyId: string) => {
     // If we have a legitimate code or error in the url (validated by state),
     // set the code/error in state and remove the crazy params from the url bar just so
     // it looks nice
-    // (TBH we might want to keep the code in the url bar for debugging purposes)
-    if (stateMatches) {
+    if (stateMatches && (code || paramError)) {
       if (paramError) {
         setError(paramError);
         setSpotifyAuthorizationCode(null);
+        setNowPlaying(null); // Clear now playing on error
       } else if (code) {
         setSpotifyAuthorizationCode(code);
+        setError(null); // Clear any previous errors
       }
       localStorage.removeItem(SPOTIFY_CODE_STATE_KEY);
       push(ART_ADD_ROUTE, undefined, { shallow: true });
@@ -96,6 +101,10 @@ export const useSpotify = (spotifyId: string) => {
       access?.refresh_token,
     ],
     queryFn: async () => {
+      if (!spotifyAuthorizationCode) {
+        throw new Error('No Spotify authorization code available');
+      }
+
       const accessQuery = access?.access_token
         ? `&${NOW_PLAYING_ACCESS_TOKEN_QUERY}=${access.access_token}`
         : '';
@@ -109,24 +118,45 @@ export const useSpotify = (spotifyId: string) => {
           method: 'GET',
         }
       );
+
       if (resp.ok) {
         if (resp.status === 204) {
-          return null;
+          return null; // No music playing
         }
         return resp.json();
       }
-      const { error: respError } = await resp.json();
-      throw new Error(respError);
+
+      let errorMessage = 'Failed to fetch now playing';
+      try {
+        const errorData = await resp.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch {
+        errorMessage = `${errorMessage}: ${resp.statusText}`;
+      }
+
+      throw new Error(errorMessage);
     },
-    enabled: Boolean(spotifyAuthorizationCode),
+    enabled: Boolean(spotifyAuthorizationCode) && !error,
+    retry: (failureCount, retryError) => {
+      // Don't retry on auth errors
+      if (
+        retryError.message.includes('Authorization') ||
+        retryError.message.includes('expired')
+      ) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+    staleTime: 30000, // Consider data fresh for 30 seconds
+    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
   });
 
+  // Process the query data and update local state
   useEffect(() => {
-    // If we don't have any now playing data, set it to null
-    // so that we know we TRIED but either got nothing or failed
-    if (data === null || data?.nowPlaying === null) {
+    if (data === null) {
+      // No music playing
       setNowPlaying(null);
-    } else if (data?.nowPlaying) {
+    } else if (data?.nowPlaying?.item) {
       const { artists, album, name, id, duration_ms, external_urls } =
         data.nowPlaying.item;
       setNowPlaying({
@@ -141,28 +171,29 @@ export const useSpotify = (spotifyId: string) => {
       });
     }
 
+    // Update access token if we got a new one
     if (data?.access) {
       setAccess(data.access);
     }
-  }, [data, isLoading]);
+  }, [data]);
 
+  // Handle query errors
   useEffect(() => {
     if (queryError) {
+      console.error('Spotify query error:', queryError);
       setError(queryError.message);
+      setNowPlaying(null);
     }
   }, [queryError]);
-
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-    }
-  }, [error]);
 
   return {
     spotifyAuthorizationCode,
     nowPlaying,
     error,
-    clearError: () => setError(null),
+    clearError: () => {
+      setError(null);
+      setNowPlaying(null);
+    },
     refetchQuery: refetch,
     nowPlayingLoading: isLoading || isRefetching,
   };

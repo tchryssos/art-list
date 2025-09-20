@@ -64,13 +64,13 @@ function ConditionalArtForm({
       if (resp.status === 200) {
         setSubmitSuccessful(true);
       } else {
+        console.error('Art creation failed:', resp.status, resp.statusText);
         setSubmitSuccessful(false);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Art creation error:', error);
       setSubmitSuccessful(false);
     }
-    setSubmitSuccessful(true);
   };
 
   if (loading) {
@@ -116,6 +116,18 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
     }
   }, [submitSuccessful, error, clearError]);
 
+  // Determine if we're still loading Spotify data
+  // Only show loading if we're actively trying to get Spotify auth OR if we have auth but are fetching now playing
+  const isSpotifyLoading =
+    spotifyAuthorizationCode === undefined ||
+    (spotifyAuthorizationCode &&
+      nowPlaying === undefined &&
+      nowPlayingLoading &&
+      !error);
+
+  // Always allow form submission - Spotify failure shouldn't block art creation
+  const allowFormSubmission = !isSpotifyLoading;
+
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
       {submitSuccessful ? (
@@ -130,12 +142,23 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
         </>
       ) : (
         <>
-          {error && <span className="text-danger text-sm">{error}</span>}
+          {error && (
+            <div className="mb-4 p-3 border">
+              <span className="text-danger text-sm">
+                Spotify connection failed: {error}
+              </span>
+              <button
+                className="ml-2 underline text-sm cursor-pointer"
+                type="button"
+                onClick={clearError}
+              >
+                Continue without Spotify
+              </button>
+            </div>
+          )}
           <ConditionalArtForm
             lastLocation={lastLocation}
-            loading={
-              spotifyAuthorizationCode === undefined || nowPlaying === undefined
-            }
+            loading={!allowFormSubmission}
             nowPlaying={error ? null : nowPlaying}
             nowPlayingLoading={nowPlayingLoading}
             setSubmitSuccessful={setSubmitSuccessful}
