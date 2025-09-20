@@ -5,7 +5,7 @@ import { useContext, useState } from 'react';
 import { AUTH_ROUTE, HOME_ROUTE } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formDataToJson } from '~/logic/util/forms';
-import type { AuthData } from '~/pages/api/authorize';
+import type { AuthData } from '~/pages/api/admin-access';
 
 import { Button } from './buttons/Button';
 import { SubmitButton } from './buttons/SubmitButton';
@@ -56,6 +56,13 @@ export function Unauthorized() {
           name="password"
           required
           type="password"
+        />
+        {/* Honey pot field - hidden from users but bots may fill it */}
+        <input
+          name="website"
+          style={{ display: 'none' }}
+          tabIndex={-1}
+          type="text"
         />
         <div className="grid gap-4 grid-cols-2">
           <SubmitButton isSubmitting={isSubmitting} label="Log In" />

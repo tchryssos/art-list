@@ -44,6 +44,6 @@ export const ART_CREATE_ROUTE = '/api/art/new/create';
 export const createArtApiRoute = (id: DetailRouteId) => `/api/art/${id}`;
 export const ARTISTS_LIST_ROUTE = '/api/artists';
 export const LOCATION_LIST_ROUTE = '/api/locations';
-export const AUTH_ROUTE = '/api/authorize';
-export const AUTH_ME_ROUTE = '/api/authorize/me';
+export const AUTH_ROUTE = '/api/admin-access';
+export const AUTH_ME_ROUTE = '/api/admin-access/me';
 export const NOW_PLAYING_ROUTE = '/api/listening-to';
