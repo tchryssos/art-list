@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { formDataToObject } from './forms';
 import { isOnClient } from './service';
 
 /**
@@ -17,15 +18,9 @@ export const useFormPersistence = (storageKey: string) => {
 
     try {
       const formData = new FormData(formRef.current);
-      const data: Record<string, unknown> = {};
+      const data = formDataToObject(formData);
 
-      // Save all form field values
-      // eslint-disable-next-line no-restricted-syntax
-      for (const [key, value] of formData.entries()) {
-        data[key] = value;
-      }
-
-      // Also capture checkbox states
+      // Also capture checkbox states (FormData doesn't include unchecked checkboxes)
       const checkboxes = formRef.current.querySelectorAll(
         'input[type="checkbox"]'
       );
