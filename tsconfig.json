@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "lib": ["dom", "ES2022"],
+    "lib": ["dom", "ES2022", "DOM.Iterable"],
     "module": "ESNext",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
@@ -25,7 +25,6 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "incremental": true,
     "moduleDetection": "force",
     "noUncheckedIndexedAccess": true,
     "allowSyntheticDefaultImports": true,
@@ -38,10 +37,5 @@
     ]
   },
   "exclude": ["node_modules"],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }
