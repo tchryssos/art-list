@@ -1,4 +1,4 @@
-import { FormEvent, RefObject } from 'react';
+import type { FormEvent, RefObject } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface FormProps {

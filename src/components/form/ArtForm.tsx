@@ -1,9 +1,11 @@
-import { Artist, Location } from '@prisma/client';
+import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
-import { ArtSubmitData } from '~/typings/art';
+import { useNowPlaying } from '~/logic/contexts/nowPlayingContext';
+import type { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
 import { ListeningToCard } from '../ListeningToCard';
@@ -14,22 +16,20 @@ import { Label } from './Label';
 
 interface ArtFormProps {
   defaultValues?: Partial<ArtSubmitData>;
-  listeningToLoading?: boolean;
   onSubmit: (e: FormEvent) => Promise<void> | void;
   readOnly?: boolean;
 }
-export function ArtForm({
-  onSubmit,
-  defaultValues,
-  readOnly,
-  listeningToLoading,
-}: ArtFormProps) {
+export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
+  const {
+    enabled: useListeningTo,
+    setEnabled: setUseListeningTo,
+    nowPlaying,
+    loading: listeningToLoading,
+  } = useNowPlaying();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationList, setLocationList] = useState<string[]>([]);
   const [artistList, setArtistList] = useState<string[]>([]);
-  const [useListeningTo, setUseListeningTo] = useState(
-    Boolean(defaultValues?.listeningTo)
-  );
   const [activeAutoComplete, setActiveAutoComplete] = useState<
     keyof ArtSubmitData | null
   >(null);
@@ -71,7 +71,7 @@ export function ArtForm({
     setIsSubmitting(false);
   };
 
-  const disableListeningTo = !defaultValues?.listeningTo || listeningToLoading;
+  const disableListeningTo = readOnly;
 
   return (
     <Form formRef={formRef} onSubmit={_onSubmit}>
@@ -124,7 +124,7 @@ export function ArtForm({
           checked={useListeningTo}
           className={clsx(
             'w-6 h-6',
-            disableListeningTo && 'cursor-not-allowed'
+            disableListeningTo ? 'cursor-not-allowed' : 'cursor-pointer'
           )}
           disabled={disableListeningTo}
           name="listeningTo"
@@ -136,7 +136,7 @@ export function ArtForm({
         {useListeningTo && (
           <ListeningToCard
             className="mt-4"
-            listeningTo={defaultValues?.listeningTo}
+            listeningTo={nowPlaying || undefined}
           />
         )}
       </div>
@@ -148,7 +148,12 @@ export function ArtForm({
         type="text"
         onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
-      {!readOnly && <SubmitButton isSubmitting={isSubmitting} />}
+      {!readOnly && (
+        <SubmitButton
+          disabled={listeningToLoading}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </Form>
   );
 }

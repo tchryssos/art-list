@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 import { AUTH_COOKIE_KEY } from '~/constants/auth';
 

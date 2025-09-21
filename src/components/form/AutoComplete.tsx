@@ -28,7 +28,7 @@ function AutoCompleteItem({
   return (
     <li>
       <Button
-        className="w-full border border-solid border-accentLight border-t-0 hover:bg-accentLight focus:bg-accentLight active:bg-accentLight"
+        className="w-full border border-solid border-accent-light border-t-0 hover:bg-accent-light focus:bg-accent-light active:bg-accent-light"
         id={value}
         transparent
         onClick={() => {
@@ -76,7 +76,7 @@ export function AutoComplete({
   }, [filterList, itemList]);
 
   return (
-    <ul className="flex flex-col w-full max-h-60 z-[2] top-20 border-t-0 border border-solid border-accentHeavy shadow-autocomplete-list">
+    <ul className="flex flex-col w-full max-h-60 z-2 top-20 border-t-0 border border-solid border-accent-heavy shadow-autocomplete-list">
       {filteredList.map((item) => (
         <AutoCompleteItem
           key={item}

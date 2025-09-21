@@ -1,6 +1,7 @@
 import { padStart } from 'lodash';
-import { GetServerSideProps } from 'next';
-import { FormEvent, useEffect, useState } from 'react';
+import type { GetServerSideProps } from 'next';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { ArtForm } from '~/components/form/ArtForm';
@@ -8,10 +9,12 @@ import { Layout } from '~/components/meta/Layout';
 import { Body } from '~/components/typography/Body';
 import { ART_CREATE_ROUTE, LOGIN_ROUTE } from '~/constants/routing';
 import { isCookieAuthorized } from '~/logic/api/auth';
+import {
+  NowPlayingProvider,
+  useNowPlaying,
+} from '~/logic/contexts/nowPlayingContext';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
-import { useSpotify } from '~/logic/util/spotify';
-import { ArtSubmitData } from '~/typings/art';
 
 interface AddArtPageProps {
   lastLocation: string;
@@ -19,10 +22,7 @@ interface AddArtPageProps {
 }
 
 interface ConditionalArtFormProps {
-  loading: boolean;
-  nowPlayingLoading: boolean;
   lastLocation: string;
-  nowPlaying: ArtSubmitData['listeningTo'] | null;
   setSubmitSuccessful: (success: boolean) => void;
 }
 
@@ -36,12 +36,11 @@ const getTodayDefaultValue = () => {
 };
 
 function ConditionalArtForm({
-  loading,
   lastLocation,
-  nowPlaying,
   setSubmitSuccessful,
-  nowPlayingLoading,
 }: ConditionalArtFormProps) {
+  const { nowPlaying } = useNowPlaying();
+
   const onSubmit = async (e: FormEvent) => {
     try {
       const formData = new FormData(e.target as HTMLFormElement);
@@ -63,29 +62,68 @@ function ConditionalArtForm({
       if (resp.status === 200) {
         setSubmitSuccessful(true);
       } else {
+        console.error('Art creation failed:', resp.status, resp.statusText);
         setSubmitSuccessful(false);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Art creation error:', error);
       setSubmitSuccessful(false);
     }
-    setSubmitSuccessful(true);
   };
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <ArtForm
       defaultValues={{
         dateSeen: getTodayDefaultValue(),
         location: lastLocation,
-        listeningTo: nowPlaying || undefined,
       }}
-      listeningToLoading={nowPlayingLoading}
       onSubmit={onSubmit}
     />
+  );
+}
+
+function ArtFormWithErrorHandling({
+  lastLocation,
+  setSubmitSuccessful,
+  submitSuccessful,
+}: ConditionalArtFormProps & {
+  submitSuccessful?: boolean | null | undefined;
+}) {
+  const { error, clearError, refetch } = useNowPlaying();
+
+  useEffect(() => {
+    if (submitSuccessful === null) {
+      refetch();
+    }
+  }, [submitSuccessful, refetch]);
+
+  useEffect(() => {
+    if (error && submitSuccessful !== null) {
+      clearError();
+    }
+  }, [submitSuccessful, error, clearError]);
+
+  return (
+    <>
+      {error && (
+        <div className="mb-4 p-3 border">
+          <span className="text-danger text-sm">
+            Spotify connection failed: {error}
+          </span>
+          <button
+            className="ml-2 underline text-sm cursor-pointer"
+            type="button"
+            onClick={clearError}
+          >
+            Continue without Spotify
+          </button>
+        </div>
+      )}
+      <ConditionalArtForm
+        lastLocation={lastLocation}
+        setSubmitSuccessful={setSubmitSuccessful}
+      />
+    </>
   );
 }
 
@@ -93,27 +131,6 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
   const [submitSuccessful, setSubmitSuccessful] = useState<
     boolean | null | undefined
   >(undefined);
-
-  const {
-    spotifyAuthorizationCode,
-    nowPlaying,
-    error,
-    clearError,
-    refetchQuery,
-    nowPlayingLoading,
-  } = useSpotify(spotifyId || '');
-
-  useEffect(() => {
-    if (submitSuccessful === null) {
-      refetchQuery();
-    }
-  }, [submitSuccessful, refetchQuery]);
-
-  useEffect(() => {
-    if (error && submitSuccessful !== null) {
-      clearError();
-    }
-  }, [submitSuccessful, error, clearError]);
 
   return (
     <Layout nav="list" pageTitle="Add New Artwork" title="Add New Artwork">
@@ -128,18 +145,13 @@ function AddArtPage({ lastLocation, spotifyId }: AddArtPageProps) {
           </Button>
         </>
       ) : (
-        <>
-          {error && <span className="text-danger text-sm">{error}</span>}
-          <ConditionalArtForm
+        <NowPlayingProvider spotifyId={spotifyId || ''}>
+          <ArtFormWithErrorHandling
             lastLocation={lastLocation}
-            loading={
-              spotifyAuthorizationCode === undefined || nowPlaying === undefined
-            }
-            nowPlaying={error ? null : nowPlaying}
-            nowPlayingLoading={nowPlayingLoading}
             setSubmitSuccessful={setSubmitSuccessful}
+            submitSuccessful={submitSuccessful}
           />
-        </>
+        </NowPlayingProvider>
       )}
     </Layout>
   );
@@ -179,7 +191,7 @@ export const getServerSideProps: GetServerSideProps<AddArtPageProps> = async ({
       },
     });
     if (art.length) {
-      lastLocation = art[0].Location?.name || '';
+      lastLocation = art[0]?.Location?.name || '';
     }
   } catch (e) {
     console.error(e);

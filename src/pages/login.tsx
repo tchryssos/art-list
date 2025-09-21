@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
 
 import { Layout } from '~/components/meta/Layout';
 import { Unauthorized } from '~/components/Unauthorized';

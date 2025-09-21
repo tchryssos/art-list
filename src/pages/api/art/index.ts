@@ -1,4 +1,4 @@
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 import { PAGE_QUERY_PARAM } from '~/constants/queryParams';
 import { getArtList } from '~/logic/api/art';

@@ -1,11 +1,12 @@
 import clsx from 'clsx';
+import { decode } from 'html-entities';
 import { useContext } from 'react';
 
 import { IS_URL } from '~/constants/regex';
 import { createArtDetailRoute } from '~/constants/routing';
 import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
-import { CompleteArt } from '~/typings/art';
+import type { CompleteArt } from '~/typings/art';
 
 import { ArtImg } from './ArtImg';
 import { Link } from './Link';
@@ -57,14 +58,14 @@ export function ArtListItem({ art }: ArtListItemProps) {
     <ListItemWrapper artId={art.id} isAuthorized={Boolean(isAuthorized)}>
       <div
         className={clsx(
-          'flex flex-col border border-solid border-accentLight p-3 gap-1 h-full',
+          'flex flex-col border border-solid border-accent-light p-3 gap-1 h-full',
           isAuthorized &&
-            'hover:border-accentHeavy hover:bg-smudge active:border-accentHeavy  active:bg-smudge'
+            'hover:border-accent-heavy hover:bg-smudge active:border-accent-heavy  active:bg-smudge'
         )}
       >
         {imgSrc?.match(IS_URL) && (
           <ArtImg
-            alt={`Artwork: ${name} by ${artistName}`}
+            alt={`Artwork: ${decode(name)} by ${decode(artistName)}`}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoAQMAAAC2MCouAAAAA1BMVEXo6Og4/a9sAAAAC0lEQVQI12MYYQAAAPAAAU6V2N8AAAAASUVORK5CYII=
             "
             fill
@@ -76,13 +77,13 @@ export function ArtListItem({ art }: ArtListItemProps) {
             }}
           />
         )}
-        <Body>{name}</Body>
-        <Body>{artistName}</Body>
+        <Body>{decode(name)}</Body>
+        <Body>{decode(artistName)}</Body>
 
-        <Body className="text-xs leading-2 font-medium">
-          {locationName || 'Unknown'}
+        <Body className="text-xs leading-3 font-medium">
+          {decode(locationName || 'Unknown')}
         </Body>
-        <Body className="text-xs leading-2 font-medium">
+        <Body className="text-xs leading-3 font-medium">
           {formatDate(dateSeen) || 'Unknown'}
         </Body>
         <ListeningToCard listeningTo={ListeningTo} size="sm" />

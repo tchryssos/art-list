@@ -1,5 +1,6 @@
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
+import { prisma } from '../util/prisma';
 import { isOnClient } from '../util/service';
 
 export async function listeningToFindOrCreate(

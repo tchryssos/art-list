@@ -1,8 +1,10 @@
-import { Artist, Location } from '@prisma/client';
+import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
+import { decode } from 'html-entities';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useContext, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useContext, useState } from 'react';
 
 import { Button } from '~/components/buttons/Button';
 import { submitButtonSizeClassName } from '~/components/buttons/SubmitButton';
@@ -20,7 +22,7 @@ import { AuthContext } from '~/logic/contexts/authContext';
 import { formatDate } from '~/logic/util/date';
 import { formDataToJson } from '~/logic/util/forms';
 import { prisma } from '~/logic/util/prisma';
-import { CompleteArt } from '~/typings/art';
+import type { CompleteArt } from '~/typings/art';
 
 interface ArtDetailProps {
   art: CompleteArt;
@@ -69,7 +71,7 @@ function DeleteButton({ art }: DeleteButtonProps) {
           <LoadingSpinner size={1} />
         </div>
       ) : (
-        <Body className="text-textContrast">
+        <Body className="text-text-contrast">
           {areYouSure ? 'Are You Sure?' : 'Delete'}
         </Body>
       )}
@@ -104,8 +106,8 @@ function ArtDetail({ art }: ArtDetailProps) {
   return (
     <Layout
       nav="art"
-      pageTitle={`Edit "${art?.name || 'Art'}"`}
-      title={`${art?.name || 'Art'} - ${art?.Artist.name || 'Unknown'}`}
+      pageTitle={`Edit "${decode(art?.name || 'Art')}"`}
+      title={`${decode(art?.name || 'Art')} - ${decode(art?.Artist.name || 'Unknown')}`}
     >
       {art && (
         <>
@@ -116,6 +118,7 @@ function ArtDetail({ art }: ArtDetailProps) {
               dateSeen: formatDate(art.dateSeen, 'yyyy-MM-dd'),
               location: art.Location.name,
               imgSrc: art.imgSrc || '',
+              listeningTo: art.ListeningTo,
             }}
             readOnly={!isAuthorized}
             onSubmit={onSubmit}

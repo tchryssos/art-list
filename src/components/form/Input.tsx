@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { FocusEventHandler, useEffect, useState } from 'react';
+import type { FocusEventHandler } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { Body } from '../typography/Body';
@@ -66,7 +67,7 @@ export function Input<T extends Record<string, unknown>>(
         aria-autocomplete={autoCompleteList ? 'list' : 'none'}
         className={clsx(
           'p-4 text-base font-light bg-background text-text border border-solid  font-jp w-full',
-          error ? 'border-danger' : 'border-accentHeavy'
+          error ? 'border-danger' : 'border-accent-heavy'
         )}
         name={name}
         readOnly={readOnly}

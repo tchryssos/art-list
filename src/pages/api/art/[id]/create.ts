@@ -1,12 +1,12 @@
 import { parseISO } from 'date-fns';
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 import { artistFindOrCreate } from '~/logic/api/artists';
 import { isCookieAuthorized } from '~/logic/api/auth';
 import { listeningToFindOrCreate } from '~/logic/api/listeningTo';
 import { locationFindOrCreate } from '~/logic/api/location';
 import { prisma } from '~/logic/util/prisma';
-import { ArtSubmitData } from '~/typings/art';
+import type { ArtSubmitData } from '~/typings/art';
 
 const createArt: NextApiHandler = async (req, res) => {
   if (isCookieAuthorized(req)) {

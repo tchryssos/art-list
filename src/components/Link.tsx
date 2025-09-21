@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import NextLink from 'next/link';
-import { ComponentProps, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
 
 interface LinkProps extends ComponentProps<typeof NextLink> {
   href: string;

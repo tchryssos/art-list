@@ -1,7 +1,7 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
 import { getSpotifyRedirectUri } from '~/constants/routing';
-import { SpotifyNowPlayingResp } from '~/typings/spotify';
+import type { SpotifyNowPlayingResp } from '~/typings/spotify';
 
 export const NOW_PLAYING_AUTH_CODE_QUERY = 'auth_code';
 export const NOW_PLAYING_ACCESS_TOKEN_QUERY = 'access_token';
