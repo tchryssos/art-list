@@ -13,6 +13,7 @@ module.exports = {
           'variants',
           'responsive',
           'screen',
+          'theme',
         ],
       },
     ],
