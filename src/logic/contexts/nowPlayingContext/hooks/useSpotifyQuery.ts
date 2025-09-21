@@ -66,12 +66,11 @@ export function useSpotifyQuery(
     refetch,
     isRefetching,
   } = useQuery<ListeningToResp | null>({
-    queryKey: [
-      nowPlayingKey,
-      spotifyAuthorizationCode,
-      access?.access_token,
-      access?.refresh_token,
-    ],
+    // Note: access tokens are intentionally excluded from queryKey to prevent infinite loops.
+    // These tokens are outputs of the query (refreshed by the API), not inputs that should
+    // trigger cache invalidation. Including them causes infinite re-fetching.
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: [nowPlayingKey, spotifyAuthorizationCode],
     queryFn: async () => {
       if (!spotifyAuthorizationCode) {
         throw new Error('No Spotify authorization code available');
