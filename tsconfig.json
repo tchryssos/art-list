@@ -13,7 +13,6 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "lib": ["dom", "ES2022"],
-    "types": ["vitest/globals"],
     "module": "ESNext",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
@@ -43,9 +42,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "tests/**/*.ts",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    ".next/types/**/*.ts"
   ]
 }

@@ -1,7 +1,5 @@
-import { isOnClient } from './service';
-
 export const getDocument = (): Document | undefined => {
-  if (!isOnClient()) {
+  if (typeof window === 'undefined') {
     return undefined;
   }
   return window.document;
