@@ -1,10 +1,11 @@
 import type { Artist, Location } from '@prisma/client';
 import clsx from 'clsx';
 import type { FormEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ARTISTS_LIST_ROUTE, LOCATION_LIST_ROUTE } from '~/constants/routing';
 import { useNowPlaying } from '~/logic/contexts/nowPlayingContext';
+import { useFormPersistence } from '~/logic/util/useFormPersistence';
 import type { ArtSubmitData } from '~/typings/art';
 
 import { SubmitButton } from '../buttons/SubmitButton';
@@ -20,11 +21,13 @@ interface ArtFormProps {
   readOnly?: boolean;
 }
 export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
+  const [formError, setFormError] = useState('');
   const {
     enabled: useListeningTo,
     setEnabled: setUseListeningTo,
     nowPlaying,
     loading: listeningToLoading,
+    error: queryError,
   } = useNowPlaying();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +37,7 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
     keyof ArtSubmitData | null
   >(null);
 
-  const formRef = useRef<HTMLFormElement>(null);
+  const { formRef, clearFormData } = useFormPersistence('art-form-draft');
 
   useEffect(() => {
     const fetchAutocompleteLists = async () => {
@@ -65,13 +68,22 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
     setIsSubmitting(true);
     try {
       await onSubmit(e);
+      // Clear persisted data and errors on successful submit
+      clearFormData();
+      setFormError('');
     } catch (error) {
       console.error(error);
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while submitting'
+      );
     }
     setIsSubmitting(false);
   };
 
   const disableListeningTo = readOnly;
+  const displayError = formError || queryError;
 
   return (
     <Form formRef={formRef} onSubmit={_onSubmit}>
@@ -148,6 +160,11 @@ export function ArtForm({ onSubmit, defaultValues, readOnly }: ArtFormProps) {
         type="text"
         onFocus={() => !readOnly && setActiveAutoComplete(null)}
       />
+      {displayError && (
+        <p aria-live="polite" className="text-sm text-danger">
+          {displayError}
+        </p>
+      )}
       {!readOnly && (
         <SubmitButton
           disabled={listeningToLoading}
