@@ -37,6 +37,12 @@ export function useSpotifyAuth(
   spotifyId: string
 ): UseSpotifyAuthReturn {
   const { push, query } = useRouter();
+  /**
+   * Okay, since this is confusing:
+   * - `code` is the code returned from Spotify's OAuth flow verifying my user, also known as an "Authorization Code" in their docs
+   * - `spotifyAuthorizationCode` is ALSO that code, but just saved to a context rather than the url bar
+   * - `access` is an object containing the "Access Token" we get back from Spotify (by providing the Authorization Code), as well as a refresh token and some meta data about that "Access Token"
+   */
   const { code, error: paramError, state } = query as Partial<SpotifyParams>;
   const { spotifyAuthorizationCode, setSpotifyAuthorizationCode } =
     useContext(AuthContext);
